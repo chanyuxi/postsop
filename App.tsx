@@ -1,45 +1,37 @@
-/**
- * Sample React Native App
- * https://github.com/facebook/react-native
- *
- * @format
- */
+import { Platform, StatusBar, StyleSheet, View } from "react-native"
+import { SafeAreaProvider, useSafeAreaInsets } from "react-native-safe-area-context"
 
-import { NewAppScreen } from '@react-native/new-app-screen';
-import { StatusBar, StyleSheet, useColorScheme, View } from 'react-native';
-import {
-  SafeAreaProvider,
-  useSafeAreaInsets,
-} from 'react-native-safe-area-context';
+import { RouteRender } from "@/routes"
 
-function App() {
-  const isDarkMode = useColorScheme() === 'dark';
-
-  return (
-    <SafeAreaProvider>
-      <StatusBar barStyle={isDarkMode ? 'light-content' : 'dark-content'} />
-      <AppContent />
-    </SafeAreaProvider>
-  );
-}
+const isAndroidLargerThan35 = Platform.OS === 'android' && Platform.Version >= 35
 
 function AppContent() {
-  const safeAreaInsets = useSafeAreaInsets();
+  const safeAreaInsets = useSafeAreaInsets()
+
+  const inlineStyles = {
+    paddingTop: isAndroidLargerThan35 ? 0 : safeAreaInsets.top,
+    paddingBottom: safeAreaInsets.bottom,
+  }
 
   return (
-    <View style={styles.container}>
-      <NewAppScreen
-        templateFileName="App.tsx"
-        safeAreaInsets={safeAreaInsets}
-      />
+    <View style={[styles.container, inlineStyles]}>
+      <RouteRender />
     </View>
-  );
+  )
+}
+
+export default function App() {
+  return (
+    <SafeAreaProvider>
+      {!isAndroidLargerThan35 && <StatusBar backgroundColor="#24292e" />}
+      <AppContent />
+    </SafeAreaProvider>
+  )
 }
 
 const styles = StyleSheet.create({
   container: {
     flex: 1,
+    backgroundColor: '#24292e'
   },
-});
-
-export default App;
+})
