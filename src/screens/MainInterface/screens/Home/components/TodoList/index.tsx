@@ -10,7 +10,7 @@ import {
 import {
   ContextMenu,
   type ContextMenuImperativeHandle,
-} from '@/components/ContextMenu'
+} from '@/components/common/ContextMenu'
 import { type Todo } from '@/types/todo'
 
 import { TodoCard } from '../TodoCard'

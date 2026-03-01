@@ -1,6 +1,6 @@
 import { Text } from 'react-native'
 
-import { BackgroundView } from '@/components/BackgroundView'
+import { BackgroundView } from '@/components/common/BackgroundView'
 
 export function QuietMode() {
   return (

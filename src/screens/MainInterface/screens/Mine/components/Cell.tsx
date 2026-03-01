@@ -1,5 +1,6 @@
-import { MaterialDesignIcons } from '@react-native-vector-icons/material-design-icons'
 import { Pressable, Text, View } from 'react-native'
+
+import { Icons } from '@/components/common/MaterialDesignIcons'
 
 interface RowProps {
   label: string
@@ -11,7 +12,7 @@ export function Cell({ label, onPress }: RowProps) {
     <Pressable onPress={onPress}>
       <View className="flex-row items-center justify-between px-8 py-4">
         <Text className="text-xl text-white">{label}</Text>
-        <MaterialDesignIcons
+        <Icons
           name="chevron-right"
           size={24}
           color="#fff"

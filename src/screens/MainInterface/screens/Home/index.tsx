@@ -1,7 +1,7 @@
 import { useEffect, useState } from 'react'
 
-import { BackgroundView } from '@/components/BackgroundView'
-import { StatusBarPlaceholder } from '@/components/StatusBarPlaceholder'
+import { BackgroundView } from '@/components/common/BackgroundView'
+import { StatusBarPlaceholder } from '@/components/common/StatusBarPlaceholder'
 import { getTodos } from '@/services/todos'
 import { Todo } from '@/types/todo'
 
