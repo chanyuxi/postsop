@@ -1,5 +1,9 @@
 import AsyncStorage from '@react-native-async-storage/async-storage'
 import {
+  MaterialDesignIcons,
+  type MaterialDesignIconsIconName,
+} from '@react-native-vector-icons/material-design-icons'
+import {
   type BottomTabBarProps,
   createBottomTabNavigator,
 } from '@react-navigation/bottom-tabs'
@@ -7,7 +11,7 @@ import { NavigationContainer } from '@react-navigation/native'
 import { createStackNavigator } from '@react-navigation/stack'
 import { useEffect, useState } from 'react'
 import { ActivityIndicator, Linking, Pressable, View } from 'react-native'
-import MCIIcon from 'react-native-vector-icons/MaterialCommunityIcons'
+import { useCSSVariable } from 'uniwind'
 
 import { Home } from '@/views/Home'
 import { Mine } from '@/views/Mine'
@@ -18,15 +22,19 @@ const PERSISTENCE_KEY = 'NAVIGATION_STATE_V1'
 const Tab = createBottomTabNavigator()
 
 // reference from https://pictogrammers.com/library/mdi/
-const tabItemIconNameMap: Record<string, string> = {
+const tabItemIconNameMap: Record<string, MaterialDesignIconsIconName> = {
   Home: 'alpha-t-circle-outline',
   QuietMode: 'alarm',
   Mine: 'account-circle-outline',
 }
 
-function CustomTabBar({ state, navigation }: BottomTabBarProps) {
+interface CustomTabBarProps extends BottomTabBarProps {
+  focusedColor: string
+}
+
+function CustomTabBar({ state, navigation, focusedColor }: CustomTabBarProps) {
   return (
-    <View className="h-[60] flex-row items-center bg-[#1f2428]">
+    <View className="bg-background-dark h-[60] flex-row items-center">
       {state.routes.map((route, index) => {
         const isFocused = state.index === index
 
@@ -48,10 +56,10 @@ function CustomTabBar({ state, navigation }: BottomTabBarProps) {
             className="flex-1 items-center justify-center"
             onPress={handlePress}
           >
-            <MCIIcon
+            <MaterialDesignIcons
               size={26}
               name={tabItemIconNameMap[route.name]}
-              color={isFocused ? '#22a7f2' : '#fff'}
+              color={isFocused ? focusedColor : '#fff'}
             />
           </Pressable>
         )
@@ -61,10 +69,17 @@ function CustomTabBar({ state, navigation }: BottomTabBarProps) {
 }
 
 function MainInterface() {
+  const primaryColor = useCSSVariable('--color-primary') as string
+
   return (
     <Tab.Navigator
       screenOptions={{ headerShown: false }}
-      tabBar={CustomTabBar}
+      tabBar={(props) =>
+        CustomTabBar({
+          ...props,
+          focusedColor: primaryColor,
+        })
+      }
     >
       <Tab.Screen
         name="Home"

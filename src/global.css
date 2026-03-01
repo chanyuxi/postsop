@@ -1,2 +1,38 @@
 @import 'tailwindcss';
 @import 'uniwind';
+
+/* Seven orders are sufficient for general systems, and special situations should be addressed in a special way, which is in line with best practices. */
+
+@layer theme {
+  :root {
+    @variant light {
+      --color-background-lightest: #2b3036;
+      --color-background-lighter: #2b3036;
+      --color-background-light: #2b3036;
+      --color-background: #24292e;
+      --color-background-dark: #1f2428;
+      --color-background-darker: #1f2428;
+      --color-background-darkest: #1f2428;
+
+      --color-foreground: #fff;
+      --color-foreground-secondary: var(--color-slate-300);
+
+      --color-primary: var(--color-blue-500);
+    }
+
+    @variant dark {
+      --color-background-lightest: #2b3036;
+      --color-background-lighter: #2b3036;
+      --color-background-light: #2b3036;
+      --color-background: #24292e;
+      --color-background-dark: #1f2428;
+      --color-background-darker: #1f2428;
+      --color-background-darkest: #1f2428;
+
+      --color-foreground: #fff;
+      --color-foreground-secondary: var(--color-slate-300);
+
+      --color-primary: var(--color-blue-500);
+    }
+  }
+}

@@ -1,6 +1,6 @@
+import { MaterialDesignIcons } from '@react-native-vector-icons/material-design-icons'
 import { useCallback, useState } from 'react'
 import { Modal, Text, TouchableOpacity, View } from 'react-native'
-import MCIIcon from 'react-native-vector-icons/MaterialCommunityIcons'
 
 export function Calendar() {
   const [isFullViewMode, setIsFullViewMode] = useState(false)
@@ -22,7 +22,7 @@ export function Calendar() {
         </View>
 
         <TouchableOpacity onPress={toggleFullViewMode}>
-          <MCIIcon
+          <MaterialDesignIcons
             name={isFullViewMode ? 'arrow-collapse' : 'arrow-expand'}
             size={20}
             color="#fff"
@@ -45,7 +45,7 @@ export function Calendar() {
             <View className="mb-4 flex-row items-center justify-between">
               <Text className="text-lg font-bold">Calendar Details</Text>
               <TouchableOpacity onPress={closeModal}>
-                <MCIIcon
+                <MaterialDesignIcons
                   name="close"
                   size={24}
                   color="#000"
