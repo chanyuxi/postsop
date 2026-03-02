@@ -1,23 +1,38 @@
+import { type BottomTabScreenProps } from '@react-navigation/bottom-tabs'
+import { type CompositeScreenProps } from '@react-navigation/native'
+import { type NativeStackScreenProps } from '@react-navigation/native-stack'
 import { Text, View } from 'react-native'
 
 import { BackgroundView } from '@/components/common/BackgroundView'
-import { StatusBarPlaceholder } from '@/components/common/StatusBarPlaceholder'
+import { ThemeText } from '@/components/common/ThemeText'
 import { APP_VERSION } from '@/constants'
-import { useAuth } from '@/contexts/auth'
+import { useAuth } from '@/modules/auth'
+import { type StackParamList } from '@/routes'
 
+import { type MainInterfaceTabParamList } from '../..'
 import { Cell } from './components/Cell'
 import { CellGroup } from './components/CellGroup'
 
-export function Mine() {
+type MineScreenProps = CompositeScreenProps<
+  BottomTabScreenProps<MainInterfaceTabParamList, 'Mine'>,
+  NativeStackScreenProps<StackParamList, 'MainInterface'>
+>
+
+export function Mine({ navigation }: MineScreenProps) {
   const { user } = useAuth()
 
-  return (
-    <BackgroundView className="gap-4">
-      <View className="bg-background-light">
-        <StatusBarPlaceholder />
+  const handleSettingPress = () => {
+    navigation.navigate('Setting')
+  }
 
+  return (
+    <BackgroundView
+      contentClassName="gap-4"
+      statusBarClassName="bg-background-light"
+    >
+      <View className="bg-background-light">
         <View className="p-8">
-          <Text className="text-foreground mb-2 text-4xl">{user?.name}</Text>
+          <ThemeText className="mb-2 text-4xl">{user?.name}</ThemeText>
           <Text className="text-foreground-secondary">{user?.signature}</Text>
         </View>
       </View>
@@ -29,7 +44,10 @@ export function Mine() {
       </CellGroup>
 
       <CellGroup className="bg-background-light">
-        <Cell label="Setting" />
+        <Cell
+          label="Setting"
+          onPress={handleSettingPress}
+        />
       </CellGroup>
 
       <View className="flex-1 justify-end p-8">

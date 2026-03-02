@@ -1,14 +1,33 @@
 import AsyncStorage from '@react-native-async-storage/async-storage'
-import { NavigationContainer } from '@react-navigation/native'
-import { createStackNavigator } from '@react-navigation/stack'
+import {
+  NavigationContainer,
+  type NavigatorScreenParams,
+} from '@react-navigation/native'
+import { createNativeStackNavigator } from '@react-navigation/native-stack'
 import { useEffect, useState } from 'react'
 import { ActivityIndicator, Linking } from 'react-native'
 
 import { PERSISTENCE_KEY } from '@/constants'
 import { LoginScreen } from '@/screens/Login'
-import { MainInterfaceScreen } from '@/screens/MainInterface'
+import {
+  MainInterfaceScreen,
+  type MainInterfaceTabParamList,
+} from '@/screens/MainInterface'
+import { SettingScreen } from '@/screens/Setting'
 
-const Stack = createStackNavigator()
+export type StackParamList = {
+  MainInterface: NavigatorScreenParams<MainInterfaceTabParamList>
+  Login: undefined
+  Setting: undefined
+}
+
+declare global {
+  namespace ReactNavigation {
+    interface RootParamList extends StackParamList {}
+  }
+}
+
+const Stack = createNativeStackNavigator<StackParamList>()
 
 function StackRoot() {
   return (
@@ -20,6 +39,10 @@ function StackRoot() {
       <Stack.Screen
         name="Login"
         component={LoginScreen}
+      />
+      <Stack.Screen
+        name="Setting"
+        component={SettingScreen}
       />
     </Stack.Navigator>
   )

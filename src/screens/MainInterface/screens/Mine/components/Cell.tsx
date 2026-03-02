@@ -1,6 +1,8 @@
-import { Pressable, Text, View } from 'react-native'
+import { Pressable, View } from 'react-native'
 
 import { Icons } from '@/components/common/MaterialDesignIcons'
+import { ThemeText } from '@/components/common/ThemeText'
+import { useForegroundColor } from '@/hooks/useCssVariable'
 
 interface RowProps {
   label: string
@@ -8,14 +10,16 @@ interface RowProps {
 }
 
 export function Cell({ label, onPress }: RowProps) {
+  const foregroundColor = useForegroundColor()
+
   return (
     <Pressable onPress={onPress}>
       <View className="flex-row items-center justify-between px-8 py-4">
-        <Text className="text-xl text-white">{label}</Text>
+        <ThemeText className="text-xl">{label}</ThemeText>
         <Icons
           name="chevron-right"
           size={24}
-          color="#fff"
+          color={foregroundColor}
         />
       </View>
     </Pressable>

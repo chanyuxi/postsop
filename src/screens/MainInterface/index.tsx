@@ -2,7 +2,6 @@ import {
   type BottomTabBarProps,
   createBottomTabNavigator,
 } from '@react-navigation/bottom-tabs'
-import { type ComponentType } from 'react'
 import { Pressable, View } from 'react-native'
 
 import { type IconsName } from '@/components/common/MaterialDesignIcons'
@@ -12,23 +11,18 @@ import { Home } from './screens/Home'
 import { Mine } from './screens/Mine'
 import { QuietMode } from './screens/QuietMode'
 
-type tabItemIconNameMapValue = { icon: IconsName; screen: ComponentType }
+export type MainInterfaceTabParamList = {
+  Home: undefined
+  QuietMode: undefined
+  Mine: undefined
+}
 
-const Tab = createBottomTabNavigator()
+const Tab = createBottomTabNavigator<MainInterfaceTabParamList>()
 
-const tabItemIconNameMap: Record<string, tabItemIconNameMapValue> = {
-  Home: {
-    icon: 'alpha-t-circle-outline',
-    screen: Home,
-  },
-  QuietMode: {
-    icon: 'alarm',
-    screen: QuietMode,
-  },
-  Mine: {
-    icon: 'account-circle-outline',
-    screen: Mine,
-  },
+const tabItemIconNameMap: Record<keyof MainInterfaceTabParamList, IconsName> = {
+  Home: 'alpha-t-circle-outline',
+  QuietMode: 'alarm',
+  Mine: 'account-circle-outline',
 }
 
 function CustomTabBar({ state, navigation }: BottomTabBarProps) {
@@ -58,7 +52,11 @@ function CustomTabBar({ state, navigation }: BottomTabBarProps) {
             <TabIcon
               focused={isFocused}
               size={26}
-              name={tabItemIconNameMap[route.name].icon}
+              name={
+                tabItemIconNameMap[
+                  route.name as keyof MainInterfaceTabParamList
+                ]
+              }
             />
           </Pressable>
         )
@@ -73,13 +71,18 @@ export function MainInterfaceScreen() {
       screenOptions={{ headerShown: false }}
       tabBar={CustomTabBar}
     >
-      {Object.entries(tabItemIconNameMap).map(([name, { screen }]) => (
-        <Tab.Screen
-          key={name}
-          name={name}
-          component={screen}
-        />
-      ))}
+      <Tab.Screen
+        name="Home"
+        component={Home}
+      />
+      <Tab.Screen
+        name="QuietMode"
+        component={QuietMode}
+      />
+      <Tab.Screen
+        name="Mine"
+        component={Mine}
+      />
     </Tab.Navigator>
   )
 }

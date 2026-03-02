@@ -5,10 +5,9 @@ import {
   SafeAreaProvider,
   useSafeAreaInsets,
 } from 'react-native-safe-area-context'
-import { useCSSVariable } from 'uniwind'
 
-import { isAndroidVersionLargerThan35 } from '@/constants'
-import { AuthProvider } from '@/contexts/auth'
+import { isAndroidAndVersionLargerThanOrEqualTo35 } from '@/constants'
+import { AuthProvider } from '@/modules/auth'
 import { RouteRender } from '@/routes'
 
 function AppContent() {
@@ -16,7 +15,14 @@ function AppContent() {
 
   const safeAreaStyles = {
     paddingLeft: safeAreaInsets.left,
-    paddingTop: isAndroidVersionLargerThan35 ? 0 : safeAreaInsets.top,
+    /**
+     * In Android devices, the status bar after version 35 cannot be
+     * colored, and compatibility with both scenarios will result in
+     * some cumbersome code. Therefore, I am considering implementing
+     * a custom status bar placeholder component, where padding Top
+     * is no longer needed.
+     */
+    paddingTop: 0,
     paddingRight: safeAreaInsets.right,
     paddingBottom: safeAreaInsets.bottom,
   }
@@ -24,8 +30,14 @@ function AppContent() {
   return (
     <View
       style={safeAreaStyles}
-      className="flex-1"
+      className="bg-background flex-1"
     >
+      {!isAndroidAndVersionLargerThanOrEqualTo35 && (
+        <StatusBar
+          backgroundColor="transparent"
+          translucent
+        />
+      )}
       <AuthProvider>
         <RouteRender />
       </AuthProvider>
@@ -34,14 +46,8 @@ function AppContent() {
 }
 
 export default function App() {
-  // TODO: This doesn't seem very good and needs optimization
-  const backgroundColor = useCSSVariable('--color-background') as string
-
   return (
     <SafeAreaProvider>
-      {!isAndroidVersionLargerThan35 && (
-        <StatusBar backgroundColor={backgroundColor} />
-      )}
       <AppContent />
     </SafeAreaProvider>
   )

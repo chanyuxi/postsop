@@ -1,6 +1,5 @@
-import { useCSSVariable } from 'uniwind'
-
 import { Icons, type IconsName } from '@/components/common/MaterialDesignIcons'
+import { useForegroundColor, usePrimaryColor } from '@/hooks/useCssVariable'
 
 interface TabIconProps {
   focused: boolean
@@ -9,13 +8,14 @@ interface TabIconProps {
 }
 
 export function TabIcon({ focused, size, name }: TabIconProps) {
-  const focusedColor = useCSSVariable('--color-primary') as string
+  const focusedColor = usePrimaryColor()
+  const unfocusedColor = useForegroundColor()
 
   return (
     <Icons
       size={size}
       name={name}
-      color={focused ? focusedColor : '#fff'}
+      color={focused ? focusedColor : unfocusedColor}
     />
   )
 }

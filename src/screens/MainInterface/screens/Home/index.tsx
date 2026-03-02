@@ -1,7 +1,6 @@
 import { useEffect, useState } from 'react'
 
 import { BackgroundView } from '@/components/common/BackgroundView'
-import { StatusBarPlaceholder } from '@/components/common/StatusBarPlaceholder'
 import { getTodos } from '@/services/todos'
 import { Todo } from '@/types/todo'
 
@@ -19,7 +18,6 @@ export function Home() {
 
   return (
     <BackgroundView>
-      <StatusBarPlaceholder backgroundColor="#1f2428" />
       <Calendar />
 
       {todos.length > 0 && <TodoList todos={todos} />}

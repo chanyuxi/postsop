@@ -8,14 +8,14 @@
     @variant light {
       --color-background-lightest: #2b3036;
       --color-background-lighter: #2b3036;
-      --color-background-light: #2b3036;
-      --color-background: #24292e;
-      --color-background-dark: #1f2428;
+      --color-background-light: #f9f9ff;
+      --color-background: #ecedf6;
+      --color-background-dark: #f9f9ff;
       --color-background-darker: #1f2428;
       --color-background-darkest: #1f2428;
 
-      --color-foreground: #fff;
-      --color-foreground-secondary: var(--color-slate-300);
+      --color-foreground: #0c0c0c;
+      --color-foreground-secondary: var(--color-slate-700);
 
       --color-primary: var(--color-blue-500);
     }
