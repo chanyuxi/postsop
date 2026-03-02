@@ -1,3 +1,4 @@
+// import { useNavigation } from '@react-navigation/native'
 import { createContext, PropsWithChildren, useContext } from 'react'
 
 import { unImplement } from '@/utils'
@@ -17,6 +18,10 @@ export const AuthContext = createContext<AuthContextValue>({
 })
 
 export function AuthProvider({ children }: PropsWithChildren) {
+  // const { navigate } = useNavigation()
+
+  const isLoggedIn = false
+
   const user: User = {
     id: 1,
     name: 'Seven Star',
@@ -28,7 +33,7 @@ export function AuthProvider({ children }: PropsWithChildren) {
   const logout = () => {}
 
   const value: AuthContextValue = {
-    isLoggedIn: true,
+    isLoggedIn,
     user,
     login,
     logout,

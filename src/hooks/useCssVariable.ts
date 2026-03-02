@@ -4,6 +4,7 @@ type Tier = 'light' | 'lighter' | 'lightest' | 'dark' | 'darker' | 'darkest'
 
 export const useForegroundColor = () =>
   useCSSVariable('--color-foreground') as string
+
 export const useBackgroundColor = (tier?: Tier) =>
   useCSSVariable(
     tier ? `--color-background-${tier}` : '--color-background'

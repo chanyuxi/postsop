@@ -17,24 +17,21 @@ export function TitleBar({ title, className }: TitleBarProps) {
   const foregroundColor = useForegroundColor()
 
   return (
-    <View
-      className={twMerge(
-        'bg-background-light h-16 flex-row items-center px-4',
-        className
-      )}
-    >
-      <View className="w-20">
-        <Icons
-          name="chevron-left"
-          size={30}
-          color={foregroundColor}
-          onPress={() => goBack()}
-        />
+    <View className={twMerge('bg-background-light pt-2 pb-4', className)}>
+      <View className="flex-row items-center px-4">
+        <View className="w-20">
+          <Icons
+            name="chevron-left"
+            size={30}
+            color={foregroundColor}
+            onPress={() => goBack()}
+          />
+        </View>
+        <View className="flex-1">
+          <ThemeText className="text-center text-xl">{title}</ThemeText>
+        </View>
+        <View className="w-20" />
       </View>
-      <View className="flex-1">
-        <ThemeText className="text-center text-xl">{title}</ThemeText>
-      </View>
-      <View className="w-20" />
     </View>
   )
 }
