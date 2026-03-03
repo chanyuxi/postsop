@@ -1,6 +1,5 @@
 import { PropsWithChildren } from 'react'
 import { Pressable } from 'react-native'
-import { twMerge } from 'tailwind-merge'
 import { tv, type VariantProps } from 'tailwind-variants'
 
 import { ThemeText } from '../ThemeText'
@@ -29,6 +28,11 @@ const button = tv({
         wrapper: 'w-full',
       },
     },
+    disabled: {
+      true: {
+        wrapper: 'opacity-50',
+      },
+    },
   },
   defaultVariants: {
     variant: 'primary',
@@ -36,33 +40,46 @@ const button = tv({
   },
 })
 
-const { wrapper, text } = button()
-
 interface ButtonProps extends VariantProps<typeof button> {
-  className?: string
+  wrapperClassName?: string
+  textClassName?: string
   onPress?: () => void
 }
 
 export function Button({
-  className,
+  wrapperClassName,
+  textClassName,
   onPress,
   variant,
   size,
   block,
+  disabled,
   children,
 }: PropsWithChildren<ButtonProps>) {
+  const { wrapper, text } = button({ variant, size, block, disabled })
+
+  const handlePress = () => {
+    if (disabled) {
+      return
+    }
+
+    onPress?.()
+  }
+
   const renderContent =
     typeof children === 'string' ? (
-      <ThemeText className={text({ size })}>{children}</ThemeText>
+      <ThemeText className={text({ className: textClassName })}>
+        {children}
+      </ThemeText>
     ) : (
       children
     )
 
   return (
     <Pressable
-      className={twMerge(wrapper({ variant, size, block }), className)}
-      onPress={onPress}
-      style={({ pressed }) => pressed && { opacity: 3 / 4 }}
+      className={wrapper({ className: wrapperClassName })}
+      onPress={handlePress}
+      style={({ pressed }) => pressed && { opacity: 0.85 }}
     >
       {renderContent}
     </Pressable>
