@@ -1,8 +1,17 @@
 @import 'tailwindcss';
 @import 'uniwind';
 
-/* Seven orders are sufficient for general systems, and special situations should be addressed in a special way, which is in line with best practices. */
+@theme {
+  --color-primary: var(--color-blue-500);
 
+  /* --color-btn-primary: var(--color-primary); */
+  /* --color-btn-secondary: var(--color-secondary); */
+  /* --color-btn-success: var(--color-green-500); */
+  /* ... */
+}
+
+/* Theme-Specific Variables */
+/* Seven orders are sufficient for general systems, and special situations should be addressed in a special way, which is in line with best practices. */
 @layer theme {
   :root {
     @variant light {
@@ -16,8 +25,6 @@
 
       --color-foreground: #0c0c0c;
       --color-foreground-secondary: var(--color-slate-700);
-
-      --color-primary: var(--color-blue-500);
     }
 
     @variant dark {
@@ -31,8 +38,6 @@
 
       --color-foreground: #fff;
       --color-foreground-secondary: var(--color-slate-300);
-
-      --color-primary: var(--color-blue-500);
     }
   }
 }
