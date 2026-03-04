@@ -10,4 +10,5 @@ export const useBackgroundColor = (tier?: Tier) =>
     tier ? `--color-background-${tier}` : '--color-background'
   ) as string
 
-export const usePrimaryColor = () => useCSSVariable('--color-primary') as string
+export const usePrimaryColor = () =>
+  useCSSVariable('--color-brand-primary') as string

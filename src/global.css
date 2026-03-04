@@ -2,41 +2,46 @@
 @import 'uniwind';
 
 @theme {
-  --color-primary: var(--color-blue-500);
+  /* Brand Colors */
 
-  /* --color-btn-primary: var(--color-primary); */
-  /* --color-btn-secondary: var(--color-secondary); */
-  /* --color-btn-success: var(--color-green-500); */
-  /* ... */
+  --color-brand-white: #fff;
+  --color-brand-black: #0c0c0c;
+
+  --color-brand-gray-100: #f7f7f7;
+  --color-brand-gray-200: #eaeaea;
+  --color-brand-gray-300: #dedede;
+  /* --color-brand-gray-400: #c7c7c7; */
+  /* --color-brand-gray-500: #b3b3b3; */
+  /* --color-brand-gray-600: #a6a6a6; */
+  --color-brand-gray-700: #2b3036;
+  --color-brand-gray-800: #24292e;
+  --color-brand-gray-900: #282e34;
+
+  --color-brand-primary: var(--color-blue-500);
+
+  /* Component Variables */
+  --color-button-primary: var(--color-brand-primary);
+  --color-button-secondary: var(--color-neutral-600);
 }
 
 /* Theme-Specific Variables */
-/* Seven orders are sufficient for general systems, and special situations should be addressed in a special way, which is in line with best practices. */
 @layer theme {
   :root {
     @variant light {
-      --color-background-lightest: #2b3036;
-      --color-background-lighter: #2b3036;
-      --color-background-light: #f9f9ff;
-      --color-background: #ecedf6;
-      --color-background-dark: #f9f9ff;
-      --color-background-darker: #1f2428;
-      --color-background-darkest: #1f2428;
+      --color-background: var(--color-brand-gray-200);
+      --color-background-secondary: var(--color-brand-gray-100);
+      --color-background-tertiary: var(--color-brand-gray-100);
 
-      --color-foreground: #0c0c0c;
+      --color-foreground: var(--color-brand-black);
       --color-foreground-secondary: var(--color-slate-700);
     }
 
     @variant dark {
-      --color-background-lightest: #2b3036;
-      --color-background-lighter: #2b3036;
-      --color-background-light: #2b3036;
-      --color-background: #24292e;
-      --color-background-dark: #1f2428;
-      --color-background-darker: #1f2428;
-      --color-background-darkest: #1f2428;
+      --color-background: var(--color-brand-gray-800);
+      --color-background-secondary: var(--color-brand-gray-700);
+      --color-background-tertiary: var(--color-brand-gray-900);
 
-      --color-foreground: #fff;
+      --color-foreground: var(--color-brand-white);
       --color-foreground-secondary: var(--color-slate-300);
     }
   }

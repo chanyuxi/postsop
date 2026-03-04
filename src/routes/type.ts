@@ -1,11 +1,12 @@
 import { NavigatorScreenParams } from '@react-navigation/native'
 
 export type AuthStackParamList = {
-  Login: undefined
+  SignIn: undefined
 }
 
 export type MainStackParamList = {
   MainInterface: NavigatorScreenParams<MainInterfaceTabParamList>
+  Setting: undefined
 }
 
 export type MainInterfaceTabParamList = {
@@ -18,3 +19,8 @@ export type RootStackParamList = {
   Auth: NavigatorScreenParams<AuthStackParamList>
   Main: NavigatorScreenParams<MainStackParamList>
 }
+
+export type AllStackParamList = RootStackParamList &
+  AuthStackParamList &
+  MainStackParamList &
+  MainInterfaceTabParamList

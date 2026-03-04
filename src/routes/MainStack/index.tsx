@@ -1,6 +1,7 @@
 import { createNativeStackNavigator } from '@react-navigation/native-stack'
 
 import { MainInterfaceScreen } from '@/screens/MainInterface'
+import { SettingScreen } from '@/screens/Setting'
 
 import { MainStackParamList } from '../type'
 
@@ -11,6 +12,10 @@ export function MainStack() {
       <Stack.Screen
         name="MainInterface"
         component={MainInterfaceScreen}
+      />
+      <Stack.Screen
+        name="Setting"
+        component={SettingScreen}
       />
     </Stack.Navigator>
   )

@@ -12,10 +12,10 @@ const button = tv({
   variants: {
     variant: {
       primary: {
-        wrapper: 'bg-primary',
+        wrapper: 'bg-button-primary',
       },
       secondary: {
-        wrapper: 'bg-gray-500',
+        wrapper: 'bg-button-secondary',
       },
     },
     size: {
@@ -37,6 +37,7 @@ const button = tv({
   defaultVariants: {
     variant: 'primary',
     size: 'medium',
+    block: true,
   },
 })
 

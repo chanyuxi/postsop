@@ -1,19 +1,20 @@
 import { type NativeStackScreenProps } from '@react-navigation/native-stack'
 import { useEffect, useState } from 'react'
-import { Button } from 'react-native'
 
 import { BackgroundView } from '@/components/common/BackgroundView'
-import { StackParamList } from '@/routes'
+import { Button } from '@/components/common/Button'
+import { useAuth } from '@/hooks/useAuth'
+import { type AllStackParamList } from '@/routes/type'
 import { getTodos } from '@/services/todos'
 import { Todo } from '@/types/todo'
 
 import { Calendar } from './components/Calendar'
 import { TodoList } from './components/TodoList'
 
-type HomeProps = NativeStackScreenProps<StackParamList>
-
-export function Home({ navigation }: HomeProps) {
+export function Home({}: NativeStackScreenProps<AllStackParamList>) {
   const [todos, setTodos] = useState<Todo[]>([])
+
+  const { signOut } = useAuth()
 
   useEffect(() => {
     getTodos().then((data) => {
@@ -27,10 +28,7 @@ export function Home({ navigation }: HomeProps) {
 
       {todos.length > 0 && <TodoList todos={todos} />}
 
-      <Button
-        title="Login"
-        onPress={() => navigation.navigate('Login')}
-      />
+      <Button onPress={signOut}>Sign Out</Button>
     </BackgroundView>
   )
 }

@@ -17,7 +17,7 @@ export function TitleBar({ title, className }: TitleBarProps) {
   const foregroundColor = useForegroundColor()
 
   return (
-    <View className={twMerge('bg-background-light pt-2 pb-4', className)}>
+    <View className={twMerge('bg-background-secondary pt-2 pb-4', className)}>
       <View className="flex-row items-center px-4">
         <View className="w-20">
           <Icons
