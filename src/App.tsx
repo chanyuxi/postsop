@@ -10,11 +10,15 @@ import { IS_ANDROID_AND_VERSION_LARGER_THAN_OR_EQUAL_TO_35 } from '@/constants'
 import { useSafeAreaStyles } from '@/hooks/useSafeAreaStyles'
 import { RootStack } from '@/routes'
 import { store } from '@/store'
+import { storage, StrorageKeys } from '@/utils/storage'
+import { setTheme, type ThemeName } from '@/utils/theme'
 
 function AppContent() {
   const safeAreaStyles = useSafeAreaStyles()
 
-  const configStatusBar =
+  // Given the introduction of Android edge-to-edge mode, we will uniformly
+  // use custom <StatusBarPlaceholder /> to manage the status bar
+  const ConfigureStatusBar =
     !IS_ANDROID_AND_VERSION_LARGER_THAN_OR_EQUAL_TO_35 && (
       <StatusBar
         backgroundColor="transparent"
@@ -23,7 +27,11 @@ function AppContent() {
     )
 
   useEffect(() => {
-    BootSplash.hide({ fade: true })
+    if (storage.contains(StrorageKeys.THEME)) {
+      setTheme(storage.getString(StrorageKeys.THEME) as ThemeName)
+    }
+
+    BootSplash.hide()
   }, [])
 
   return (
@@ -31,7 +39,7 @@ function AppContent() {
       style={safeAreaStyles}
       className="bg-background flex-1"
     >
-      {configStatusBar}
+      {ConfigureStatusBar}
       <RootStack />
     </View>
   )

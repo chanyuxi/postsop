@@ -8,3 +8,6 @@ export const PERSISTENCE_KEY = 'NAVIGATION_STATE_V1'
 
 export const IS_ANDROID_AND_VERSION_LARGER_THAN_OR_EQUAL_TO_35 =
   Platform.OS === 'android' && Platform.Version >= 35
+
+// Storage Key Definitions
+export const STRORAGE_KEY_THEME = 'system.theme'

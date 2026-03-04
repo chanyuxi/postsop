@@ -1,7 +1,7 @@
 import { createNativeStackNavigator } from '@react-navigation/native-stack'
 
-import { MainInterfaceScreen } from '@/screens/MainInterface'
-import { SettingScreen } from '@/screens/Setting'
+import { MainInterfaceScreen } from '@/screens/MainInterfaceScreen'
+import { SettingScreen } from '@/screens/SettingScreen'
 
 import { MainStackParamList } from '../type'
 

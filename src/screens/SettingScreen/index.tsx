@@ -1,9 +1,11 @@
-import { Pressable, StatusBar, View } from 'react-native'
+import { Pressable, View } from 'react-native'
 import { Uniwind, useUniwind } from 'uniwind'
 
 import { ScreenWrapper } from '@/components/common/ScreenWrapper'
 import { ThemeText } from '@/components/common/ThemeText'
 import { TitleBar } from '@/components/common/TitleBar'
+import { storage, StrorageKeys } from '@/utils/storage'
+import { setTheme } from '@/utils/theme'
 
 export function SettingScreen() {
   const { theme, hasAdaptiveThemes } = useUniwind()
@@ -11,10 +13,9 @@ export function SettingScreen() {
   const activeTheme = hasAdaptiveThemes ? 'system' : theme
 
   const toggleTheme = () => {
-    const isLightTheme = Uniwind.currentTheme === 'light'
-
-    Uniwind.setTheme(isLightTheme ? 'dark' : 'light')
-    StatusBar.setBarStyle(isLightTheme ? 'light-content' : 'dark-content')
+    const newTheme = Uniwind.currentTheme === 'light' ? 'dark' : 'light'
+    setTheme(newTheme)
+    storage.set(StrorageKeys.THEME, newTheme)
   }
 
   return (

@@ -6,7 +6,7 @@ import { ThemeText } from '../ThemeText'
 
 const button = tv({
   slots: {
-    wrapper: 'rounded-lg',
+    wrapper: '',
     text: 'text-foreground text-center',
   },
   variants: {
@@ -25,6 +25,11 @@ const button = tv({
         wrapper: 'px-6 py-4',
       },
     },
+    rounded: {
+      true: {
+        wrapper: 'rounded-lg',
+      },
+    },
     block: {
       true: {
         wrapper: 'w-full',
@@ -39,6 +44,7 @@ const button = tv({
   defaultVariants: {
     variant: 'primary',
     size: 'medium',
+    rounded: true,
     block: true,
   },
 })
@@ -57,11 +63,12 @@ export function Button({
   onPress,
   variant,
   size,
+  rounded,
   block,
   disabled,
   children,
 }: PropsWithChildren<ButtonProps>) {
-  const { wrapper, text } = button({ variant, size, block, disabled })
+  const { wrapper, text } = button({ variant, size, rounded, block, disabled })
 
   const handlePress = () => {
     onPress?.()
