@@ -1,25 +1,19 @@
 import { type BottomTabScreenProps } from '@react-navigation/bottom-tabs'
-import { type CompositeScreenProps } from '@react-navigation/native'
-import { type NativeStackScreenProps } from '@react-navigation/native-stack'
 import { Text, View } from 'react-native'
 
 import { BackgroundView } from '@/components/common/BackgroundView'
 import { ThemeText } from '@/components/common/ThemeText'
 import { APP_VERSION } from '@/constants'
-import { useAuth } from '@/modules/auth'
-import { type StackParamList } from '@/routes'
+import { useAuth } from '@/hooks/useAuth'
+import { type MainInterfaceTabParamList } from '@/routes/type'
 
-import { type MainInterfaceTabParamList } from '../..'
 import { Cell } from './components/Cell'
 import { CellGroup } from './components/CellGroup'
 
-type MineScreenProps = CompositeScreenProps<
-  BottomTabScreenProps<MainInterfaceTabParamList, 'Mine'>,
-  NativeStackScreenProps<StackParamList, 'MainInterface'>
->
-
-export function Mine({ navigation }: MineScreenProps) {
-  const { user } = useAuth()
+export function Mine({
+  navigation,
+}: BottomTabScreenProps<MainInterfaceTabParamList, 'Mine'>) {
+  const { isSignIn, user } = useAuth()
 
   const handleSettingPress = () => {
     navigation.navigate('Setting')
@@ -32,8 +26,13 @@ export function Mine({ navigation }: MineScreenProps) {
     >
       <View className="bg-background-light">
         <View className="p-8">
-          <ThemeText className="mb-2 text-4xl">{user?.name}</ThemeText>
-          <Text className="text-foreground-secondary">{user?.signature}</Text>
+          <ThemeText className="mb-2 text-4xl">
+            {isSignIn && user.name}
+          </ThemeText>
+          <Text className="text-foreground-secondary">
+            {' '}
+            {isSignIn && user.signature}
+          </Text>
         </View>
       </View>
 

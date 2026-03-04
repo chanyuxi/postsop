@@ -1,46 +1,38 @@
 import './global.css'
 
+import { useEffect } from 'react'
 import { StatusBar, View } from 'react-native'
-import {
-  SafeAreaProvider,
-  useSafeAreaInsets,
-} from 'react-native-safe-area-context'
+import BootSplash from 'react-native-bootsplash'
+import { SafeAreaProvider } from 'react-native-safe-area-context'
+import { Provider as StoreProvider } from 'react-redux'
 
-import { isAndroidAndVersionLargerThanOrEqualTo35 } from '@/constants'
-import { AuthProvider } from '@/modules/auth'
-import { RouteRender } from '@/routes'
+import { IS_ANDROID_AND_VERSION_LARGER_THAN_OR_EQUAL_TO_35 } from '@/constants'
+import { useSafeAreaStyles } from '@/hooks/useSafeAreaStyles'
+import { RootStack } from '@/routes'
+import { store } from '@/store'
 
 function AppContent() {
-  const safeAreaInsets = useSafeAreaInsets()
+  const safeAreaStyles = useSafeAreaStyles()
 
-  const safeAreaStyles = {
-    paddingLeft: safeAreaInsets.left,
-    /**
-     * In Android devices, the status bar after version 35 cannot be
-     * colored, and compatibility with both scenarios will result in
-     * some cumbersome code. Therefore, I am considering implementing
-     * a custom status bar placeholder component, where padding Top
-     * is no longer needed.
-     */
-    paddingTop: 0,
-    paddingRight: safeAreaInsets.right,
-    paddingBottom: safeAreaInsets.bottom,
-  }
+  const configStatusBar =
+    !IS_ANDROID_AND_VERSION_LARGER_THAN_OR_EQUAL_TO_35 && (
+      <StatusBar
+        backgroundColor="transparent"
+        translucent
+      />
+    )
+
+  useEffect(() => {
+    BootSplash.hide({ fade: true })
+  }, [])
 
   return (
     <View
       style={safeAreaStyles}
       className="bg-background flex-1"
     >
-      {!isAndroidAndVersionLargerThanOrEqualTo35 && (
-        <StatusBar
-          backgroundColor="transparent"
-          translucent
-        />
-      )}
-      <AuthProvider>
-        <RouteRender />
-      </AuthProvider>
+      {configStatusBar}
+      <RootStack />
     </View>
   )
 }
@@ -48,7 +40,9 @@ function AppContent() {
 export default function App() {
   return (
     <SafeAreaProvider>
-      <AppContent />
+      <StoreProvider store={store}>
+        <AppContent />
+      </StoreProvider>
     </SafeAreaProvider>
   )
 }
