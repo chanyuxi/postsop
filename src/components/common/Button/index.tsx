@@ -6,16 +6,18 @@ import { ThemeText } from '../ThemeText'
 
 const button = tv({
   slots: {
-    wrapper: 'rounded',
+    wrapper: 'rounded-lg',
     text: 'text-foreground text-center',
   },
   variants: {
     variant: {
       primary: {
         wrapper: 'bg-button-primary',
+        text: 'text-white',
       },
       secondary: {
         wrapper: 'bg-button-secondary',
+        text: 'text-white',
       },
     },
     size: {
@@ -44,12 +46,14 @@ const button = tv({
 interface ButtonProps extends VariantProps<typeof button> {
   wrapperClassName?: string
   textClassName?: string
+  uppercase?: boolean
   onPress?: () => void
 }
 
 export function Button({
   wrapperClassName,
   textClassName,
+  uppercase = true,
   onPress,
   variant,
   size,
@@ -60,17 +64,13 @@ export function Button({
   const { wrapper, text } = button({ variant, size, block, disabled })
 
   const handlePress = () => {
-    if (disabled) {
-      return
-    }
-
     onPress?.()
   }
 
   const renderContent =
     typeof children === 'string' ? (
       <ThemeText className={text({ className: textClassName })}>
-        {children}
+        {uppercase ? children.toUpperCase() : children}
       </ThemeText>
     ) : (
       children
@@ -79,6 +79,7 @@ export function Button({
   return (
     <Pressable
       className={wrapper({ className: wrapperClassName })}
+      disabled={disabled}
       onPress={handlePress}
       style={({ pressed }) => pressed && { opacity: 0.85 }}
     >

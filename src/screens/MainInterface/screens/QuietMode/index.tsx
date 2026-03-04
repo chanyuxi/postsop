@@ -1,11 +1,11 @@
 import { Text } from 'react-native'
 
-import { BackgroundView } from '@/components/common/BackgroundView'
+import { ScreenWrapper } from '@/components/common/ScreenWrapper'
 
 export function QuietMode() {
   return (
-    <BackgroundView>
+    <ScreenWrapper>
       <Text className="text-white">QuietMode</Text>
-    </BackgroundView>
+    </ScreenWrapper>
   )
 }

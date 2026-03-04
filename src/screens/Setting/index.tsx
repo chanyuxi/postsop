@@ -1,7 +1,7 @@
 import { Pressable, StatusBar, View } from 'react-native'
 import { Uniwind, useUniwind } from 'uniwind'
 
-import { BackgroundView } from '@/components/common/BackgroundView'
+import { ScreenWrapper } from '@/components/common/ScreenWrapper'
 import { ThemeText } from '@/components/common/ThemeText'
 import { TitleBar } from '@/components/common/TitleBar'
 
@@ -18,7 +18,7 @@ export function SettingScreen() {
   }
 
   return (
-    <BackgroundView statusBarClassName="bg-background-secondary">
+    <ScreenWrapper statusBarClassName="bg-background-secondary">
       <TitleBar title="SETTING" />
 
       <View className="p-6">
@@ -35,6 +35,6 @@ export function SettingScreen() {
           </View>
         </View>
       </View>
-    </BackgroundView>
+    </ScreenWrapper>
   )
 }

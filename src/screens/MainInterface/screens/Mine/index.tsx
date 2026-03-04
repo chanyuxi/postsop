@@ -1,7 +1,7 @@
 import { type BottomTabScreenProps } from '@react-navigation/bottom-tabs'
 import { Text, View } from 'react-native'
 
-import { BackgroundView } from '@/components/common/BackgroundView'
+import { ScreenWrapper } from '@/components/common/ScreenWrapper'
 import { ThemeText } from '@/components/common/ThemeText'
 import { APP_VERSION } from '@/constants'
 import { useAuth } from '@/hooks/useAuth'
@@ -20,7 +20,7 @@ export function Mine({
   }
 
   return (
-    <BackgroundView
+    <ScreenWrapper
       contentClassName="gap-4"
       statusBarClassName="bg-background-secondary"
     >
@@ -45,10 +45,10 @@ export function Mine({
       </CellGroup>
 
       <View className="flex-1 justify-end p-8">
-        <Text className="text-center text-xs text-white/10">
+        <Text className="text-black.10 text-center text-black/10 italic dark:text-white/10">
           Version {APP_VERSION}
         </Text>
       </View>
-    </BackgroundView>
+    </ScreenWrapper>
   )
 }

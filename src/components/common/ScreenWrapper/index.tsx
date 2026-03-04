@@ -4,16 +4,16 @@ import { twMerge } from 'tailwind-merge'
 
 import { StatusBarPlaceholder } from '../StatusBarPlaceholder'
 
-interface BackgroundViewProps {
+interface ScreenWrapperProps {
   contentClassName?: string
   statusBarClassName?: string
 }
 
-export function BackgroundView({
+export function ScreenWrapper({
   contentClassName,
   statusBarClassName,
   children,
-}: PropsWithChildren<BackgroundViewProps>) {
+}: PropsWithChildren<ScreenWrapperProps>) {
   return (
     <View className="bg-background flex-1">
       <StatusBarPlaceholder className={statusBarClassName} />
