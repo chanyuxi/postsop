@@ -1,6 +1,6 @@
 {
   "name": "postsop",
-  "version": "development-0.1.9.alpha.0",
+  "version": "0.1.9",
   "private": true,
   "scripts": {
     "android": "react-native run-android",
