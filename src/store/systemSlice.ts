@@ -1,34 +1,39 @@
 import { createSlice, type PayloadAction } from '@reduxjs/toolkit'
 import { nanoid } from '@reduxjs/toolkit'
 
-interface Toast {
-  id: string
-  message: string
-}
+import { type Toast } from '@/types/system'
 
 interface SystemState {
-  toasts: Toast[]
+  activatedToast: Toast | null
 }
 
+const toastQueue: Toast[] = []
+
 const initialState: SystemState = {
-  toasts: [],
+  activatedToast: null,
 }
 
 export const systemSlice = createSlice({
   name: 'system',
   initialState,
   reducers: {
-    addToast: (state, action: PayloadAction<string>) => {
-      state.toasts.push({
-        id: nanoid(8),
-        message: action.payload,
-      })
+    scheduleToast: (state, action: PayloadAction<Omit<Toast, 'id'>>) => {
+      const toast = {
+        id: nanoid(),
+        ...action.payload,
+      }
+
+      if (state.activatedToast === null) {
+        state.activatedToast = toast
+      } else {
+        toastQueue.push(toast)
+      }
     },
-    removeToast: (state, action: PayloadAction<string>) => {
-      state.toasts = state.toasts.filter((toast) => toast.id !== action.payload)
+    nextToast: (state) => {
+      state.activatedToast = toastQueue.shift() || null
     },
   },
 })
 
-export const { addToast, removeToast } = systemSlice.actions
+export const { scheduleToast, nextToast } = systemSlice.actions
 export default systemSlice.reducer

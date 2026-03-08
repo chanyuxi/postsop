@@ -4,14 +4,22 @@ import { Button } from '@/components/common/Button'
 import { ScreenWrapper } from '@/components/common/ScreenWrapper'
 import { APP_VERSION } from '@/constants'
 import { useAuth } from '@/hooks/useAuth'
+import { useToast } from '@/hooks/useToast'
 
 export function SignInScreen() {
+  const { toast } = useToast()
+
   const { signIn } = useAuth()
+
+  const handleSignIn = () => {
+    toast({ message: 'Sign in successful' })
+    signIn()
+  }
 
   return (
     <ScreenWrapper contentClassName="p-8 items-center justify-center">
       <View className="w-full gap-4">
-        <Button onPress={signIn}>Sign in</Button>
+        <Button onPress={handleSignIn}>Sign in</Button>
         <Button variant="secondary">Create new account</Button>
       </View>
 

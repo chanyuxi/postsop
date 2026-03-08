@@ -1,5 +1,7 @@
 import { createSlice } from '@reduxjs/toolkit'
 
+import { type User } from '@/types/system'
+
 export interface AuthState {
   user: User | null
 }

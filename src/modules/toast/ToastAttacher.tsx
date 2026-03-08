@@ -1,86 +1,98 @@
-import { useEffect } from 'react'
-import { Button, Text, View } from 'react-native'
+import { useEffect, useId } from 'react'
+import { Text, View } from 'react-native'
 import Animated, {
   Easing,
   interpolate,
-  runOnJS,
   useAnimatedStyle,
   useSharedValue,
   withDelay,
-  withSequence,
   withTiming,
 } from 'react-native-reanimated'
+import { scheduleOnRN } from 'react-native-worklets'
 
 import { useAppDispatch, useAppSelector } from '@/hooks/useStore'
-import { addToast, removeToast } from '@/store/systemSlice'
+import { nextToast } from '@/store/systemSlice'
+import { type Toast } from '@/types/system'
 
 interface ToastProps {
-  id: string
+  toast: Toast
 }
 
-function Toast({ id }: ToastProps) {
+function Toast({ toast }: ToastProps) {
+  const { message, duration } = toast
+
   const dispatch = useAppDispatch()
+
   const enter = useSharedValue(0)
   const exit = useSharedValue(0)
 
-  const animatedStyle = useAnimatedStyle(() => {
-    const opacity = enter.value * (1 - exit.value)
-    const scale = interpolate(enter.value, [0, 1], [0.25, 1])
-    const translateY = interpolate(enter.value, [0, 1], [20, 0])
-    return {
-      opacity,
-      transform: [{ scale }, { translateY }],
-    }
-  })
+  const animatedStyle = useAnimatedStyle(() => ({
+    opacity: enter.value * (1 - exit.value),
+    transform: [
+      {
+        scale: interpolate(enter.value, [0, 1], [0.25, 1]),
+      },
+      {
+        translateY: interpolate(enter.value, [0, 1], [20, 0]),
+      },
+    ],
+  }))
 
   useEffect(() => {
-    const dispatchRemove = () => dispatch(removeToast(id))
+    const dispatchRemove = () => dispatch(nextToast())
 
-    const enterAnimation = withTiming(1, {
-      duration: 300,
+    enter.value = withTiming(1, {
+      duration: 100,
       easing: Easing.inOut(Easing.ease),
     })
 
-    const exitAnimation = withTiming(
-      1,
-      { duration: 300, easing: Easing.out(Easing.ease) },
-      (finished) => {
-        if (finished) runOnJS(dispatchRemove)()
-      }
+    exit.value = withDelay(
+      duration,
+      withTiming(
+        1,
+        {
+          duration: 300,
+        },
+        (finished) => {
+          if (finished) scheduleOnRN(dispatchRemove)
+        }
+      )
     )
-
-    enter.value = withSequence(enterAnimation, withTiming(1, { duration: 0 }))
-    exit.value = withDelay(2000, exitAnimation)
-  }, [enter, exit, dispatch, id])
+  }, [enter, exit, duration, dispatch])
 
   return (
     <Animated.View
       style={animatedStyle}
       className="mx-auto h-10 min-w-25 items-center justify-center rounded-full bg-white px-4 shadow-lg"
     >
-      <Text>Toast</Text>
+      <Text className="text-sm">{message}</Text>
     </Animated.View>
   )
 }
 
+let mountedToastAttacherId: string | null = null
+
 export function ToastAttacher() {
-  const toasts = useAppSelector((state) => state.system.toasts)
-  const dispatch = useAppDispatch()
+  const id = useId()
+
+  const activatedToast = useAppSelector((state) => state.system.activatedToast)
+
+  useEffect(() => {
+    if (mountedToastAttacherId !== null && mountedToastAttacherId !== id) {
+      console.warn('ToastAttacher is mounted multiple times')
+    } else {
+      mountedToastAttacherId = id
+    }
+  }, [id])
 
   return (
-    <View>
-      <Button
-        title="show"
-        onPress={() => dispatch(addToast('Hello Toast'))}
-      />
-      <View className="absolute right-0 bottom-0 left-0 gap-3 pb-20">
-        {toasts.map((toast) => (
-          <Toast
-            key={toast.id}
-            id={toast.id}
-          />
-        ))}
-      </View>
+    <View className="absolute right-0 bottom-0 left-0 gap-3 pb-30">
+      {activatedToast && (
+        <Toast
+          key={activatedToast.id}
+          toast={activatedToast}
+        />
+      )}
     </View>
   )
 }
