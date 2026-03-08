@@ -77,16 +77,15 @@ export function ToastAttacher() {
 
   const activatedToast = useAppSelector((state) => state.system.activatedToast)
 
-  useEffect(() => {
-    if (mountedToastAttacherId !== null && mountedToastAttacherId !== id) {
-      console.warn('ToastAttacher is mounted multiple times')
-    } else {
-      mountedToastAttacherId = id
-    }
-  }, [id])
+  if (mountedToastAttacherId === null) {
+    mountedToastAttacherId = id
+  } else if (mountedToastAttacherId !== id) {
+    console.warn('ToastAttacher is mounted multiple times')
+    return null
+  }
 
   return (
-    <View className="absolute right-0 bottom-0 left-0 gap-3 pb-30">
+    <View className="absolute right-0 bottom-0 left-0 z-50 gap-3 pb-30">
       {activatedToast && (
         <Toast
           key={activatedToast.id}
