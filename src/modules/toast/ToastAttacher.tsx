@@ -1,4 +1,4 @@
-import { useEffect, useId } from 'react'
+import { useEffect } from 'react'
 import { Text, View } from 'react-native'
 import Animated, {
   Easing,
@@ -10,6 +10,7 @@ import Animated, {
 } from 'react-native-reanimated'
 import { scheduleOnRN } from 'react-native-worklets'
 
+import { useIsSingletonComponent } from '@/hooks/useIsSingletonComponent'
 import { useAppDispatch, useAppSelector } from '@/hooks/useStore'
 import { nextToast } from '@/store/systemSlice'
 import { type Toast } from '@/types/system'
@@ -70,22 +71,20 @@ function Toast({ toast }: ToastProps) {
   )
 }
 
-let mountedToastAttacherId: string | null = null
-
 export function ToastAttacher() {
-  const id = useId()
+  const isSingleton = useIsSingletonComponent('ToastAttacher')
 
   const activatedToast = useAppSelector((state) => state.system.activatedToast)
 
-  if (mountedToastAttacherId === null) {
-    mountedToastAttacherId = id
-  } else if (mountedToastAttacherId !== id) {
+  if (!isSingleton) {
     console.warn('ToastAttacher is mounted multiple times')
     return null
   }
 
+  console.log('render')
+
   return (
-    <View className="absolute right-0 bottom-0 left-0 z-50 gap-3 pb-30">
+    <View className="absolute right-0 bottom-0 left-0 gap-3 pb-30">
       {activatedToast && (
         <Toast
           key={activatedToast.id}
