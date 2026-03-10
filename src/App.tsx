@@ -3,6 +3,7 @@ import './global.css'
 import { useEffect } from 'react'
 import { StatusBar, View } from 'react-native'
 import BootSplash from 'react-native-bootsplash'
+import { GestureHandlerRootView } from 'react-native-gesture-handler'
 import { SafeAreaProvider } from 'react-native-safe-area-context'
 import { Provider as StoreProvider } from 'react-redux'
 
@@ -48,12 +49,14 @@ function AppContent() {
 
 export default function App() {
   return (
-    <SafeAreaProvider>
-      <StoreProvider store={store}>
-        <AppContent />
+    <GestureHandlerRootView>
+      <SafeAreaProvider>
+        <StoreProvider store={store}>
+          <AppContent />
 
-        <ToastAttacher />
-      </StoreProvider>
-    </SafeAreaProvider>
+          <ToastAttacher />
+        </StoreProvider>
+      </SafeAreaProvider>
+    </GestureHandlerRootView>
   )
 }

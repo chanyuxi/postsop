@@ -1,6 +1,6 @@
 import { useRef } from 'react'
 import {
-  GestureResponderEvent,
+  type GestureResponderEvent,
   ScrollView,
   StyleSheet,
   Text,

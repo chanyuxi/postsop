@@ -6,7 +6,7 @@ import { ScreenWrapper } from '@/components/common/ScreenWrapper'
 import { useAuth } from '@/hooks/useAuth'
 import { type AllStackParamList } from '@/routes/type'
 import { getTodos } from '@/services/todos'
-import { Todo } from '@/types/todo'
+import { type Todo } from '@/types/todo'
 
 import { Calendar } from './components/Calendar'
 import { TodoList } from './components/TodoList'

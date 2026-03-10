@@ -1,11 +1,11 @@
 import {
-  PropsWithChildren,
+  type PropsWithChildren,
   useCallback,
   useEffect,
   useRef,
   useState,
 } from 'react'
-import { Animated, LayoutChangeEvent, View } from 'react-native'
+import { Animated, type LayoutChangeEvent, View } from 'react-native'
 
 /**
  * Props for the Collapse component
