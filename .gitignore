@@ -76,3 +76,4 @@ yarn-error.log
 
 # Tailwindcss
 tailwind-output.css
+uniwind-types.d.ts

@@ -13,7 +13,11 @@ export function useToast() {
   const dispatch = useAppDispatch()
 
   const toast = useCallback(
-    (options: ToastOptions) => {
+    (options: ToastOptions | string) => {
+      if (typeof options === 'string') {
+        options = { message: options }
+      }
+
       const { message, duration = 3000 } = options
 
       dispatch(

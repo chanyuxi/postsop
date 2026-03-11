@@ -77,7 +77,7 @@ Form.Item = function FormItem(props: PropsWithChildren<FormItemProps>) {
                 entering={FadeIn}
                 exiting={FadeOut}
               >
-                <ThemeText className="text-red-500">
+                <ThemeText className="text-brand-danger">
                   {transformErrorMessage(fieldState.error)}
                 </ThemeText>
               </Animated.View>

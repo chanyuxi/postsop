@@ -12,11 +12,23 @@ const button = tv({
   variants: {
     variant: {
       primary: {
-        wrapper: 'bg-button-primary',
+        wrapper: 'bg-brand-primary',
         text: 'text-white',
       },
       secondary: {
-        wrapper: 'bg-button-secondary',
+        wrapper: 'bg-brand-secondary',
+        text: 'text-white',
+      },
+      success: {
+        wrapper: 'bg-brand-success',
+        text: 'text-white',
+      },
+      danger: {
+        wrapper: 'bg-brand-danger',
+        text: 'text-white',
+      },
+      warning: {
+        wrapper: 'bg-brand-warning',
         text: 'text-white',
       },
     },

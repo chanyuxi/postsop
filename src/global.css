@@ -2,47 +2,54 @@
 @import 'uniwind';
 
 @theme static {
-  /* Brand Colors */
+  --color-brand-gray-100: #0d0d0d;
+  --color-brand-gray-200: #151515;
+  --color-brand-gray-300: #242424;
+  --color-brand-gray-400: #3c3c3c;
+  --color-brand-gray-500: #5f5f5f;
+  --color-brand-gray-600: #797979;
+  --color-brand-gray-700: #c1c1c1;
+  --color-brand-gray-800: #e3e3e3;
+  --color-brand-gray-900: #efefef;
 
-  --color-brand-white: #fff;
-  --color-brand-black: #0c0c0c;
+  --color-brand-white: var(--color-brand-gray-900);
+  --color-brand-black: var(--color-brand-gray-100);
 
-  --color-brand-gray-100: #f7f7f7;
-  --color-brand-gray-200: #eaeaea;
-  --color-brand-gray-300: #dedede;
-  /* --color-brand-gray-400: #c7c7c7; */
-  /* --color-brand-gray-500: #b3b3b3; */
-  /* --color-brand-gray-600: #a6a6a6; */
-  --color-brand-gray-700: #2b3036;
-  --color-brand-gray-800: #24292e;
-  --color-brand-gray-900: #282e34;
+  --color-brand-blue: #2b5bc3;
+  --color-brand-green: #239c50;
+  --color-brand-red: #c1301c;
+  --color-brand-yellow: #d9a114;
 
-  --color-brand-primary: var(--color-blue-500);
-
-  /* Component Variables */
-  --color-button-primary: var(--color-brand-primary);
-  --color-button-secondary: var(--color-neutral-600);
+  --color-brand-primary: var(--color-brand-blue);
+  --color-brand-secondary: var(--color-brand-gray-400);
+  --color-brand-success: var(--color-brand-green);
+  --color-brand-warning: var(--color-brand-yellow);
+  --color-brand-danger: var(--color-brand-red);
 }
 
 /* Theme-Specific Variables */
 @layer theme {
   :root {
     @variant light {
-      --color-background: var(--color-brand-gray-200);
-      --color-background-secondary: var(--color-brand-gray-100);
-      --color-background-tertiary: var(--color-brand-gray-100);
-
+      /* Base */
+      --color-background: var(--color-brand-gray-800);
+      --color-background-secondary: var(--color-brand-gray-900);
       --color-foreground: var(--color-brand-black);
-      --color-foreground-secondary: var(--color-slate-700);
+      --color-foreground-secondary: var(--color-brand-gray-400);
+      /* Components */
+      --color-background-bottom-bar: var(--color-brand-gray-900);
+      --color-input: var(--color-brand-gray-900);
     }
 
     @variant dark {
-      --color-background: var(--color-brand-gray-800);
-      --color-background-secondary: var(--color-brand-gray-700);
-      --color-background-tertiary: var(--color-brand-gray-900);
-
+      /* Base */
+      --color-background: var(--color-brand-gray-100);
+      --color-background-secondary: var(--color-brand-gray-200);
       --color-foreground: var(--color-brand-white);
-      --color-foreground-secondary: var(--color-slate-300);
+      --color-foreground-secondary: var(--color-brand-gray-600);
+      /* Components */
+      --color-background-bottom-bar: var(--color-brand-gray-200);
+      --color-input: var(--color-brand-gray-300);
     }
   }
 }

@@ -27,7 +27,7 @@ const tabItemIconNameMap: Record<keyof MainInterfaceTabParamList, IconsName> = {
 
 function CustomTabBar({ state, navigation }: BottomTabBarProps) {
   return (
-    <View className="bg-background-tertiary h-[60] flex-row items-center">
+    <View className="bg-background-bottom-bar h-[60] flex-row items-center">
       {state.routes.map((route, index) => {
         const isFocused = state.index === index
 
