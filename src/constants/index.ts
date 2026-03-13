@@ -11,3 +11,4 @@ export const IS_ANDROID_AND_VERSION_LARGER_THAN_OR_EQUAL_TO_35 =
 
 // Storage Key Definitions
 export const STRORAGE_KEY_THEME = 'system.theme'
+export const AUTHORIZATION_USER_TOKEN = 'authorization.user.token'

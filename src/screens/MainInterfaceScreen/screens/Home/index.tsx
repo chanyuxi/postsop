@@ -1,20 +1,18 @@
 import { type NativeStackScreenProps } from '@react-navigation/native-stack'
 import { useEffect, useState } from 'react'
+import { View } from 'react-native'
 
-import { Button } from '@/components/common/Button'
+import { Icons, TopBar } from '@/components/common'
 import { ScreenWrapper } from '@/components/common/ScreenWrapper'
-import { useAuth } from '@/hooks/useAuth'
 import { type AllStackParamList } from '@/routes/type'
 import { getTodos } from '@/services/todos'
 import { type Todo } from '@/types/todo'
 
-import { Calendar } from './components/Calendar'
+import { StatsPanel } from './components/StatsPanel'
 import { TodoList } from './components/TodoList'
 
 export function Home({}: NativeStackScreenProps<AllStackParamList>) {
   const [todos, setTodos] = useState<Todo[]>([])
-
-  const { signOut } = useAuth()
 
   useEffect(() => {
     getTodos().then((data) => {
@@ -23,12 +21,18 @@ export function Home({}: NativeStackScreenProps<AllStackParamList>) {
   }, [])
 
   return (
-    <ScreenWrapper>
-      <Calendar />
+    <ScreenWrapper statusBarClassName="bg-background-secondary">
+      <TopBar
+        hideBackButton
+        title="Todo"
+        rightIcon={<Icons name="bell-outline" />}
+      />
 
-      {todos.length > 0 && <TodoList todos={todos} />}
+      <View className="flex-1 p-4">
+        <StatsPanel />
 
-      <Button onPress={signOut}>Sign Out</Button>
+        {todos.length > 0 && <TodoList todos={todos} />}
+      </View>
     </ScreenWrapper>
   )
 }

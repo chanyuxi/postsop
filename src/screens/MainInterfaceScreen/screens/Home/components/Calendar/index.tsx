@@ -48,7 +48,6 @@ export function Calendar() {
               <TouchableOpacity onPress={closeModal}>
                 <Icons
                   name="close"
-                  size={24}
                   color="#000"
                 />
               </TouchableOpacity>

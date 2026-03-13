@@ -1,11 +1,13 @@
-import { Text } from 'react-native'
-
+import { TopBar } from '@/components/common'
 import { ScreenWrapper } from '@/components/common/ScreenWrapper'
 
 export function QuietMode() {
   return (
-    <ScreenWrapper>
-      <Text className="text-white">QuietMode</Text>
+    <ScreenWrapper statusBarClassName="bg-background-secondary">
+      <TopBar
+        title="Quiet Mode"
+        hideBackButton
+      />
     </ScreenWrapper>
   )
 }

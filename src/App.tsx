@@ -15,8 +15,13 @@ import { store } from '@/store'
 import { storage, StrorageKeys } from '@/utils/storage'
 import { setTheme, type ThemeName } from '@/utils/theme'
 
+import { useAppDispatch } from './hooks'
+import { unstable_initializeUser } from './store/authSlice'
+
 function AppContent() {
   const safeAreaStyles = useSafeAreaStyles()
+
+  const dispatch = useAppDispatch()
 
   // Given the introduction of Android edge-to-edge mode, we will uniformly
   // use custom <StatusBarPlaceholder /> to manage the status bar
@@ -33,8 +38,12 @@ function AppContent() {
       setTheme(storage.getString(StrorageKeys.THEME) as ThemeName)
     }
 
+    if (storage.contains(StrorageKeys.TOKEN)) {
+      dispatch(unstable_initializeUser())
+    }
+
     BootSplash.hide()
-  }, [])
+  }, [dispatch])
 
   return (
     <View

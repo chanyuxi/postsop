@@ -8,6 +8,7 @@ import { Form } from '@/components/form/Form'
 import { Input } from '@/components/form/Input'
 import { APP_VERSION } from '@/constants'
 import { useAuth, useToast } from '@/hooks'
+import { storage, StrorageKeys } from '@/utils/storage'
 
 interface LoginFormState {
   email: string
@@ -18,7 +19,7 @@ const loginSchema = z.object({
   email: z.email('Invalid email address'),
   password: z
     .string('Password is required')
-    .min(8, { error: 'Password must be at least 8 characters long' }),
+    .min(6, { error: 'Password must be at least 8 characters long' }),
 })
 
 export function SignInScreen() {
@@ -27,14 +28,16 @@ export function SignInScreen() {
   const { signIn } = useAuth()
 
   const loginForm = useForm<LoginFormState>({
-    defaultValues: { email: 'todo@example.com', password: '12345678' },
+    defaultValues: { email: 'hello@example.com', password: '123456' },
     resolver: zodResolver(loginSchema),
   })
 
   const handleSignIn = loginForm.handleSubmit((data) => {
-    if (data.email === 'todo@example.com' && data.password === '12345678') {
+    if (data.email === 'hello@example.com' && data.password === '123456') {
       signIn()
-      toast('Sign in successful')
+      const token = 'ABCDEFGHIJKLMNOPQRSTUVWXYZ'
+      console.log('sign in with token:', token)
+      storage.set(StrorageKeys.TOKEN, token)
     } else {
       toast('Invalid credentials')
     }
@@ -44,10 +47,8 @@ export function SignInScreen() {
     <ScreenWrapper contentClassName="p-8 items-center justify-center">
       <View className="w-full">
         <View className="mb-8">
-          <ThemeText className="text-3xl font-bold uppercase italic">
-            Todo
-          </ThemeText>
-          <ThemeText className="text-brand-secondary text-base">
+          <ThemeText className="mb-1 text-3xl font-bold">Todo App</ThemeText>
+          <ThemeText className="text-foreground-secondary uppercase">
             Make your life well-organized
           </ThemeText>
         </View>
@@ -59,13 +60,8 @@ export function SignInScreen() {
           <Form.Item name="email">
             <Input
               className="shadow-xs"
-              placeholder="Type your email..."
-              prefix={
-                <Icons
-                  name="email-outline"
-                  size={24}
-                />
-              }
+              placeholder="Type your email here"
+              prefix={<Icons name="alpha-e-box-outline" />}
             />
           </Form.Item>
 
@@ -73,13 +69,8 @@ export function SignInScreen() {
             <Input
               secureTextEntry
               className="shadow-xs"
-              placeholder="Type your password..."
-              prefix={
-                <Icons
-                  name="key-outline"
-                  size={24}
-                />
-              }
+              placeholder="Type your password here"
+              prefix={<Icons name="alpha-p-box-outline" />}
             />
           </Form.Item>
         </Form>
@@ -90,11 +81,11 @@ export function SignInScreen() {
         </View>
 
         <View className="flex-row justify-end gap-2">
-          <ThemeText className="text-brand-secondary">
+          <ThemeText className="text-foreground-secondary text-sm">
             Don't have an account?
           </ThemeText>
-          <ThemeText className="text-brand-primary italic underline">
-            Create account
+          <ThemeText className="text-brand-primary text-sm italic underline">
+            Create
           </ThemeText>
         </View>
       </View>

@@ -1,6 +1,7 @@
 import { useState } from 'react'
-import { type GestureResponderEvent, Pressable, Text, View } from 'react-native'
+import { type GestureResponderEvent, Pressable, View } from 'react-native'
 
+import { ThemeText } from '@/components/common'
 import { Collapse } from '@/components/common/Collapse'
 import { type Todo } from '@/types/todo'
 
@@ -18,16 +19,16 @@ export function TodoCard({ todo, onLongPress }: TodoCardProps) {
 
   return (
     <Pressable
-      className="mb-4 rounded-lg bg-sky-100 p-4"
+      className="bg-background-secondary mb-4 rounded-lg p-4"
       onPress={toggleCollapse}
       onLongPress={onLongPress}
     >
-      <Text>{todo.title}</Text>
+      <ThemeText>{todo.title}</ThemeText>
 
       <Collapse collapsed={isCollapsed}>
         <View>
-          <Text>Something about description</Text>
-          <Text>Date: unknown</Text>
+          <ThemeText>Something about description</ThemeText>
+          <ThemeText>Date: unknown</ThemeText>
         </View>
       </Collapse>
     </Pressable>

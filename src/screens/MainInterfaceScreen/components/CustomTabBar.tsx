@@ -11,7 +11,7 @@ const tabItemIconNameMap = {
 
 export function CustomTabBar({ state, navigation }: BottomTabBarProps) {
   return (
-    <View className="bg-background-bottom-bar h-[60] flex-row items-center">
+    <View className="bg-background-bottom-bar flex-row items-center">
       {state.routes.map((route, index) => {
         const isFocused = state.index === index
 
@@ -30,7 +30,7 @@ export function CustomTabBar({ state, navigation }: BottomTabBarProps) {
         return (
           <Pressable
             key={route.key}
-            className="flex-1 items-center justify-center"
+            className="h-[60] flex-1 items-center justify-center"
             onPress={handlePress}
           >
             <TabIcon

@@ -1,8 +1,13 @@
 import AsyncStorage from '@react-native-async-storage/async-storage'
-import { NavigationContainer } from '@react-navigation/native'
+import {
+  DarkTheme,
+  DefaultTheme,
+  NavigationContainer,
+} from '@react-navigation/native'
 import { createNativeStackNavigator } from '@react-navigation/native-stack'
 import { useEffect, useState } from 'react'
 import { ActivityIndicator, Linking } from 'react-native'
+import { useUniwind } from 'uniwind'
 
 import { PERSISTENCE_KEY } from '@/constants'
 import { useAuth } from '@/hooks/useAuth'
@@ -13,6 +18,7 @@ import { type RootStackParamList } from './type'
 
 const Stack = createNativeStackNavigator<RootStackParamList>()
 export function RootStack() {
+  const { theme } = useUniwind()
   const { isSignIn } = useAuth()
 
   const [isReady, setIsReady] = useState(__DEV__ ? false : true)
@@ -45,6 +51,7 @@ export function RootStack() {
 
   return (
     <NavigationContainer
+      theme={theme === 'dark' ? DarkTheme : DefaultTheme}
       initialState={initialState}
       onStateChange={(state) =>
         AsyncStorage.setItem(PERSISTENCE_KEY, JSON.stringify(state))

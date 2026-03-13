@@ -11,6 +11,8 @@ export function ThemeText({
   children,
 }: PropsWithChildren<ThemeTextProps>) {
   return (
-    <Text className={twMerge('text-foreground', className)}>{children}</Text>
+    <Text className={twMerge('text-foreground text-base', className)}>
+      {children}
+    </Text>
   )
 }

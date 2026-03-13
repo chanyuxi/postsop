@@ -28,7 +28,7 @@ export function TodoList({ todos }: TodoListProps) {
 
   return (
     <View style={styles.container}>
-      <ScrollView>
+      <ScrollView showsVerticalScrollIndicator={false}>
         {todos.map((todo) => (
           <TodoCard
             key={todo.id}
@@ -52,7 +52,6 @@ export function TodoList({ todos }: TodoListProps) {
 const styles = StyleSheet.create({
   container: {
     flex: 1,
-    padding: 16,
   },
   contextMenuContent: {
     padding: 16,

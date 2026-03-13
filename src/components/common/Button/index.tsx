@@ -4,37 +4,32 @@ import { tv, type VariantProps } from 'tailwind-variants'
 
 import { ThemeText } from '../ThemeText'
 
-const button = tv({
+const buttonVariants = tv({
   slots: {
     wrapper: '',
-    text: 'text-foreground text-center',
+    text: 'text-center text-white',
   },
   variants: {
     variant: {
       primary: {
-        wrapper: 'bg-brand-primary',
-        text: 'text-white',
+        wrapper: 'bg-brand-primary border-brand-primary border',
       },
       secondary: {
-        wrapper: 'bg-brand-secondary',
-        text: 'text-white',
+        wrapper: 'bg-brand-secondary border-brand-secondary border',
       },
       success: {
-        wrapper: 'bg-brand-success',
-        text: 'text-white',
+        wrapper: 'bg-brand-success border-brand-success border',
       },
       danger: {
-        wrapper: 'bg-brand-danger',
-        text: 'text-white',
+        wrapper: 'bg-brand-danger border-brand-danger border',
       },
       warning: {
-        wrapper: 'bg-brand-warning',
-        text: 'text-white',
+        wrapper: 'bg-brand-warning border-brand-warning border',
       },
     },
     size: {
       medium: {
-        wrapper: 'px-6 py-4',
+        wrapper: 'px-6 py-3',
       },
     },
     rounded: {
@@ -52,6 +47,11 @@ const button = tv({
         wrapper: 'opacity-50',
       },
     },
+    ghost: {
+      true: {
+        wrapper: 'bg-transparent',
+      },
+    },
   },
   defaultVariants: {
     variant: 'primary',
@@ -61,7 +61,7 @@ const button = tv({
   },
 })
 
-interface ButtonProps extends VariantProps<typeof button> {
+interface ButtonProps extends VariantProps<typeof buttonVariants> {
   wrapperClassName?: string
   textClassName?: string
   uppercase?: boolean
@@ -78,9 +78,17 @@ export function Button({
   rounded,
   block,
   disabled,
+  ghost,
   children,
 }: PropsWithChildren<ButtonProps>) {
-  const { wrapper, text } = button({ variant, size, rounded, block, disabled })
+  const { wrapper, text } = buttonVariants({
+    variant,
+    size,
+    rounded,
+    block,
+    disabled,
+    ghost,
+  })
 
   const handlePress = () => {
     onPress?.()

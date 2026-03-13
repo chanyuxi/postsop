@@ -1,40 +1,56 @@
-import { Pressable, View } from 'react-native'
-import { Uniwind, useUniwind } from 'uniwind'
+import { View } from 'react-native'
 
+import { Button, Icons } from '@/components/common'
 import { ScreenWrapper } from '@/components/common/ScreenWrapper'
-import { ThemeText } from '@/components/common/ThemeText'
-import { TitleBar } from '@/components/common/TitleBar'
-import { storage, StrorageKeys } from '@/utils/storage'
-import { setTheme } from '@/utils/theme'
+import { TopBar } from '@/components/common/TopBar'
+import { APP_VERSION } from '@/constants'
+import { useAuth, useToast } from '@/hooks'
+
+import { ConfigItem } from './components/ConfigItem'
+import { ThemeToggle } from './components/ThemeToggle'
 
 export function SettingScreen() {
-  const { theme, hasAdaptiveThemes } = useUniwind()
-
-  const activeTheme = hasAdaptiveThemes ? 'system' : theme
-
-  const toggleTheme = () => {
-    const newTheme = Uniwind.currentTheme === 'light' ? 'dark' : 'light'
-    setTheme(newTheme)
-    storage.set(StrorageKeys.THEME, newTheme)
-  }
+  const { signOut } = useAuth()
+  const { toast } = useToast()
 
   return (
     <ScreenWrapper statusBarClassName="bg-background-secondary">
-      <TitleBar title="SETTING" />
+      <TopBar title="SETTING" />
 
-      <View className="p-6">
-        <View className="flex-row gap-4">
-          <Pressable
-            onPress={toggleTheme}
-            className="bg-background-secondary flex-1 rounded p-6"
-          >
-            <ThemeText>Theme - {activeTheme}</ThemeText>
-          </Pressable>
+      <View className="flex-1 gap-4 p-4">
+        <ThemeToggle />
 
-          <View className="bg-background-secondary flex-1 rounded p-6">
-            <ThemeText>Other</ThemeText>
-          </View>
-        </View>
+        <ConfigItem
+          label="Language"
+          description="switching regional languages"
+          value="En"
+        />
+
+        <ConfigItem
+          label="Do Not Disturb"
+          description="no longer accepting new messagess"
+          value="Off"
+        />
+
+        <ConfigItem
+          label="Help and Feedback"
+          description="submit your question to us"
+          value={<Icons name="chevron-right" />}
+        />
+
+        <ConfigItem
+          label="Version"
+          description="check for updates"
+          value={APP_VERSION}
+          onPress={() => toast('No updates available')}
+        />
+
+        <Button
+          variant="danger"
+          onPress={signOut}
+        >
+          Sign out
+        </Button>
       </View>
     </ScreenWrapper>
   )

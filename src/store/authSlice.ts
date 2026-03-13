@@ -24,8 +24,17 @@ export const authSlice = createSlice({
     signOutAction: (state) => {
       state.user = null
     },
+
+    unstable_initializeUser: (state) => {
+      state.user = {
+        id: 1,
+        name: 'John Doe',
+        signature: 'Dreams always dreams without actions',
+      }
+    },
   },
 })
 
-export const { signInAction, signOutAction } = authSlice.actions
+export const { signInAction, signOutAction, unstable_initializeUser } =
+  authSlice.actions
 export default authSlice.reducer

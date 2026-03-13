@@ -18,7 +18,6 @@ export function Cell({ label, onPress }: RowProps) {
         <ThemeText className="text-xl">{label}</ThemeText>
         <Icons
           name="chevron-right"
-          size={24}
           color={foregroundColor}
         />
       </View>

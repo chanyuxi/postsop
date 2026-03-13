@@ -1,4 +1,5 @@
 import { signInAction, signOutAction } from '@/store/authSlice'
+import { storage, StrorageKeys } from '@/utils/storage'
 
 import { useAppDispatch, useAppSelector } from './useStore'
 
@@ -9,7 +10,10 @@ export function useAuth() {
 
   const signIn = () => dispatch(signInAction())
 
-  const signOut = () => dispatch(signOutAction())
+  const signOut = () => {
+    storage.remove(StrorageKeys.TOKEN)
+    dispatch(signOutAction())
+  }
 
   return {
     isSignIn: !!user,

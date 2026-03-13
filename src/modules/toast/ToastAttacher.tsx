@@ -64,7 +64,7 @@ function Toast({ toast }: ToastProps) {
   return (
     <Animated.View
       style={animatedStyle}
-      className="mx-auto h-10 min-w-25 items-center justify-center rounded-full bg-white px-4 shadow-lg"
+      className="dark:bg-brand-gray-700 mx-auto h-10 min-w-25 items-center justify-center rounded-full bg-white px-4 shadow-lg"
     >
       <Text className="text-sm">{message}</Text>
     </Animated.View>
@@ -80,8 +80,6 @@ export function ToastAttacher() {
     console.warn('ToastAttacher is mounted multiple times')
     return null
   }
-
-  console.log('render')
 
   return (
     <View className="absolute right-0 bottom-0 left-0 gap-3 pb-30">

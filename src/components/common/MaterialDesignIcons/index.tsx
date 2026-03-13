@@ -12,7 +12,7 @@ export interface IconsProps {
   onPress?: (event: GestureResponderEvent) => void
 }
 
-function Icons({ name, size, color, onPress }: IconsProps) {
+function Icons({ name, size = 24, color, onPress }: IconsProps) {
   const foreground = useCSSVariable('--color-foreground') as string
 
   return (
