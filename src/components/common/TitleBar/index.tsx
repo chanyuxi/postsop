@@ -1,8 +1,7 @@
 import { useNavigation } from '@react-navigation/native'
 import { View } from 'react-native'
 import { twMerge } from 'tailwind-merge'
-
-import { useForegroundColor } from '@/hooks/useCssVariable'
+import { useCSSVariable } from 'uniwind'
 
 import { Icons } from '../MaterialDesignIcons'
 import { ThemeText } from '../ThemeText'
@@ -14,7 +13,7 @@ interface TitleBarProps {
 
 export function TitleBar({ title, className }: TitleBarProps) {
   const { goBack } = useNavigation()
-  const foregroundColor = useForegroundColor()
+  const foregroundColor = useCSSVariable('--color-foreground') as string
 
   return (
     <View className={twMerge('bg-background-secondary pt-2 pb-4', className)}>

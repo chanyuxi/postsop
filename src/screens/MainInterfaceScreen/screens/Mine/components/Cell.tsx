@@ -1,8 +1,8 @@
 import { Pressable, View } from 'react-native'
+import { useCSSVariable } from 'uniwind'
 
 import { Icons } from '@/components/common/MaterialDesignIcons'
 import { ThemeText } from '@/components/common/ThemeText'
-import { useForegroundColor } from '@/hooks/useCssVariable'
 
 interface RowProps {
   label: string
@@ -10,7 +10,7 @@ interface RowProps {
 }
 
 export function Cell({ label, onPress }: RowProps) {
-  const foregroundColor = useForegroundColor()
+  const foregroundColor = useCSSVariable('--color-foreground') as string
 
   return (
     <Pressable onPress={onPress}>
