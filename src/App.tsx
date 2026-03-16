@@ -1,5 +1,9 @@
 import './global.css'
 
+import AsyncStorage from '@react-native-async-storage/async-storage'
+import { createAsyncStoragePersister } from '@tanstack/query-async-storage-persister'
+import { QueryClient } from '@tanstack/react-query'
+import { PersistQueryClientProvider } from '@tanstack/react-query-persist-client'
 import { useEffect } from 'react'
 import { StatusBar, View } from 'react-native'
 import BootSplash from 'react-native-bootsplash'
@@ -8,7 +12,7 @@ import { SafeAreaProvider } from 'react-native-safe-area-context'
 import { Provider as StoreProvider } from 'react-redux'
 
 import { IS_ANDROID_AND_VERSION_LARGER_THAN_OR_EQUAL_TO_35 } from '@/constants'
-import { useSafeAreaStyles } from '@/hooks'
+import { useFocusManager, useOnlineManager, useSafeAreaStyles } from '@/hooks'
 import { ToastAttacher } from '@/modules/toast/ToastAttacher'
 import { RootStack } from '@/routes'
 import { store } from '@/store'
@@ -17,6 +21,19 @@ import { setTheme, type ThemeName } from '@/utils/theme'
 
 import { useAppDispatch } from './hooks'
 import { unstable_initializeUser } from './store/authSlice'
+
+const persister = createAsyncStoragePersister({
+  storage: AsyncStorage,
+  throttleTime: 3000,
+})
+
+const queryClient = new QueryClient({
+  defaultOptions: {
+    queries: {
+      retry: false,
+    },
+  },
+})
 
 function AppContent() {
   const safeAreaStyles = useSafeAreaStyles()
@@ -45,6 +62,9 @@ function AppContent() {
     BootSplash.hide()
   }, [dispatch])
 
+  useFocusManager()
+  useOnlineManager()
+
   return (
     <View
       style={safeAreaStyles}
@@ -61,9 +81,13 @@ export default function App() {
     <GestureHandlerRootView>
       <SafeAreaProvider>
         <StoreProvider store={store}>
-          <AppContent />
-
-          <ToastAttacher />
+          <PersistQueryClientProvider
+            client={queryClient}
+            persistOptions={{ persister }}
+          >
+            <AppContent />
+            <ToastAttacher />
+          </PersistQueryClientProvider>
         </StoreProvider>
       </SafeAreaProvider>
     </GestureHandlerRootView>
