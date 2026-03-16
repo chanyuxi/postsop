@@ -8,7 +8,7 @@ import { SafeAreaProvider } from 'react-native-safe-area-context'
 import { Provider as StoreProvider } from 'react-redux'
 
 import { IS_ANDROID_AND_VERSION_LARGER_THAN_OR_EQUAL_TO_35 } from '@/constants'
-import { useSafeAreaStyles } from '@/hooks/useSafeAreaStyles'
+import { useSafeAreaStyles } from '@/hooks'
 import { ToastAttacher } from '@/modules/toast/ToastAttacher'
 import { RootStack } from '@/routes'
 import { store } from '@/store'
