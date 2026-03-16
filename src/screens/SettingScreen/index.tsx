@@ -21,26 +21,26 @@ export function SettingScreen() {
         <ThemeToggle />
 
         <ConfigItem
-          label="Language"
           description="switching regional languages"
+          label="Language"
           value="En"
         />
 
         <ConfigItem
-          label="Do Not Disturb"
           description="no longer accepting new messagess"
+          label="Do Not Disturb"
           value="Off"
         />
 
         <ConfigItem
-          label="Help and Feedback"
           description="submit your question to us"
+          label="Help and Feedback"
           value={<Icons name="chevron-right" />}
         />
 
         <ConfigItem
-          label="Version"
           description="check for updates"
+          label="Version"
           value={APP_VERSION}
           onPress={() => toast('No updates available')}
         />

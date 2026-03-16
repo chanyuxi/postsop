@@ -20,8 +20,8 @@ export function TodoCard({ todo, onLongPress }: TodoCardProps) {
   return (
     <Pressable
       className="bg-background-secondary mb-4 rounded-lg p-4"
-      onPress={toggleCollapse}
       onLongPress={onLongPress}
+      onPress={toggleCollapse}
     >
       <ThemeText>{todo.title}</ThemeText>
 

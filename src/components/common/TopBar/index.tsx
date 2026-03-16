@@ -28,9 +28,9 @@ export function TopBar(props: TopBarProps) {
           {!hideBackButton && (
             <Pressable onPress={() => goBack()}>
               <Icons
+                color={foregroundColor}
                 name="chevron-left"
                 size={30}
-                color={foregroundColor}
               />
             </Pressable>
           )}

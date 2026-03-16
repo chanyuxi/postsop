@@ -45,8 +45,8 @@ function AppContent() {
   const ConfigureStatusBar =
     !IS_ANDROID_AND_VERSION_LARGER_THAN_OR_EQUAL_TO_35 && (
       <StatusBar
-        backgroundColor="transparent"
         translucent
+        backgroundColor="transparent"
       />
     )
 
@@ -67,8 +67,8 @@ function AppContent() {
 
   return (
     <View
-      style={safeAreaStyles}
       className="bg-background flex-1"
+      style={safeAreaStyles}
     >
       {ConfigureStatusBar}
       <RootStack />

@@ -40,8 +40,8 @@ export function ThemeToggle() {
 
   return (
     <ConfigItem
-      label="Theme"
       description="set your favorite theme"
+      label="Theme"
       value={value}
       onPress={toggleTheme}
     />

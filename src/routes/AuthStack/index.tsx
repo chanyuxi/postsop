@@ -9,8 +9,8 @@ export function AuthStack() {
   return (
     <Stack.Navigator screenOptions={{ headerShown: false }}>
       <Stack.Screen
-        name="SignIn"
         component={SignInScreen}
+        name="SignIn"
       />
     </Stack.Navigator>
   )

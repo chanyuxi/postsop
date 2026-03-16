@@ -140,8 +140,8 @@ export function Collapse({
     >
       <View
         className="absolute w-full"
-        style={styleOfOpacity}
         pointerEvents="none"
+        style={styleOfOpacity}
         onLayout={handleContentLayout}
       >
         {children}

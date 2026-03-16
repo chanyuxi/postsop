@@ -16,16 +16,16 @@ export function MainInterfaceScreen() {
       tabBar={CustomTabBar}
     >
       <Tab.Screen
-        name="Home"
         component={Home}
+        name="Home"
       />
       <Tab.Screen
-        name="QuietMode"
         component={QuietMode}
+        name="QuietMode"
       />
       <Tab.Screen
-        name="Mine"
         component={Mine}
+        name="Mine"
       />
     </Tab.Navigator>
   )

@@ -7,11 +7,11 @@ export function SearchBar() {
   return (
     <View style={styles.container}>
       <TextInput
-        style={styles.input}
-        placeholder="Type a movie name..."
-        value={searchText}
-        placeholderTextColor="#fff6"
         cursorColor="#8800f8ff"
+        placeholder="Type a movie name..."
+        placeholderTextColor="#fff6"
+        style={styles.input}
+        value={searchText}
         onChangeText={setSearchText}
       />
     </View>

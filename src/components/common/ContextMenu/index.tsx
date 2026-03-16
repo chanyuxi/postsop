@@ -127,8 +127,8 @@ export function ContextMenu({
 
   return (
     <Modal
-      visible={visible}
       transparent
+      visible={visible}
     >
       <Pressable
         className="flex-1"

@@ -17,9 +17,9 @@ function Icons({ name, size = 24, color, onPress }: IconsProps) {
 
   return (
     <MaterialDesignIcons
+      color={color ?? foreground}
       name={name}
       size={size}
-      color={color ?? foreground}
       onPress={onPress}
     />
   )

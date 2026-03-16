@@ -29,18 +29,18 @@ export function CustomTabBar({ state, navigation }: BottomTabBarProps) {
 
         return (
           <Pressable
-            key={route.key}
             className="h-[60] flex-1 items-center justify-center"
+            key={route.key}
             onPress={handlePress}
           >
             <TabIcon
               focused={isFocused}
-              size={26}
               name={
                 tabItemIconNameMap[
                   route.name as keyof typeof tabItemIconNameMap
                 ]
               }
+              size={26}
             />
           </Pressable>
         )

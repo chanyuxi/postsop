@@ -10,12 +10,12 @@ export function MainStack() {
   return (
     <Stack.Navigator screenOptions={{ headerShown: false }}>
       <Stack.Screen
-        name="MainInterface"
         component={MainInterfaceScreen}
+        name="MainInterface"
       />
       <Stack.Screen
-        name="Setting"
         component={SettingScreen}
+        name="Setting"
       />
     </Stack.Navigator>
   )

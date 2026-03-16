@@ -24,8 +24,8 @@ export function Home({}: NativeStackScreenProps<AllStackParamList>) {
     <ScreenWrapper statusBarClassName="bg-background-secondary">
       <TopBar
         hideBackButton
-        title="Todo"
         rightIcon={<Icons name="bell-outline" />}
+        title="Todo"
       />
 
       <View className="flex-1 p-4">

@@ -16,9 +16,9 @@ export function TabIcon({ focused, size, name }: TabIconProps) {
 
   return (
     <Icons
-      size={size}
-      name={name}
       color={focused ? focusedColor : unfocusedColor}
+      name={name}
+      size={size}
     />
   )
 }

@@ -5,8 +5,8 @@ export function QuietMode() {
   return (
     <ScreenWrapper statusBarClassName="bg-background-secondary">
       <TopBar
-        title="Quiet Mode"
         hideBackButton
+        title="Quiet Mode"
       />
     </ScreenWrapper>
   )

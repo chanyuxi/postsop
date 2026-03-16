@@ -63,8 +63,8 @@ function Toast({ toast }: ToastProps) {
 
   return (
     <Animated.View
-      style={animatedStyle}
       className="dark:bg-brand-gray-700 mx-auto h-10 min-w-25 items-center justify-center rounded-full bg-white px-4 shadow-lg"
+      style={animatedStyle}
     >
       <Text className="text-sm">{message}</Text>
     </Animated.View>

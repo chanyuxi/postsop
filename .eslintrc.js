@@ -8,5 +8,9 @@ module.exports = {
     'import/first': 'error',
     'import/newline-after-import': 'error',
     'import/no-duplicates': 'error',
+    'react/jsx-sort-props': [
+      'error',
+      { shorthandFirst: true, callbacksLast: true },
+    ],
   },
 }

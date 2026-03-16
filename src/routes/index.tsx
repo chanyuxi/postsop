@@ -51,8 +51,8 @@ export function RootStack() {
 
   return (
     <NavigationContainer
-      theme={theme === 'dark' ? DarkTheme : DefaultTheme}
       initialState={initialState}
+      theme={theme === 'dark' ? DarkTheme : DefaultTheme}
       onStateChange={(state) =>
         AsyncStorage.setItem(PERSISTENCE_KEY, JSON.stringify(state))
       }
@@ -60,13 +60,13 @@ export function RootStack() {
       <Stack.Navigator screenOptions={{ headerShown: false }}>
         {isSignIn ? (
           <Stack.Screen
-            name="Main"
             component={MainStack}
+            name="Main"
           />
         ) : (
           <Stack.Screen
-            name="Auth"
             component={AuthStack}
+            name="Auth"
           />
         )}
       </Stack.Navigator>

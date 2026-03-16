@@ -107,8 +107,8 @@ export function Button({
     <Pressable
       className={wrapper({ className: wrapperClassName })}
       disabled={disabled}
-      onPress={handlePress}
       style={({ pressed }) => pressed && { opacity: 0.85 }}
+      onPress={handlePress}
     >
       {renderContent}
     </Pressable>

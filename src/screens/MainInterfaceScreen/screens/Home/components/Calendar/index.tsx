@@ -24,22 +24,22 @@ export function Calendar() {
 
         <TouchableOpacity onPress={toggleFullViewMode}>
           <Icons
+            color="#fff"
             name={isFullViewMode ? 'arrow-collapse' : 'arrow-expand'}
             size={20}
-            color="#fff"
           />
         </TouchableOpacity>
       </View>
 
       <Modal
         transparent
-        visible={isFullViewMode}
         animationType="fade"
+        visible={isFullViewMode}
         onRequestClose={closeModal}
       >
         <TouchableOpacity
-          className="flex-1 items-center justify-center bg-black/50"
           activeOpacity={1}
+          className="flex-1 items-center justify-center bg-black/50"
           onPressOut={closeModal}
         >
           <View className="max-h-4/5 w-4/5 rounded-xl bg-white p-5">
@@ -47,8 +47,8 @@ export function Calendar() {
               <Text className="text-lg font-bold">Calendar Details</Text>
               <TouchableOpacity onPress={closeModal}>
                 <Icons
-                  name="close"
                   color="#000"
+                  name="close"
                 />
               </TouchableOpacity>
             </View>

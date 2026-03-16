@@ -17,8 +17,8 @@ export function Cell({ label, onPress }: RowProps) {
       <View className="flex-row items-center justify-between px-8 py-4">
         <ThemeText className="text-xl">{label}</ThemeText>
         <Icons
-          name="chevron-right"
           color={foregroundColor}
+          name="chevron-right"
         />
       </View>
     </Pressable>
