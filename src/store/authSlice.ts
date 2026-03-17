@@ -25,7 +25,8 @@ export const authSlice = createSlice({
       state.user = null
     },
 
-    unstable_initializeUser: (state) => {
+    /** Temporary function to initialize the user */
+    temporary_initializeUser: (state) => {
       state.user = {
         id: 1,
         name: 'John Doe',
@@ -35,6 +36,6 @@ export const authSlice = createSlice({
   },
 })
 
-export const { signInAction, signOutAction, unstable_initializeUser } =
+export const { signInAction, signOutAction, temporary_initializeUser } =
   authSlice.actions
 export default authSlice.reducer

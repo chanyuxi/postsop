@@ -9,7 +9,7 @@ import { View } from 'react-native'
 import Animated, { FadeIn, FadeOut } from 'react-native-reanimated'
 import { twMerge } from 'tailwind-merge'
 
-import { ThemeText } from '../common/ThemeText'
+import { ThemeText } from '../ThemeText'
 import { FormItemContext, transformErrorMessage } from './core'
 
 interface FormProps<

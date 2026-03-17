@@ -1,6 +1,7 @@
 export * from './Button'
 export * from './Collapse'
 export * from './ContextMenu'
+export * from './form'
 export * from './MaterialDesignIcons'
 export * from './ScreenWrapper'
 export * from './StatusBarPlaceholder'

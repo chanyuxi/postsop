@@ -9,7 +9,7 @@ import { useEffect, useState } from 'react'
 import { ActivityIndicator, Linking } from 'react-native'
 import { useUniwind } from 'uniwind'
 
-import { PERSISTENCE_KEY } from '@/constants'
+import { PERSISTENCE_KEY } from '@/constants/keys'
 import { useAuth } from '@/hooks/useAuth'
 
 import { AuthStack } from './AuthStack'

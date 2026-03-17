@@ -4,14 +4,14 @@ import { Button, Icons } from '@/components/common'
 import { ScreenWrapper } from '@/components/common/ScreenWrapper'
 import { TopBar } from '@/components/common/TopBar'
 import { APP_VERSION } from '@/constants'
-import { useAuth, useToast } from '@/hooks'
+import { useAuth } from '@/hooks'
+import { toast } from '@/utils/toast'
 
 import { ConfigItem } from './components/ConfigItem'
 import { ThemeToggle } from './components/ThemeToggle'
 
 export function SettingScreen() {
   const { signOut } = useAuth()
-  const { toast } = useToast()
 
   return (
     <ScreenWrapper statusBarClassName="bg-background-secondary">

@@ -1,30 +1,27 @@
 import { zodResolver } from '@hookform/resolvers/zod'
 import { useForm } from 'react-hook-form'
 import { Text, View } from 'react-native'
-import { z } from 'zod'
 
-import { Button, Icons, ScreenWrapper, ThemeText } from '@/components/common'
-import { Form } from '@/components/form/Form'
-import { Input } from '@/components/form/Input'
+import {
+  Button,
+  Form,
+  Icons,
+  Input,
+  ScreenWrapper,
+  ThemeText,
+} from '@/components/common'
 import { APP_VERSION } from '@/constants'
-import { useAuth, useToast } from '@/hooks'
+import { loginSchema } from '@/constants/schemas'
+import { useAuth } from '@/hooks'
 import { storage, StrorageKeys } from '@/utils/storage'
+import { toast } from '@/utils/toast'
 
 interface LoginFormState {
   email: string
   password: string
 }
 
-const loginSchema = z.object({
-  email: z.email('Invalid email address'),
-  password: z
-    .string('Password is required')
-    .min(6, { error: 'Password must be at least 8 characters long' }),
-})
-
 export function SignInScreen() {
-  const { toast } = useToast()
-
   const { signIn } = useAuth()
 
   const loginForm = useForm<LoginFormState>({

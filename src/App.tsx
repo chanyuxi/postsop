@@ -11,16 +11,17 @@ import { GestureHandlerRootView } from 'react-native-gesture-handler'
 import { SafeAreaProvider } from 'react-native-safe-area-context'
 import { Provider as StoreProvider } from 'react-redux'
 
+import { ApiError } from '@/api/error'
 import { IS_ANDROID_AND_VERSION_LARGER_THAN_OR_EQUAL_TO_35 } from '@/constants'
 import { useFocusManager, useOnlineManager, useSafeAreaStyles } from '@/hooks'
-import { ToastAttacher } from '@/modules/toast/ToastAttacher'
+import { ToastAttacher } from '@/libs/toast/ToastAttacher'
 import { RootStack } from '@/routes'
 import { store } from '@/store'
 import { storage, StrorageKeys } from '@/utils/storage'
 import { setTheme, type ThemeName } from '@/utils/theme'
 
 import { useAppDispatch } from './hooks'
-import { unstable_initializeUser } from './store/authSlice'
+import { temporary_initializeUser } from './store/authSlice'
 
 const persister = createAsyncStoragePersister({
   storage: AsyncStorage,
@@ -30,10 +31,29 @@ const persister = createAsyncStoragePersister({
 const queryClient = new QueryClient({
   defaultOptions: {
     queries: {
-      retry: false,
+      retry: (failureCount, error) => {
+        if (error instanceof ApiError) {
+          if (error.needsReLogin || error.type === 'business') return false
+
+          if (error.isNetworkError || error.isServerError)
+            return failureCount < 2
+        }
+        return false
+      },
+    },
+    mutations: {
+      onError: (error) => {
+        if (error instanceof ApiError) {
+          handleError(error)
+        }
+      },
     },
   },
 })
+
+const handleError = (_error: ApiError) => {
+  // TODO: Handle error
+}
 
 function AppContent() {
   const safeAreaStyles = useSafeAreaStyles()
@@ -56,7 +76,7 @@ function AppContent() {
     }
 
     if (storage.contains(StrorageKeys.TOKEN)) {
-      dispatch(unstable_initializeUser())
+      dispatch(temporary_initializeUser())
     }
 
     BootSplash.hide()
