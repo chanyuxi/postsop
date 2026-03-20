@@ -136,7 +136,8 @@ export function Collapse({
   return (
     <Animated.View
       className="overflow-hidden"
-      style={{ height: animatedHeight.current }}
+      // Fix: Cannot access refs during render
+      // style={{ height: animatedHeight.current }}
     >
       <View
         className="absolute w-full"

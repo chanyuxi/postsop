@@ -114,15 +114,16 @@ export function ContextMenu({
     hide,
   }))
 
-  const animatedTransformScale = animatedValue.current.interpolate({
-    inputRange: [0, 1],
-    outputRange: [0.5, 1],
-  })
+  // Fix: Cannot access refs during render
+  // const animatedTransformScale = animatedValue.current.interpolate({
+  //   inputRange: [0, 1],
+  //   outputRange: [0.5, 1],
+  // })
 
   const combinedStyle = {
     top: location.y,
     left: location.x,
-    transform: [{ scale: animatedTransformScale }],
+    // transform: [{ scale: animatedTransformScale }],
   }
 
   return (
