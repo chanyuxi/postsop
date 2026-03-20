@@ -6,7 +6,13 @@
   "editor.codeActionsOnSave": {
     "source.fixAll.eslint": "always"
   },
+  "eslint.workingDirectories": [
+    {
+      "pattern": "apps/*/"
+    }
+  ],
 
   // Enable autocompletion for Tailwind Variants
-  "tailwindCSS.classFunctions": ["tv"]
+  "tailwindCSS.classFunctions": ["tv"],
+  "chatgpt.openOnStartup": true
 }

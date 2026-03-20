@@ -1,7 +1,15 @@
+const path = require('path')
+
 module.exports = {
   root: true,
   extends: ['@react-native', 'plugin:prettier/recommended'],
   plugins: ['simple-import-sort', 'import'],
+  parserOptions: {
+    requireConfigFile: false,
+    babelOptions: {
+      configFile: path.resolve(__dirname, 'babel.config.js'),
+    },
+  },
   rules: {
     'simple-import-sort/imports': 'error',
     'simple-import-sort/exports': 'error',

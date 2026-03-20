@@ -1,3 +1,4 @@
+const path = require('path')
 const { getDefaultConfig, mergeConfig } = require('@react-native/metro-config')
 const { withUniwindConfig } = require('uniwind/metro')
 
@@ -7,10 +8,21 @@ const { withUniwindConfig } = require('uniwind/metro')
  *
  * @type {import('@react-native/metro-config').MetroConfig}
  */
-const config = {}
+const projectRoot = __dirname
+const workspaceRoot = path.resolve(projectRoot, '../..')
+
+const config = {
+  watchFolders: [workspaceRoot],
+  resolver: {
+    nodeModulesPaths: [
+      path.resolve(projectRoot, 'node_modules'),
+      path.resolve(workspaceRoot, 'node_modules'),
+    ],
+  },
+}
 
 module.exports = withUniwindConfig(
-  mergeConfig(getDefaultConfig(__dirname), config),
+  mergeConfig(getDefaultConfig(projectRoot), config),
   {
     // relative path to your global.css file (from previous step)
     cssEntryFile: './src/global.css',
