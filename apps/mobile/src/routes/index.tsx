@@ -3,6 +3,7 @@ import {
   DarkTheme,
   DefaultTheme,
   NavigationContainer,
+  type NavigationState,
 } from '@react-navigation/native'
 import { createNativeStackNavigator } from '@react-navigation/native-stack'
 import { useEffect, useState } from 'react'
@@ -17,29 +18,39 @@ import { MainStack } from './MainStack'
 import { type RootStackParamList } from './type'
 
 const Stack = createNativeStackNavigator<RootStackParamList>()
+
 export function RootStack() {
   const { theme } = useUniwind()
   const { isSignIn } = useAuth()
 
   const [isReady, setIsReady] = useState(__DEV__ ? false : true)
-  const [initialState, setInitialState] = useState()
+  const [initialState, setInitialState] = useState<NavigationState>()
 
   useEffect(() => {
     const restoreState = async () => {
-      try {
-        const initialUrl = await Linking.getInitialURL()
+      const initialUrl = await Linking.getInitialURL()
 
-        if (initialUrl == null) {
-          const savedState = await AsyncStorage.getItem(PERSISTENCE_KEY)
-          const state = savedState ? JSON.parse(savedState) : undefined
+      if (initialUrl == null) {
+        let savedState: string | null = null
+        let state: NavigationState | undefined
 
-          if (state !== undefined) {
+        try {
+          savedState = await AsyncStorage.getItem(PERSISTENCE_KEY)
+        } catch (error) {
+          console.error('Failed to restore navigation state', error)
+        }
+
+        if (savedState) {
+          try {
+            state = JSON.parse(savedState)
             setInitialState(state)
+          } catch (error) {
+            console.error('Failed to parse navigation state', error)
           }
         }
-      } finally {
-        setIsReady(true)
       }
+
+      setIsReady(true)
     }
 
     restoreState()
