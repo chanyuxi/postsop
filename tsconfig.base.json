@@ -2,9 +2,10 @@
   "compilerOptions": {
     "resolveJsonModule": true,
     "strict": true,
-    "noEmit": true,
+    "noFallthroughCasesInSwitch": true,
     "esModuleInterop": true,
     "forceConsistentCasingInFileNames": true,
+    "isolatedModules": true,
     "skipLibCheck": true
   }
 }

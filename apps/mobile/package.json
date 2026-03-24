@@ -8,8 +8,8 @@
   "scripts": {
     "android": "react-native run-android",
     "ios": "react-native run-ios",
-    "lint": "eslint . --cache",
-    "lint:fix": "eslint . --fix --cache",
+    "lint": "pnpm --dir ../.. exec eslint apps/mobile --cache",
+    "lint:fix": "pnpm --dir ../.. exec eslint apps/mobile --fix --cache",
     "type-check": "tsc --noEmit",
     "start": "react-native start",
     "test": "jest",
@@ -30,7 +30,7 @@
     "@tanstack/react-query-persist-client": "^5.90.24",
     "axios": "^1.13.6",
     "dayjs": "^1.11.20",
-    "react": "19.2.3",
+    "react": "19.2.4",
     "react-hook-form": "^7.71.2",
     "react-native": "0.84.1",
     "react-native-bootsplash": "^7.1.0",
@@ -72,7 +72,7 @@
     "prettier": "^3.8.1",
     "prettier-plugin-tailwindcss": "^0.7.2",
     "react-native-dotenv": "^3.4.11",
-    "react-test-renderer": "19.2.3",
+    "react-test-renderer": "19.2.4",
     "typescript": "^5.8.3"
   }
 }
