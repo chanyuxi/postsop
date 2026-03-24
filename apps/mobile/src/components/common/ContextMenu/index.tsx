@@ -50,7 +50,7 @@ export function ContextMenu({
       let x = pageX - insets.left
       let y = pageY - insets.top
 
-      const { width, height } = straightforwardMenuSize || menuSize
+      const { width, height } = straightforwardMenuSize ?? menuSize
 
       if (x + width + insets.left > screenWidth) {
         x = x - width

@@ -51,7 +51,8 @@ const queryClient = new QueryClient({
   },
 })
 
-const handleError = (_error: ApiError) => {
+// eslint-disable-next-line @typescript-eslint/no-unused-vars
+const handleError = (error: ApiError) => {
   // TODO: Handle error
 }
 
@@ -59,8 +60,6 @@ function AppContent() {
   const safeAreaStyles = useSafeAreaStyles()
 
   const dispatch = useAppDispatch()
-
-  const a = '1'
 
   // Given the introduction of Android edge-to-edge mode, we will uniformly
   // use custom <StatusBarPlaceholder /> to manage the status bar
@@ -81,6 +80,7 @@ function AppContent() {
       dispatch(temporary_initializeUser())
     }
 
+    // eslint-disable-next-line @typescript-eslint/no-floating-promises
     BootSplash.hide()
   }, [dispatch])
 

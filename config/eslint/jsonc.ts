@@ -7,10 +7,10 @@ import {
   packageJsonTopLevelOrder,
   tsconfigCompilerOptionsOrder,
   tsconfigTopLevelOrder,
-} from './json-sort-orders'
+} from './jsonc-sort-orders'
 
-export default defineConfig(
-  ...eslintPluginJsonc.configs['recommended-with-jsonc'],
+export const jsonc = defineConfig(
+  eslintPluginJsonc.configs['recommended-with-jsonc'],
 
   {
     files: ['**/package.json'],

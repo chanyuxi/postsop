@@ -2,6 +2,9 @@
   "name": "@postsop/mobile",
   "version": "0.1.91",
   "private": true,
+  "engines": {
+    "node": ">=22.11.0"
+  },
   "scripts": {
     "android": "react-native run-android",
     "ios": "react-native run-ios",
@@ -51,11 +54,10 @@
     "@babel/plugin-transform-export-namespace-from": "^7.27.1",
     "@babel/preset-env": "^7.25.3",
     "@babel/runtime": "^7.25.0",
-    "@postsop/eslint-config": "workspace:*",
     "@react-native-community/cli": "20.1.0",
     "@react-native-community/cli-platform-android": "20.1.0",
-    "@react-native/babel-preset": "0.84.1",
     "@react-native-community/cli-platform-ios": "20.1.0",
+    "@react-native/babel-preset": "0.84.1",
     "@react-native/metro-config": "0.84.1",
     "@react-native/typescript-config": "0.84.1",
     "@tailwindcss/cli": "^4.2.1",
@@ -65,7 +67,6 @@
     "@types/react-test-renderer": "^19.1.0",
     "babel-plugin-module-resolver": "^5.0.2",
     "cross-env": "^10.1.0",
-    "eslint": "^9.18.0",
     "jest": "^29.6.3",
     "postcss": "^8.5.6",
     "prettier": "^3.8.1",
@@ -73,8 +74,5 @@
     "react-native-dotenv": "^3.4.11",
     "react-test-renderer": "19.2.3",
     "typescript": "^5.8.3"
-  },
-  "engines": {
-    "node": ">=22.11.0"
   }
 }

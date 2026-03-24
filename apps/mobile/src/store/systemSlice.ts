@@ -30,7 +30,7 @@ export const systemSlice = createSlice({
       }
     },
     nextToast: (state) => {
-      state.activatedToast = toastQueue.shift() || null
+      state.activatedToast = toastQueue.shift() ?? null
     },
   },
 })

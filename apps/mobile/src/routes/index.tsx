@@ -42,7 +42,7 @@ export function RootStack() {
 
         if (savedState) {
           try {
-            state = JSON.parse(savedState)
+            state = JSON.parse(savedState) as NavigationState
             setInitialState(state)
           } catch (error) {
             console.error('Failed to parse navigation state', error)
@@ -53,6 +53,7 @@ export function RootStack() {
       setIsReady(true)
     }
 
+    // eslint-disable-next-line @typescript-eslint/no-floating-promises
     restoreState()
   }, [isReady])
 

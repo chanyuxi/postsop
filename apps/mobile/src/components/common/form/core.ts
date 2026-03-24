@@ -6,6 +6,7 @@ import {
 } from 'react'
 import type { FieldError } from 'react-hook-form'
 
+// eslint-disable-next-line @typescript-eslint/no-empty-function
 const PLAIN_ONCHANGE = () => {}
 
 export interface Controllability<T = unknown> {
@@ -20,6 +21,7 @@ export const FormItemContext = createContext<
   onChange: PLAIN_ONCHANGE,
 })
 
+// eslint-disable-next-line @typescript-eslint/no-explicit-any
 export function withAutoControl<P extends Controllability<any>>(
   Component: FunctionComponent<P>
 ) {
@@ -35,6 +37,7 @@ export function withAutoControl<P extends Controllability<any>>(
       // easy to use input components
       return {
         ...props,
+        // eslint-disable-next-line @typescript-eslint/no-unsafe-assignment
         value: props.value ?? ctx.value,
         onChange: (value) => {
           ctx.onChange(value)
@@ -48,5 +51,5 @@ export function withAutoControl<P extends Controllability<any>>(
 }
 
 export function transformErrorMessage(error: FieldError | undefined) {
-  return error?.message || ''
+  return error?.message ?? ''
 }

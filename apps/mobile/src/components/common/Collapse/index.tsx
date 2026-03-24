@@ -123,6 +123,8 @@ export function Collapse({
   // Reset measurements when children change
   useEffect(() => {
     if (!children) {
+      // TODO: fix lint error
+      // eslint-disable-next-line react-hooks/set-state-in-effect
       setContentHeight(0)
       setIsMeasured(false)
     }

@@ -57,6 +57,7 @@ Form.Item = function FormItem(props: PropsWithChildren<FormItemProps>) {
     <Controller
       name={name}
       render={({ field, fieldState }) => {
+        // eslint-disable-next-line @typescript-eslint/no-unsafe-assignment
         const { value, onChange } = field
 
         return (

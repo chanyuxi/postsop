@@ -14,7 +14,7 @@ export function StatusBarPlaceholder({ className }: StatusBarPlaceholderProps) {
   return (
     <View
       className={twMerge('w-full', className)}
-      style={{ height: statusBarHeight || insets.top }}
+      style={{ height: statusBarHeight ?? insets.top }}
     />
   )
 }
