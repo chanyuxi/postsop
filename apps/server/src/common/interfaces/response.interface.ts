@@ -1,5 +1,1 @@
-export interface Response<T = unknown> {
-  code: number
-  message: string
-  data: T | null
-}
+﻿export type { ApiResponse as Response } from '@postsop/shared-contracts'

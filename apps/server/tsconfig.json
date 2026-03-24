@@ -3,17 +3,17 @@
   "compilerOptions": {
     "incremental": true,
     "target": "ES2023",
-    "module": "nodenext",
-    "moduleResolution": "nodenext",
-    "resolvePackageJsonExports": true,
     "emitDecoratorMetadata": true,
     "experimentalDecorators": true,
+    "baseUrl": "./",
+    "module": "nodenext",
+    "moduleResolution": "nodenext",
+    "paths": { "@/*": ["./src/*"] },
+    "resolvePackageJsonExports": true,
     "declaration": true,
     "outDir": "./dist",
-    "sourceMap": true,
     "removeComments": true,
-    "baseUrl": "./",
-    "paths": { "@/*": ["./src/*"] },
+    "sourceMap": true,
     "allowSyntheticDefaultImports": true
   },
   "exclude": ["dist", "node_modules", "eslint.config.mts"]

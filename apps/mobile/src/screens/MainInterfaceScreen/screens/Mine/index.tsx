@@ -14,6 +14,9 @@ export function Mine({
   navigation,
 }: BottomTabScreenProps<AllStackParamList, 'Mine'>) {
   const { user } = useAuth()
+  const roleLabel = user?.roles.length
+    ? user.roles.map((role) => role.name).join(', ')
+    : 'No roles'
 
   const handleSettingPress = () => {
     navigation.navigate('Setting')
@@ -26,8 +29,8 @@ export function Mine({
     >
       <View className="bg-background-secondary">
         <View className="p-8">
-          <ThemeText className="mb-2 text-4xl">{user?.name}</ThemeText>
-          <Text className="text-foreground-secondary"> {user?.signature}</Text>
+          <ThemeText className="mb-2 text-4xl">{user?.email}</ThemeText>
+          <Text className="text-foreground-secondary">{roleLabel}</Text>
         </View>
       </View>
 

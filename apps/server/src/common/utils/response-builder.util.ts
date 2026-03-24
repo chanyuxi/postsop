@@ -1,9 +1,11 @@
-import { Response } from '../interfaces/response.interface'
+﻿import { BizCode } from '@postsop/shared-contracts'
+
+import type { Response } from '../interfaces/response.interface'
 
 export class ResponseBuilder {
   static success<T = unknown>(data: T): Response<T> {
     return {
-      code: 0,
+      code: BizCode.SUCCESS,
       message: 'success',
       data,
     }
@@ -11,7 +13,7 @@ export class ResponseBuilder {
 
   static failure<T = unknown>(message: string): Response<T> {
     return {
-      code: 1,
+      code: BizCode.FAIL,
       message,
       data: null,
     }

@@ -1,8 +1,13 @@
-import {
+﻿import {
   BadRequestException,
   Injectable,
   UnauthorizedException,
 } from '@nestjs/common'
+import type {
+  AuthTokens,
+  RefreshTokenResult,
+  SignInResult,
+} from '@postsop/shared-contracts'
 
 import {
   hashPassword,
@@ -32,7 +37,7 @@ export class AuthService {
     }
   }
 
-  async signIn(signInDto: SignInDto) {
+  async signIn(signInDto: SignInDto): Promise<SignInResult> {
     const user = await this.userService.findAuthUserByEmail(signInDto.email)
 
     if (!user || !(await verifyPassword(signInDto.password, user.password))) {
@@ -61,7 +66,7 @@ export class AuthService {
     await this.tokenService.invalidateSession(sessionId)
   }
 
-  async refreshToken(refreshToken: string) {
+  async refreshToken(refreshToken: string): Promise<RefreshTokenResult> {
     const session = await this.tokenService.rotateSession(refreshToken)
     const user = await this.userService.findUserById(session.userId)
 
@@ -73,7 +78,7 @@ export class AuthService {
     return this.issueTokenPair(session)
   }
 
-  private async issueTokenPair(session: AuthSession) {
+  private async issueTokenPair(session: AuthSession): Promise<AuthTokens> {
     const jwtPayload: JwtPayload = {
       user: {
         id: session.userId,

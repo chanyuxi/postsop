@@ -80,6 +80,9 @@ importers:
       '@hookform/resolvers':
         specifier: ^5.2.2
         version: 5.2.2(react-hook-form@7.71.2(react@19.2.4))
+      '@postsop/shared-contracts':
+        specifier: workspace:*
+        version: link:../../packages/shared/contracts
       '@react-native-async-storage/async-storage':
         specifier: ^3.0.1
         version: 3.0.1(react-native@0.84.1(@babel/core@7.29.0)(@react-native-community/cli@20.1.0(typescript@5.9.3))(@react-native/metro-config@0.84.1(@babel/core@7.29.0))(@types/react@19.2.14)(react@19.2.4))(react@19.2.4)
@@ -270,6 +273,9 @@ importers:
       '@nestjs/platform-express':
         specifier: ^11.0.1
         version: 11.1.17(@nestjs/common@11.1.17(reflect-metadata@0.2.2)(rxjs@7.8.2))(@nestjs/core@11.1.17)
+      '@postsop/shared-contracts':
+        specifier: workspace:*
+        version: link:../../packages/shared/contracts
       '@prisma/adapter-pg':
         specifier: ^7.5.0
         version: 7.5.0
@@ -370,6 +376,12 @@ importers:
       typescript:
         specifier: ^5.7.3
         version: 5.9.3
+
+  packages/shared/contracts:
+    dependencies:
+      zod:
+        specifier: ^4.3.6
+        version: 4.3.6
 
 packages:
 

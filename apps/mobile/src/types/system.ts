@@ -1,8 +1,4 @@
-export interface User {
-  id: number
-  name: string
-  signature: string
-}
+﻿export type { SessionUser as User } from '@postsop/shared-contracts'
 
 export interface Toast {
   id: string

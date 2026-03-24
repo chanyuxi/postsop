@@ -1,4 +1,4 @@
-import { zodResolver } from '@hookform/resolvers/zod'
+﻿import { zodResolver } from '@hookform/resolvers/zod'
 import { useForm } from 'react-hook-form'
 import { Text, View } from 'react-native'
 
@@ -11,15 +11,10 @@ import {
   ThemeText,
 } from '@/components/common'
 import { APP_VERSION } from '@/constants'
-import { loginSchema } from '@/constants/schemas'
+import { type LoginFormState, loginSchema } from '@/constants/schemas'
 import { useAuth } from '@/hooks'
 import { storage, StrorageKeys } from '@/utils/storage'
 import { toast } from '@/utils/toast'
-
-interface LoginFormState {
-  email: string
-  password: string
-}
 
 export function SignInScreen() {
   const { signIn } = useAuth()
@@ -31,7 +26,11 @@ export function SignInScreen() {
 
   const handleSignIn = loginForm.handleSubmit((data) => {
     if (data.email === 'hello@example.com' && data.password === '123456') {
-      signIn()
+      signIn({
+        id: 1,
+        email: data.email,
+        roles: [{ name: 'member' }],
+      })
       const token = 'ABCDEFGHIJKLMNOPQRSTUVWXYZ'
       console.log('sign in with token:', token)
       storage.set(StrorageKeys.TOKEN, token)

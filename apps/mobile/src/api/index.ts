@@ -1,4 +1,4 @@
-import { REACT_APP_API_URL } from '@env'
+﻿import { REACT_APP_API_URL } from '@env'
 import axios, {
   type AxiosError,
   type AxiosRequestConfig,
@@ -14,9 +14,7 @@ const service = axios.create({
   timeout: 5000,
 })
 
-// ──────────────────────────────────────────────
 // Request interceptor
-// ──────────────────────────────────────────────
 service.interceptors.request.use(
   (config) => {
     config.headers['Content-Type'] = 'application/json'
@@ -32,15 +30,15 @@ service.interceptors.request.use(
   }
 )
 
-// ──────────────────────────────────────────────
 // Response interceptor
-// ──────────────────────────────────────────────
 service.interceptors.response.use(
   (response: AxiosResponse<ApiResponse>) => {
     const res = response.data
 
-    if (res.status !== BizStatus.SUCCESS) {
-      return Promise.reject(new ApiError(res.message, res.status, res.status))
+    if (res.code !== BizStatus.SUCCESS) {
+      return Promise.reject(
+        new ApiError(res.message, response.status, res.code)
+      )
     }
 
     return response
@@ -56,17 +54,15 @@ service.interceptors.response.use(
 
     const { status, data } = error.response
 
-    if (data?.status && data?.message) {
-      throw new ApiError(data.message, status, data.status)
+    if (data?.code && data?.message) {
+      throw new ApiError(data.message, status, data.code)
     }
 
     throw ApiError.http(status, error.message)
   }
 )
 
-// ──────────────────────────────────────────────
 // Typed request helpers
-// ──────────────────────────────────────────────
 async function request<T>(config: AxiosRequestConfig): Promise<ApiResponse<T>> {
   const response = await service.request<ApiResponse<T>>(config)
   return response.data
