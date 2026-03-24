@@ -6,7 +6,5 @@
   "jsxBracketSameLine": false,
   "arrowParens": "always",
   "endOfLine": "auto",
-  "singleAttributePerLine": true,
-  "plugins": ["prettier-plugin-tailwindcss"],
-  "tailwindFunctions": ["tv", "twMerge"]
+  "singleAttributePerLine": true
 }

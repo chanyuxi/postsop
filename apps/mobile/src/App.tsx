@@ -60,6 +60,8 @@ function AppContent() {
 
   const dispatch = useAppDispatch()
 
+  const a = '1'
+
   // Given the introduction of Android edge-to-edge mode, we will uniformly
   // use custom <StatusBarPlaceholder /> to manage the status bar
   const ConfigureStatusBar =
