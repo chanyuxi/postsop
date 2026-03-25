@@ -67,6 +67,8 @@ yarn-error.log
 # testing
 /coverage
 .eslintcache
+.turbo
+**/.turbo
 
 # Yarn
 .yarn/*
@@ -86,3 +88,4 @@ uniwind-types.d.ts
 **/.env.development
 **/.env.production
 
+**/dist

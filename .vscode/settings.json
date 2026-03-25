@@ -14,7 +14,6 @@
 
   // Enable autocompletion for Tailwind Variants
   "tailwindCSS.classFunctions": ["tv"],
-  "chatgpt.openOnStartup": true,
   "[javascript]": {
     "editor.defaultFormatter": "vscode.typescript-language-features"
   },

@@ -3,23 +3,34 @@
   "version": "0.1.91",
   "private": true,
   "sideEffects": false,
+  "react-native": "./src/index.ts",
   "exports": {
     ".": {
       "types": "./src/index.ts",
       "react-native": "./src/index.ts",
       "require": "./dist/index.js",
       "default": "./dist/index.js"
-    }
+    },
+    "./definition": {
+      "types": "./src/definition/index.ts",
+      "react-native": "./src/definition/index.ts",
+      "require": "./dist/definition/index.js",
+      "default": "./dist/definition/index.js"
+    },
+    "./package.json": "./package.json"
   },
   "main": "./dist/index.js",
   "types": "./src/index.ts",
-  "react-native": "./src/index.ts",
   "files": [
     "dist",
     "src"
   ],
   "scripts": {
-    "build": "tsc -p tsconfig.build.json",
+    "lint": "pnpm --dir ../../.. exec eslint packages/shared/contracts --cache",
+    "lint:fix": "pnpm --dir ../../.. exec eslint packages/shared/contracts --fix --cache",
+    "clean": "node -e \"require('node:fs').rmSync('dist', { recursive: true, force: true })\"",
+    "build": "pnpm run clean && tsc -p tsconfig.build.json",
+    "build:watch": "tsc -p tsconfig.build.json --watch",
     "type-check": "tsc -p tsconfig.json --noEmit"
   },
   "dependencies": {

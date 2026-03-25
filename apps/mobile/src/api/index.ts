@@ -1,11 +1,10 @@
 ﻿import { REACT_APP_API_URL } from '@env'
+import { type ApiResponse, BizStatus } from '@postsop/shared-contracts'
 import axios, {
   type AxiosError,
   type AxiosRequestConfig,
   type AxiosResponse,
 } from 'axios'
-
-import { type ApiResponse, BizStatus } from '@/types/api'
 
 import { ApiError } from './error'
 

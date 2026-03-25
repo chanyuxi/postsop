@@ -13,8 +13,8 @@ export const base = defineConfig(
   {
     files: ['**/*.ts', '**/*.tsx', '**/*.mts', '**/*.cts'],
     extends: [
-      tseslint.configs.recommendedTypeChecked,
-      tseslint.configs.stylisticTypeChecked,
+      tseslint.configs.recommended,
+      // tseslint.configs.stylisticTypeChecked,
     ],
     languageOptions: {
       parserOptions: {

@@ -39,6 +39,30 @@ export function SignInScreen() {
     }
   })
 
+  const loginFormRender = (
+    <Form
+      className="mb-4 gap-4"
+      form={loginForm}
+    >
+      <Form.Item name="email">
+        <Input
+          className="shadow-xs"
+          placeholder="Type your email here"
+          prefix={<Icons name="alpha-e-box-outline" />}
+        />
+      </Form.Item>
+
+      <Form.Item name="password">
+        <Input
+          secureTextEntry
+          className="shadow-xs"
+          placeholder="Type your password here"
+          prefix={<Icons name="alpha-p-box-outline" />}
+        />
+      </Form.Item>
+    </Form>
+  )
+
   return (
     <ScreenWrapper contentClassName="p-8 items-center justify-center">
       <View className="w-full">
@@ -49,27 +73,7 @@ export function SignInScreen() {
           </ThemeText>
         </View>
 
-        <Form
-          className="mb-4 gap-4"
-          form={loginForm}
-        >
-          <Form.Item name="email">
-            <Input
-              className="shadow-xs"
-              placeholder="Type your email here"
-              prefix={<Icons name="alpha-e-box-outline" />}
-            />
-          </Form.Item>
-
-          <Form.Item name="password">
-            <Input
-              secureTextEntry
-              className="shadow-xs"
-              placeholder="Type your password here"
-              prefix={<Icons name="alpha-p-box-outline" />}
-            />
-          </Form.Item>
-        </Form>
+        {loginFormRender}
 
         <View className="mb-8 gap-4">
           <Button onPress={handleSignIn}>Sign in</Button>
