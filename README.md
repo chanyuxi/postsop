@@ -14,5 +14,4 @@ pnpm contracts:watch
 
 ## Shared Packages
 
-- Shared package conventions live in `packages/shared/PACKAGE_TEMPLATE.md`.
-- `@postsop/shared-contracts` is the reference implementation for new shared packages.
+- `@postsop/contracts` is the reference implementation for new shared packages.

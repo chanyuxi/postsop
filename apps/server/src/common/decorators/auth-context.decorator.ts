@@ -3,10 +3,10 @@ import {
   ExecutionContext,
   InternalServerErrorException,
 } from '@nestjs/common'
+import type { NestedPath } from '@postsop/contracts/type'
 import { Request } from 'express'
 import get from 'lodash/get'
 
-import type { NestedPath } from '@/common/types/nested-path.type'
 import type { JwtPayload } from '@/modules/auth/interfaces/jwt-payload.interface'
 
 type JwtPayloadPath = NestedPath<JwtPayload>

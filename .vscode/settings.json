@@ -15,7 +15,7 @@
   // Enable autocompletion for Tailwind Variants
   "tailwindCSS.classFunctions": ["tv"],
   "[javascript]": {
-    "editor.defaultFormatter": "vscode.typescript-language-features"
+    "editor.defaultFormatter": "esbenp.prettier-vscode"
   },
   "[prisma]": {
     "editor.defaultFormatter": "Prisma.prisma-insider"

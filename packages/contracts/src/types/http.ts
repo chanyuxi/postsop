@@ -17,7 +17,7 @@ export enum HttpStatus {
   GATEWAY_TIMEOUT = 504,
 }
 
-export enum BizCode {
+export enum ResponseCode {
   SUCCESS = 100000,
   FAIL = 100001,
 
@@ -33,10 +33,8 @@ export enum BizCode {
   ACCOUNT_LOCKED = 400002,
 }
 
-export { BizCode as BizStatus }
-
 export interface ApiResponse<T = unknown> {
-  code: number
+  code: ResponseCode
   message: string
   data: T | null
 }

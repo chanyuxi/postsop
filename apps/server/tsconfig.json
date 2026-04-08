@@ -8,7 +8,9 @@
     "baseUrl": "./",
     "module": "nodenext",
     "moduleResolution": "nodenext",
-    "paths": { "@/*": ["./src/*"] },
+    "paths": {
+      "@/*": ["./src/*"]
+    },
     "resolvePackageJsonExports": true,
     "declaration": true,
     "outDir": "./dist",

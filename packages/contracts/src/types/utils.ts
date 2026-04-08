@@ -1,4 +1,11 @@
-type Primitive = bigint | boolean | null | number | string | symbol | undefined
+export type Primitive =
+  | bigint
+  | boolean
+  | null
+  | number
+  | string
+  | symbol
+  | undefined
 
 export type NestedPath<T> = T extends Primitive | readonly unknown[]
   ? never

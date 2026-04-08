@@ -2,15 +2,15 @@ const path = require('path')
 const { getDefaultConfig, mergeConfig } = require('@react-native/metro-config')
 const { withUniwindConfig } = require('uniwind/metro')
 
+const projectRoot = __dirname
+const workspaceRoot = path.resolve(projectRoot, '../..')
+
 /**
  * Metro configuration
  * https://reactnative.dev/docs/metro
  *
  * @type {import('@react-native/metro-config').MetroConfig}
  */
-const projectRoot = __dirname
-const workspaceRoot = path.resolve(projectRoot, '../..')
-
 const config = {
   watchFolders: [workspaceRoot],
   resolver: {

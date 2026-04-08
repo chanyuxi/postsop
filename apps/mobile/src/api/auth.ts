@@ -1,4 +1,4 @@
-import type { SignInDto } from '@postsop/shared-contracts'
+import type { SignInDto } from '@postsop/contracts/type'
 
 import { post } from './index'
 

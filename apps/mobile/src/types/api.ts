@@ -1,4 +1,4 @@
-﻿export type { ApiResponse } from '@postsop/shared-contracts'
-export { BizCode as BizStatus, HttpStatus } from '@postsop/shared-contracts'
+﻿export type { ApiResponse } from '@postsop/contracts/type'
+export { ResponseCode as BizStatus, HttpStatus } from '@postsop/contracts/type'
 
 export type ApiErrorType = 'network' | 'http' | 'business'

@@ -1,5 +1,5 @@
 ﻿import { REACT_APP_API_URL } from '@env'
-import { type ApiResponse, BizStatus } from '@postsop/shared-contracts'
+import { type ApiResponse, ResponseCode } from '@postsop/contracts/type'
 import axios, {
   type AxiosError,
   type AxiosRequestConfig,
@@ -34,7 +34,7 @@ service.interceptors.response.use(
   (response: AxiosResponse<ApiResponse>) => {
     const res = response.data
 
-    if (res.code !== BizStatus.SUCCESS) {
+    if (res.code !== ResponseCode.SUCCESS) {
       return Promise.reject(
         new ApiError(res.message, response.status, res.code)
       )

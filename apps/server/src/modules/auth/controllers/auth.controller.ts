@@ -1,12 +1,10 @@
 import { Controller, Get, Post } from '@nestjs/common'
+import { RefreshTokenDto, SignInDto, SignUpDto } from '@postsop/contracts/type'
 
 import { AuthContext } from '@/common/decorators/auth-context.decorator'
 import { Public } from '@/common/decorators/public.decorator'
 import { ZodBody } from '@/common/decorators/zod-body.decorator'
 
-import { RefreshTokenDto } from '../dto/refresh-token.dto'
-import { SignInDto } from '../dto/sign-in.dto'
-import { SignUpDto } from '../dto/sign-up.dto'
 import { AuthService } from '../services/auth.service'
 
 @Controller('auth')

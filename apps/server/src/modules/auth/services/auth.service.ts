@@ -6,8 +6,10 @@
 import type {
   AuthTokens,
   RefreshTokenResult,
+  SignInDto,
   SignInResult,
-} from '@postsop/shared-contracts'
+  SignUpDto,
+} from '@postsop/contracts/type'
 
 import {
   hashPassword,
@@ -16,8 +18,6 @@ import {
 } from '@/common/utils/password.util'
 import { UserService } from '@/modules/user/services/user.service'
 
-import { SignInDto } from '../dto/sign-in.dto'
-import { SignUpDto } from '../dto/sign-up.dto'
 import type { JwtPayload } from '../interfaces/jwt-payload.interface'
 import type { AuthSession } from './token.service'
 import { TokenService } from './token.service'

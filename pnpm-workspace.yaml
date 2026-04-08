@@ -3,4 +3,4 @@ overrides:
 
 packages:
   - 'apps/*'
-  - 'packages/*/*'
+  - 'packages/*'

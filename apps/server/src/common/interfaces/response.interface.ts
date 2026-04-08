@@ -1,1 +1,1 @@
-﻿export type { ApiResponse as Response } from '@postsop/shared-contracts'
+export type { ApiResponse as Response } from '@postsop/contracts/type'
