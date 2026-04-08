@@ -1,5 +1,7 @@
 {
   "extends": "./tsconfig.base.json",
+  "include": ["*.ts", "config/**/*.ts"],
+  "exclude": ["**/dist/**", "**/node_modules/**"],
   "compilerOptions": {
     "target": "ES2023",
     "module": "nodenext",
@@ -7,7 +9,5 @@
     "resolvePackageJsonExports": true,
     "resolvePackageJsonImports": true,
     "noEmit": true
-  },
-  "include": ["*.ts", "config/**/*.ts"],
-  "exclude": ["**/dist/**", "**/node_modules/**"]
+  }
 }

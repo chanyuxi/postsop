@@ -1,5 +1,6 @@
 {
   "extends": "../../tsconfig.base.json",
+  "exclude": ["dist", "node_modules", "eslint.config.mts"],
   "compilerOptions": {
     "incremental": true,
     "target": "ES2023",
@@ -17,6 +18,5 @@
     "removeComments": true,
     "sourceMap": true,
     "allowSyntheticDefaultImports": true
-  },
-  "exclude": ["dist", "node_modules", "eslint.config.mts"]
+  }
 }

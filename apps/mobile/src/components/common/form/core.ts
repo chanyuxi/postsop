@@ -6,7 +6,6 @@ import {
 } from 'react'
 import type { FieldError } from 'react-hook-form'
 
-// eslint-disable-next-line @typescript-eslint/no-empty-function
 const PLAIN_ONCHANGE = () => {}
 
 export interface Controllability<T = unknown> {
@@ -37,7 +36,7 @@ export function withAutoControl<P extends Controllability<any>>(
       // easy to use input components
       return {
         ...props,
-        // eslint-disable-next-line @typescript-eslint/no-unsafe-assignment
+
         value: props.value ?? ctx.value,
         onChange: (value) => {
           ctx.onChange(value)

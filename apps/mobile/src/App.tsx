@@ -80,7 +80,6 @@ function AppContent() {
       dispatch(temporary_initializeUser())
     }
 
-    // eslint-disable-next-line @typescript-eslint/no-floating-promises
     BootSplash.hide()
   }, [dispatch])
 

@@ -17,5 +17,4 @@ async function bootstrap() {
   await app.listen(Number(configService.getOrThrow(ENV_CONSTANTS.PORT)))
 }
 
-// eslint-disable-next-line @typescript-eslint/no-floating-promises
 bootstrap()

@@ -64,10 +64,10 @@ export const gitHookOrder = [
 export const tsconfigTopLevelOrder = [
   'references',
   'extends',
-  'compilerOptions',
   'files',
   'include',
   'exclude',
+  'compilerOptions',
 ]
 
 export const tsconfigCompilerOptionsOrder = [
