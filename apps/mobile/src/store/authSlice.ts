@@ -1,4 +1,4 @@
-﻿import { createSlice, type PayloadAction } from '@reduxjs/toolkit'
+import { createSlice, type PayloadAction } from '@reduxjs/toolkit'
 
 import { type User } from '@/types/system'
 
@@ -20,18 +20,8 @@ export const authSlice = createSlice({
     signOutAction: (state) => {
       state.user = null
     },
-
-    /** Temporary function to initialize the user */
-    temporary_initializeUser: (state) => {
-      state.user = {
-        id: 1,
-        email: 'hello@example.com',
-        roles: [{ name: 'member' }],
-      }
-    },
   },
 })
 
-export const { signInAction, signOutAction, temporary_initializeUser } =
-  authSlice.actions
+export const { signInAction, signOutAction } = authSlice.actions
 export default authSlice.reducer

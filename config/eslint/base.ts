@@ -12,22 +12,11 @@ export const base = defineConfig(
 
   {
     files: ['**/*.ts', '**/*.tsx', '**/*.mts', '**/*.cts'],
-    extends: [
-      tseslint.configs.recommended,
-      // tseslint.configs.stylisticTypeChecked,
-    ],
+    extends: [tseslint.configs.recommended, tseslint.configs.stylistic],
     languageOptions: {
       parserOptions: {
         projectService: true,
       },
-    },
-    rules: {
-      '@typescript-eslint/no-misused-promises': 'off',
-      '@typescript-eslint/no-unsafe-enum-comparison': 'off',
-      '@typescript-eslint/no-unsafe-assignment': 'off',
-      '@typescript-eslint/no-unsafe-member-access': 'off',
-      '@typescript-eslint/no-unsafe-argument': 'off',
-      '@typescript-eslint/consistent-type-definitions': 'off',
     },
   },
 

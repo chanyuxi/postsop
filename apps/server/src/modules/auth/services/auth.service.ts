@@ -1,4 +1,4 @@
-﻿import {
+import {
   BadRequestException,
   Injectable,
   UnauthorizedException,
@@ -11,11 +11,7 @@ import type {
   SignUpDto,
 } from '@postsop/contracts/type'
 
-import {
-  hashPassword,
-  isPasswordHash,
-  verifyPassword,
-} from '@/common/utils/password.util'
+import { verifyPassword } from '@/common/utils/password.util'
 import { UserService } from '@/modules/user/services/user.service'
 
 import type { JwtPayload } from '../interfaces/jwt-payload.interface'
@@ -42,11 +38,6 @@ export class AuthService {
 
     if (!user || !(await verifyPassword(signInDto.password, user.password))) {
       throw new UnauthorizedException('Invalid email or password')
-    }
-
-    if (!isPasswordHash(user.password)) {
-      const passwordHash = await hashPassword(signInDto.password)
-      await this.userService.updatePasswordHash(user.id, passwordHash)
     }
 
     const session = await this.tokenService.createSession(user.id)

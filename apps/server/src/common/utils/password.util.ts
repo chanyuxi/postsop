@@ -11,9 +11,17 @@ const KEY_LENGTH = 64
 const SALT_LENGTH = 16
 const HASH_SEPARATOR = ':'
 
-export function isPasswordHash(value: string): boolean {
+function parsePasswordHash(value: string) {
   const [salt, hash] = value.split(HASH_SEPARATOR)
-  return Boolean(salt && hash)
+
+  if (!salt || !hash) {
+    return null
+  }
+
+  return {
+    hash,
+    salt,
+  }
 }
 
 export async function hashPassword(password: string): Promise<string> {
@@ -27,13 +35,18 @@ export async function verifyPassword(
   password: string,
   storedValue: string,
 ): Promise<boolean> {
-  if (!isPasswordHash(storedValue)) {
-    return storedValue === password
+  const parsedHash = parsePasswordHash(storedValue)
+
+  if (!parsedHash) {
+    return false
   }
 
-  const [salt, hash] = storedValue.split(HASH_SEPARATOR)
-  const storedHash = Buffer.from(hash, 'hex')
-  const derivedKey = (await scrypt(password, salt, KEY_LENGTH)) as Buffer
+  const storedHash = Buffer.from(parsedHash.hash, 'hex')
+  const derivedKey = (await scrypt(
+    password,
+    parsedHash.salt,
+    KEY_LENGTH,
+  )) as Buffer
 
   if (storedHash.length !== derivedKey.length) {
     return false

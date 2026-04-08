@@ -36,12 +36,13 @@ describe('App (e2e)', () => {
   }
 
   beforeAll(() => {
-    process.env.PORT = '3000'
-    process.env.JWT_SECRET = 'test-secret'
-    process.env.JWT_EXPIRATION_TIME = '15m'
-    process.env.REFRESH_TOKEN_EXPIRATION_TIME = '60000'
-    process.env.REDIS_URL = 'redis://127.0.0.1:6379'
-    process.env.DATABASE_URL = 'postgresql://user:password@localhost:5432/coco'
+    process.env['PORT'] = '3000'
+    process.env['JWT_SECRET'] = 'test-secret'
+    process.env['JWT_EXPIRATION_TIME'] = '15m'
+    process.env['REFRESH_TOKEN_EXPIRATION_TIME'] = '60000'
+    process.env['REDIS_URL'] = 'redis://127.0.0.1:6379'
+    process.env['DATABASE_URL'] =
+      'postgresql://user:password@localhost:5432/coco'
   })
 
   beforeEach(async () => {

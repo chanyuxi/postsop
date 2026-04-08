@@ -1,8 +1,8 @@
 import { Injectable } from '@nestjs/common'
+import type { SignUpDto } from '@postsop/contracts/type'
 
 import { hashPassword } from '@/common/utils/password.util'
 import { PrismaService } from '@/database/prisma.service'
-import { SignUpDto } from '@/modules/auth/dto/sign-up.dto'
 
 @Injectable()
 export class UserService {
@@ -55,17 +55,6 @@ export class UserService {
       },
       select: {
         id: true,
-      },
-    })
-  }
-
-  updatePasswordHash(userId: number, passwordHash: string) {
-    return this.prismaService.user.update({
-      where: {
-        id: userId,
-      },
-      data: {
-        password: passwordHash,
       },
     })
   }

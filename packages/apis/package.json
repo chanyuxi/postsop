@@ -1,0 +1,13 @@
+{
+  "name": "@postsop/apis",
+  "version": "1.0.0",
+  "packageManager": "pnpm@10.31.0",
+  "description": "",
+  "author": "",
+  "license": "ISC",
+  "keywords": [],
+  "scripts": {
+    "build": "tsc",
+    "dev": "tsc -w"
+  }
+}

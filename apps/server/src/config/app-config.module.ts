@@ -4,7 +4,7 @@ import { ConfigModule } from '@nestjs/config'
 function getEnvFilePath() {
   const defaultEnvFilePath = ['.env.local', '.env']
 
-  const env = process.env.NODE_ENV
+  const env = process.env['NODE_ENV']
   if (env) {
     defaultEnvFilePath.unshift(`.env.${env}.local`, `.env.${env}`)
   }

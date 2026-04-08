@@ -5,7 +5,7 @@ import { PrismaPg } from '@prisma/adapter-pg'
 import { hashPassword } from '../src/common/utils/password.util'
 import { PrismaClient } from '../src/generated/prisma/client'
 
-const adapter = new PrismaPg({ connectionString: process.env.DATABASE_URL })
+const adapter = new PrismaPg({ connectionString: process.env['DATABASE_URL'] })
 const prisma = new PrismaClient({ adapter })
 
 async function main() {

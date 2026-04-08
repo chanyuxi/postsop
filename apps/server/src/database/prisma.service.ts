@@ -64,7 +64,7 @@ export class PrismaService
   })
   readonly errors = PrismaErrorIdentification
 
-  constructor(private readonly configService: ConfigService) {
+  constructor(configService: ConfigService) {
     super(
       createPrismaClientOptions(
         configService.getOrThrow(ENV_CONSTANTS.DATABASE_URL),

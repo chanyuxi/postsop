@@ -7,13 +7,13 @@
   },
   "scripts": {
     "android": "react-native run-android",
-    "ios": "react-native run-ios",
     "lint": "pnpm --dir ../.. exec eslint apps/mobile --cache",
     "lint:fix": "pnpm --dir ../.. exec eslint apps/mobile --fix --cache",
-    "type-check": "tsc --noEmit",
+    "ios": "react-native run-ios",
     "start": "react-native start",
+    "tailwind:build": "tailwindcss -i ./src/global.css -o ./tailwind-output.css",
     "test": "jest",
-    "generate:tailwindcss:output": "tailwindcss -i ./src/global.css -o ./tailwind-output.css"
+    "type-check": "tsc --noEmit"
   },
   "dependencies": {
     "@hookform/resolvers": "^5.2.2",

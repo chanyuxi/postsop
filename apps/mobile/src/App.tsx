@@ -17,11 +17,18 @@ import { useFocusManager, useOnlineManager, useSafeAreaStyles } from '@/hooks'
 import { ToastAttacher } from '@/libs/toast/ToastAttacher'
 import { RootStack } from '@/routes'
 import { store } from '@/store'
-import { storage, StrorageKeys } from '@/utils/storage'
+import { signInAction } from '@/store/authSlice'
+import {
+  clearStoredAuthSession,
+  getStoredAccessToken,
+  getStoredRefreshToken,
+  getStoredUser,
+  storage,
+  StrorageKeys,
+} from '@/utils/storage'
 import { setTheme, type ThemeName } from '@/utils/theme'
 
 import { useAppDispatch } from './hooks'
-import { temporary_initializeUser } from './store/authSlice'
 
 const persister = createAsyncStoragePersister({
   storage: AsyncStorage,
@@ -76,8 +83,14 @@ function AppContent() {
       setTheme(storage.getString(StrorageKeys.THEME) as ThemeName)
     }
 
-    if (storage.contains(StrorageKeys.TOKEN)) {
-      dispatch(temporary_initializeUser())
+    const storedAccessToken = getStoredAccessToken()
+    const storedRefreshToken = getStoredRefreshToken()
+    const storedUser = getStoredUser()
+
+    if (storedAccessToken && storedRefreshToken && storedUser) {
+      dispatch(signInAction(storedUser))
+    } else if (storedAccessToken || storedRefreshToken || storedUser) {
+      clearStoredAuthSession()
     }
 
     BootSplash.hide()

@@ -1,5 +1,6 @@
 import { UnauthorizedException } from '@nestjs/common'
 
+import { hashPassword } from '@/common/utils/password.util'
 import type { UserService } from '@/modules/user/services/user.service'
 
 import { AuthService } from './auth.service'
@@ -16,7 +17,6 @@ describe('AuthService', () => {
     createUser: jest.fn(),
     findAuthUserByEmail: jest.fn(),
     findUserById: jest.fn(),
-    updatePasswordHash: jest.fn(),
   } as unknown as UserService
 
   const tokenService = {
@@ -31,14 +31,14 @@ describe('AuthService', () => {
     authService = new AuthService(userService, tokenService)
   })
 
-  it('upgrades legacy plaintext passwords on successful sign-in', async () => {
+  it('signs in successfully when the stored password is hashed', async () => {
+    const passwordHash = await hashPassword('password')
     const findAuthUserByEmail = jest.fn().mockResolvedValue({
       email: 'admin@example.com',
       id: 1,
-      password: 'password',
+      password: passwordHash,
       roles: [{ name: 'admin' }],
     })
-    const updatePasswordHash = jest.fn().mockResolvedValue(undefined)
     const createSession = jest.fn().mockResolvedValue({
       refreshToken: 'refresh-token',
       sessionId: 'session-1',
@@ -47,7 +47,6 @@ describe('AuthService', () => {
     const generateAccessToken = jest.fn().mockResolvedValue('access-token')
 
     userService.findAuthUserByEmail = findAuthUserByEmail
-    userService.updatePasswordHash = updatePasswordHash
     tokenService.createSession = createSession
     tokenService.generateAccessToken = generateAccessToken
 
@@ -56,7 +55,6 @@ describe('AuthService', () => {
       password: 'password',
     })
 
-    expect(updatePasswordHash).toHaveBeenCalledWith(1, expect.any(String))
     expect(generateAccessToken).toHaveBeenCalledWith({
       sessionId: 'session-1',
       user: {

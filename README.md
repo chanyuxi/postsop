@@ -12,6 +12,8 @@ pnpm test
 pnpm contracts:watch
 ```
 
+For package-specific work, prefer `pnpm --filter @postsop/mobile <script>` or `pnpm --filter @postsop/backend <script>`.
+
 ## Shared Packages
 
 - `@postsop/contracts` is the reference implementation for new shared packages.

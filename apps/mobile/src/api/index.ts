@@ -1,10 +1,12 @@
-﻿import { REACT_APP_API_URL } from '@env'
+import { REACT_APP_API_URL } from '@env'
 import { type ApiResponse, ResponseCode } from '@postsop/contracts/type'
 import axios, {
   type AxiosError,
   type AxiosRequestConfig,
   type AxiosResponse,
 } from 'axios'
+
+import { getStoredAccessToken } from '@/utils/storage'
 
 import { ApiError } from './error'
 
@@ -17,6 +19,12 @@ const service = axios.create({
 service.interceptors.request.use(
   (config) => {
     config.headers['Content-Type'] = 'application/json'
+
+    const accessToken = getStoredAccessToken()
+
+    if (accessToken) {
+      config.headers.Authorization = `Bearer ${accessToken}`
+    }
 
     return config
   },
@@ -42,7 +50,7 @@ service.interceptors.response.use(
 
     return response
   },
-  (error: AxiosError<ApiResponse>) => {
+  (error: AxiosError<{ code?: number; message?: string | string[] }>) => {
     if (error.code === 'ECONNABORTED' || error.message?.includes('timeout')) {
       throw ApiError.timeout()
     }
@@ -53,8 +61,20 @@ service.interceptors.response.use(
 
     const { status, data } = error.response
 
-    if (data?.code && data?.message) {
+    if (data?.code && typeof data.message === 'string') {
       throw new ApiError(data.message, status, data.code)
+    }
+
+    const rawMessage = data?.message
+    const message =
+      typeof rawMessage === 'string'
+        ? rawMessage
+        : Array.isArray(rawMessage)
+          ? rawMessage.join(', ')
+          : undefined
+
+    if (message) {
+      throw ApiError.http(status, message)
     }
 
     throw ApiError.http(status, error.message)

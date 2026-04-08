@@ -1,7 +1,11 @@
-﻿import { zodResolver } from '@hookform/resolvers/zod'
+import { zodResolver } from '@hookform/resolvers/zod'
+import { type NativeStackScreenProps } from '@react-navigation/native-stack'
+import { useState } from 'react'
 import { useForm } from 'react-hook-form'
-import { Text, View } from 'react-native'
+import { Pressable, Text, View } from 'react-native'
 
+import { requestSignIn } from '@/api/auth'
+import { ApiError } from '@/api/error'
 import {
   Button,
   Form,
@@ -13,29 +17,49 @@ import {
 import { APP_VERSION } from '@/constants'
 import { type LoginFormState, loginSchema } from '@/constants/schemas'
 import { useAuth } from '@/hooks'
-import { storage, StrorageKeys } from '@/utils/storage'
+import { type AuthStackParamList } from '@/routes/type'
 import { toast } from '@/utils/toast'
 
-export function SignInScreen() {
+type SignInScreenProps = NativeStackScreenProps<AuthStackParamList, 'SignIn'>
+
+export function SignInScreen({ navigation, route }: SignInScreenProps) {
   const { signIn } = useAuth()
+  const [isSubmitting, setIsSubmitting] = useState(false)
 
   const loginForm = useForm<LoginFormState>({
-    defaultValues: { email: 'hello@example.com', password: '123456' },
+    defaultValues: {
+      email: route.params?.initialEmail ?? '',
+      password: '',
+    },
     resolver: zodResolver(loginSchema),
   })
 
-  const handleSignIn = loginForm.handleSubmit((data) => {
-    if (data.email === 'hello@example.com' && data.password === '123456') {
-      signIn({
-        id: 1,
-        email: data.email,
-        roles: [{ name: 'member' }],
-      })
-      const token = 'ABCDEFGHIJKLMNOPQRSTUVWXYZ'
-      console.log('sign in with token:', token)
-      storage.set(StrorageKeys.TOKEN, token)
-    } else {
-      toast('Invalid credentials')
+  const handleSignIn = loginForm.handleSubmit(async (data) => {
+    if (isSubmitting) {
+      return
+    }
+
+    try {
+      setIsSubmitting(true)
+
+      const response = await requestSignIn(data)
+
+      if (!response.data) {
+        throw new Error('Sign-in response is missing session data')
+      }
+
+      signIn(response.data)
+      toast('Sign in successful')
+    } catch (error) {
+      if (error instanceof ApiError) {
+        toast(error.message)
+      } else if (error instanceof Error) {
+        toast(error.message)
+      } else {
+        toast('Sign in failed')
+      }
+    } finally {
+      setIsSubmitting(false)
     }
   })
 
@@ -47,6 +71,7 @@ export function SignInScreen() {
       <Form.Item name="email">
         <Input
           className="shadow-xs"
+          editable={!isSubmitting}
           placeholder="Type your email here"
           prefix={<Icons name="alpha-e-box-outline" />}
         />
@@ -54,10 +79,11 @@ export function SignInScreen() {
 
       <Form.Item name="password">
         <Input
-          secureTextEntry
           className="shadow-xs"
+          editable={!isSubmitting}
           placeholder="Type your password here"
           prefix={<Icons name="alpha-p-box-outline" />}
+          secureTextEntry
         />
       </Form.Item>
     </Form>
@@ -76,17 +102,32 @@ export function SignInScreen() {
         {loginFormRender}
 
         <View className="mb-8 gap-4">
-          <Button onPress={handleSignIn}>Sign in</Button>
-          <Button variant="secondary">Sign in with Github</Button>
+          <Button
+            disabled={isSubmitting}
+            onPress={handleSignIn}
+          >
+            {isSubmitting ? 'Signing in...' : 'Sign in'}
+          </Button>
+          <Button
+            disabled={isSubmitting}
+            variant="secondary"
+          >
+            Sign in with Github
+          </Button>
         </View>
 
         <View className="flex-row justify-end gap-2">
           <ThemeText className="text-foreground-secondary text-sm">
             Don't have an account?
           </ThemeText>
-          <ThemeText className="text-brand-primary text-sm italic underline">
-            Create
-          </ThemeText>
+          <Pressable
+            disabled={isSubmitting}
+            onPress={() => navigation.navigate('SignUp')}
+          >
+            <ThemeText className="text-brand-primary text-sm italic underline">
+              Create
+            </ThemeText>
+          </Pressable>
         </View>
       </View>
 
