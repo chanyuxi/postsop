@@ -1,7 +1,6 @@
 {
-  "extends": "../../tsconfig.base.json",
+  "extends": "../../packages/configs/tsconfig.base.json",
   "include": ["src/**/*.ts"],
-  "exclude": ["dist", "node_modules"],
   "compilerOptions": {
     "target": "ES2023",
     "rootDir": "./src",

@@ -2,7 +2,7 @@ import NetInfo from '@react-native-community/netinfo'
 import { onlineManager } from '@tanstack/react-query'
 import { useEffect } from 'react'
 
-export function useOnlineManager() {
+export function useOnlineStateManager() {
   useEffect(() => {
     return NetInfo.addEventListener((state) => {
       onlineManager.setOnline(

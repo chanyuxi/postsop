@@ -1,0 +1,20 @@
+{
+  "name": "@postsop/configs",
+  "type": "module",
+  "version": "1.0.0",
+  "private": true,
+  "packageManager": "pnpm@10.31.0",
+  "description": "",
+  "author": "",
+  "license": "ISC",
+  "keywords": [],
+  "exports": {
+    "./eslint": {
+      "types": "./src/eslint/index.ts",
+      "default": "./src/eslint/index.ts"
+    }
+  },
+  "scripts": {
+    "lint": "pnpm --dir ../.. exec eslint packages/configs/src/eslint --cache"
+  }
+}

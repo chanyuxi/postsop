@@ -37,6 +37,7 @@
     "@commitlint/types": "^20.5.0",
     "@eslint-community/eslint-plugin-eslint-comments": "^4.7.1",
     "@eslint/js": "^9.39.4",
+    "@postsop/configs": "workspace:*",
     "@react-native/eslint-plugin": "^0.84.1",
     "eslint": "^9.39.4",
     "eslint-config-prettier": "^10.0.1",
@@ -54,9 +55,5 @@
     "turbo": "^2.8.20",
     "typescript": "^5.9.3",
     "typescript-eslint": "^8.57.2"
-  },
-  "lint-staged": {
-    "*.{js,jsx,ts,tsx,mjs,cjs,mts,cts}": "eslint --fix --cache --no-warn-ignored",
-    "*.{json,jsonc}": "eslint --fix --cache --no-warn-ignored"
   }
 }

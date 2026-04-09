@@ -1,5 +1,5 @@
 {
-  "extends": "../../tsconfig.base.json",
+  "extends": "../../packages/configs/tsconfig.base.json",
   "exclude": ["dist", "node_modules", "eslint.config.mts"],
   "compilerOptions": {
     "incremental": true,

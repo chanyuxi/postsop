@@ -1,7 +1,7 @@
 // Why don't I use @react-native/eslint-config?
-// 1、High coupling degree, unable to flexibly customize
-// 2、Built in flow verification, but I don't need it, and it works with eslint@9 incompatible
-// 3、Splitting it out is beneficial for monorepo
+// 1. It is tightly coupled and harder to customize in a monorepo.
+// 2. It bundles Flow-related validation that this workspace does not need.
+// 3. The extracted config is easier to share across packages.
 
 import reactNativePlugin from '@react-native/eslint-plugin'
 import { defineConfig } from 'eslint/config'

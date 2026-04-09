@@ -26,6 +26,9 @@ importers:
       '@eslint/js':
         specifier: ^9.39.4
         version: 9.39.4
+      '@postsop/configs':
+        specifier: workspace:*
+        version: link:packages/configs
       '@react-native/eslint-plugin':
         specifier: ^0.84.1
         version: 0.84.1
@@ -381,6 +384,8 @@ importers:
         version: 5.9.3
 
   packages/apis: {}
+
+  packages/configs: {}
 
   packages/contracts: {}
 
