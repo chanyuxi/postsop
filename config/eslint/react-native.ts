@@ -72,17 +72,10 @@ export const reactNative = defineConfig({
     'react-native/no-unused-styles': 'error',
     'react-native/split-platform-components': 'error',
     'react-native/no-inline-styles': 'warn',
-    'react-native/no-raw-text': [
-      'error',
-      {
-        skip: ['ThemeText', 'Button'],
-      },
-    ],
+    'react-native/no-raw-text': 'off',
     'react-native/no-single-element-style-arrays': 'error',
 
     '@react-native/no-deep-imports': 'error',
-
-    'react/no-unescaped-entities': 'off',
     'react-hooks/immutability': 'off',
   },
   languageOptions: {

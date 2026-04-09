@@ -3,14 +3,14 @@ import globals from 'globals'
 
 import { base, jsonc, react, reactNative, testing } from './config/eslint'
 
-const mobile = ['apps/mobile/**/*.{js,jsx,ts,tsx}']
+const clientApp = ['apps/client-app/**/*.{js,jsx,ts,tsx}']
 const server = ['apps/server/**/*.{js,ts}']
 
 export default defineConfig(
   globalIgnores([
     '**/dist/**',
-    'apps/mobile/android/**',
-    'apps/mobile/ios/**',
+    'apps/client-app/android/**',
+    'apps/client-app/ios/**',
     '**/uniwind-types.d.ts',
     'apps/server/src/generated/prisma/**',
   ]),
@@ -20,12 +20,8 @@ export default defineConfig(
   testing,
 
   {
-    files: mobile,
-    extends: react,
-  },
-  {
-    files: mobile,
-    extends: reactNative,
+    files: clientApp,
+    extends: [react, reactNative],
   },
 
   {

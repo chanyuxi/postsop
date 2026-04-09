@@ -15,6 +15,8 @@ const service = axios.create({
   timeout: 5000,
 })
 
+console.log(REACT_APP_API_URL)
+
 // Request interceptor
 service.interceptors.request.use(
   (config) => {

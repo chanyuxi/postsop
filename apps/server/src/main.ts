@@ -3,8 +3,7 @@ import { NestFactory } from '@nestjs/core'
 
 import { AppModule } from '@/app.module'
 import { ENV_CONSTANTS } from '@/common/constants/env'
-
-import { ResponseEncapsulationInterceptor } from './common/interceptors/response-encapsulation.interceptor'
+import { ResponseEncapsulationInterceptor } from '@/common/interceptors/response-encapsulation.interceptor'
 
 async function bootstrap() {
   const app = await NestFactory.create(AppModule)

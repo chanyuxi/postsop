@@ -28,8 +28,8 @@ export function SignInScreen({ navigation, route }: SignInScreenProps) {
 
   const loginForm = useForm<LoginFormState>({
     defaultValues: {
-      email: route.params?.initialEmail ?? '',
-      password: '',
+      email: route.params?.initialEmail ?? 'admin@example.com',
+      password: 'password',
     },
     resolver: zodResolver(loginSchema),
   })
@@ -118,7 +118,7 @@ export function SignInScreen({ navigation, route }: SignInScreenProps) {
 
         <View className="flex-row justify-end gap-2">
           <ThemeText className="text-foreground-secondary text-sm">
-            Don't have an account?
+            Don&apos;t have an account?
           </ThemeText>
           <Pressable
             disabled={isSubmitting}

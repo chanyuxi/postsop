@@ -1,6 +1,6 @@
 # postsop
 
-Monorepo root for the `postsop` React Native app and backend, managed with `pnpm` workspaces and Turborepo.
+Monorepo root for the `postsop` React Native client app and server, managed with `pnpm` workspaces and Turborepo.
 
 ## Common Commands
 
@@ -12,7 +12,7 @@ pnpm test
 pnpm contracts:watch
 ```
 
-For package-specific work, prefer `pnpm --filter @postsop/mobile <script>` or `pnpm --filter @postsop/backend <script>`.
+For package-specific work, prefer `pnpm --filter @postsop/client-app <script>` or `pnpm --filter @postsop/server <script>`.
 
 ## Shared Packages
 
