@@ -28,6 +28,6 @@ export class AppConfigModule implements OnModuleInit {
   })
 
   onModuleInit() {
-    this.logger.log(`Loading from: ${envFilePath.join(', ')}`)
+    this.logger.log(envFilePath.join(', '))
   }
 }

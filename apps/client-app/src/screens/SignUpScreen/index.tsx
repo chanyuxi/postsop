@@ -1,10 +1,11 @@
 import { zodResolver } from '@hookform/resolvers/zod'
-import type { SignUpDto } from '@postsop/contracts/type'
 import { type NativeStackScreenProps } from '@react-navigation/native-stack'
 import { useState } from 'react'
 import { useForm } from 'react-hook-form'
 import { Pressable, View } from 'react-native'
 import { z } from 'zod'
+
+import type { SignUpDto } from '@postsop/contracts/type'
 
 import { requestSignUp } from '@/api/auth'
 import { ApiError } from '@/api/error'

@@ -131,7 +131,7 @@ export function SignInScreen({ navigation, route }: SignInScreenProps) {
         </View>
       </View>
 
-      <View className="absolute right-0 bottom-0 left-0 p-8">
+      <View className="absolute right-0 bottom-0  p-8 left-0">
         <Text className="text-black.10 text-center text-black/10 italic dark:text-white/10">
           Version {APP_VERSION}
         </Text>

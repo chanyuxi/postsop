@@ -1,4 +1,5 @@
 import { Injectable } from '@nestjs/common'
+
 import type { SignUpDto } from '@postsop/contracts/type'
 
 import { hashPassword } from '@/common/utils/password.util'

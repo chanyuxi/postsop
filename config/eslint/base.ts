@@ -18,6 +18,21 @@ export const base = defineConfig(
         projectService: true,
       },
     },
+
+    rules: {
+      '@typescript-eslint/consistent-type-exports': [
+        'error',
+        {
+          fixMixedExportsWithInlineTypeSpecifier: false,
+        },
+      ],
+      '@typescript-eslint/consistent-type-imports': [
+        'error',
+        {
+          fixStyle: 'separate-type-imports',
+        },
+      ],
+    },
   },
 
   // Additional ESLint rules for ESLint directive comments
@@ -35,7 +50,18 @@ export const base = defineConfig(
       import: importPlugin,
     },
     rules: {
-      'simple-import-sort/imports': 'error',
+      'simple-import-sort/imports': [
+        'error',
+        {
+          groups: [
+            ['^\\u0000'],
+            ['^(?!@postsop(?:/|$))@?\\w'],
+            ['^@postsop(?:/|$)'],
+            ['^@/'],
+            ['^\\.'],
+          ],
+        },
+      ],
       'simple-import-sort/exports': 'error',
 
       'import/first': 'error',

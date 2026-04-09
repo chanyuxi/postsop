@@ -1,5 +1,6 @@
-import type { SessionUser, SignInResult } from '@postsop/contracts/type'
 import { createMMKV } from 'react-native-mmkv'
+
+import type { SessionUser, SignInResult } from '@postsop/contracts/type'
 
 import {
   AUTHORIZATION_USER_PROFILE,

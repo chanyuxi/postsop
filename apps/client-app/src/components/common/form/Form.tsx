@@ -1,5 +1,5 @@
 import { type PropsWithChildren } from 'react'
-import {
+import type {
   Controller,
   type FieldValues,
   FormProvider,
