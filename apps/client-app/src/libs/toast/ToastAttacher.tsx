@@ -13,7 +13,7 @@ import { scheduleOnRN } from 'react-native-worklets'
 import { useIsSingletonComponent } from '@/hooks/useIsSingletonComponent'
 import { useAppDispatch, useAppSelector } from '@/hooks/useStore'
 import { nextToast } from '@/store/systemSlice'
-import { type Toast } from '@/types/system'
+import type { Toast } from '@/types/system'
 
 interface ToastProps {
   toast: Toast

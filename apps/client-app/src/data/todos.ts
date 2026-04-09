@@ -1,4 +1,4 @@
-import { type Todo } from '@/types/todo'
+import type { Todo } from '@/types/todo'
 
 const todoTitles: string[] = [
   'Wake up at 6:00 AM',

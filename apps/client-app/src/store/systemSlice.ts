@@ -1,7 +1,7 @@
-import { createSlice, type PayloadAction } from '@reduxjs/toolkit'
-import { nanoid } from '@reduxjs/toolkit'
+import type { PayloadAction } from '@reduxjs/toolkit'
+import { createSlice, nanoid } from '@reduxjs/toolkit'
 
-import { type Toast } from '@/types/system'
+import type { Toast } from '@/types/system'
 
 interface SystemState {
   activatedToast: Toast | null

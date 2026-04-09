@@ -1,7 +1,5 @@
-import {
-  MaterialDesignIcons,
-  type MaterialDesignIconsIconName,
-} from '@react-native-vector-icons/material-design-icons'
+import type { MaterialDesignIconsIconName } from '@react-native-vector-icons/material-design-icons'
+import { MaterialDesignIcons } from '@react-native-vector-icons/material-design-icons'
 import type { GestureResponderEvent } from 'react-native'
 import { useCSSVariable } from 'uniwind'
 

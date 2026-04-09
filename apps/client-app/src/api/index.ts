@@ -1,9 +1,6 @@
 import { REACT_APP_API_URL } from '@env'
-import axios, {
-  type AxiosError,
-  type AxiosRequestConfig,
-  type AxiosResponse,
-} from 'axios'
+import type { AxiosError, AxiosRequestConfig, AxiosResponse } from 'axios'
+import axios from 'axios'
 
 import type { ApiResponse } from '@postsop/contracts/type'
 import { ResponseCode } from '@postsop/contracts/type'

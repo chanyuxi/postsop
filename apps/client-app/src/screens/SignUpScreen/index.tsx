@@ -1,5 +1,5 @@
 import { zodResolver } from '@hookform/resolvers/zod'
-import { type NativeStackScreenProps } from '@react-navigation/native-stack'
+import type { NativeStackScreenProps } from '@react-navigation/native-stack'
 import { useState } from 'react'
 import { useForm } from 'react-hook-form'
 import { Pressable, View } from 'react-native'
@@ -19,7 +19,7 @@ import {
   TopBar,
 } from '@/components/common'
 import { signUpSchema } from '@/constants/schemas'
-import { type AuthStackParamList } from '@/routes/type'
+import type { AuthStackParamList } from '@/routes/type'
 import { toast } from '@/utils/toast'
 
 const signUpFormSchema = signUpSchema

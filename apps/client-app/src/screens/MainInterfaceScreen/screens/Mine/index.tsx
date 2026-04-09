@@ -1,11 +1,11 @@
-import { type BottomTabScreenProps } from '@react-navigation/bottom-tabs'
+import type { BottomTabScreenProps } from '@react-navigation/bottom-tabs'
 import { Text, View } from 'react-native'
 
 import { ScreenWrapper } from '@/components/common/ScreenWrapper'
 import { ThemeText } from '@/components/common/ThemeText'
 import { APP_VERSION } from '@/constants'
 import { useAuth } from '@/hooks/useAuth'
-import { type AllStackParamList } from '@/routes/type'
+import type { AllStackParamList } from '@/routes/type'
 
 import { Cell } from './components/Cell'
 import { CellGroup } from './components/CellGroup'

@@ -1,9 +1,5 @@
-import {
-  createContext,
-  type FunctionComponent,
-  useContext,
-  useMemo,
-} from 'react'
+import type { FunctionComponent } from 'react'
+import { createContext, useContext, useMemo } from 'react'
 import type { FieldError } from 'react-hook-form'
 
 // eslint-disable-next-line @typescript-eslint/no-empty-function

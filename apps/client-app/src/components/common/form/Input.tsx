@@ -1,8 +1,11 @@
 import type { ReactNode } from 'react'
-import { TextInput, type TextInputProps, View } from 'react-native'
-import { tv, type VariantProps } from 'tailwind-variants'
+import type { TextInputProps } from 'react-native'
+import { TextInput, View } from 'react-native'
+import type { VariantProps } from 'tailwind-variants'
+import { tv } from 'tailwind-variants'
 
-import { type Controllability, withAutoControl } from './core'
+import type { Controllability } from './core'
+import { withAutoControl } from './core'
 
 interface InputProps
   extends

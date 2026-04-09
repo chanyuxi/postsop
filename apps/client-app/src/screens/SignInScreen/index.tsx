@@ -1,5 +1,5 @@
 import { zodResolver } from '@hookform/resolvers/zod'
-import { type NativeStackScreenProps } from '@react-navigation/native-stack'
+import type { NativeStackScreenProps } from '@react-navigation/native-stack'
 import { useState } from 'react'
 import { useForm } from 'react-hook-form'
 import { Pressable, Text, View } from 'react-native'
@@ -15,9 +15,10 @@ import {
   ThemeText,
 } from '@/components/common'
 import { APP_VERSION } from '@/constants'
-import { type LoginFormState, loginSchema } from '@/constants/schemas'
+import type { LoginFormState } from '@/constants/schemas'
+import { loginSchema } from '@/constants/schemas'
 import { useAuth } from '@/hooks'
-import { type AuthStackParamList } from '@/routes/type'
+import type { AuthStackParamList } from '@/routes/type'
 import { toast } from '@/utils/toast'
 
 type SignInScreenProps = NativeStackScreenProps<AuthStackParamList, 'SignIn'>

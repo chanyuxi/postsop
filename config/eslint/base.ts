@@ -18,21 +18,6 @@ export const base = defineConfig(
         projectService: true,
       },
     },
-
-    rules: {
-      '@typescript-eslint/consistent-type-exports': [
-        'error',
-        {
-          fixMixedExportsWithInlineTypeSpecifier: false,
-        },
-      ],
-      '@typescript-eslint/consistent-type-imports': [
-        'error',
-        {
-          fixStyle: 'separate-type-imports',
-        },
-      ],
-    },
   },
 
   // Additional ESLint rules for ESLint directive comments
@@ -67,6 +52,7 @@ export const base = defineConfig(
       'import/first': 'error',
       'import/newline-after-import': 'error',
       'import/no-duplicates': 'error',
+      'import/consistent-type-specifier-style': 'error',
     },
   }
 )

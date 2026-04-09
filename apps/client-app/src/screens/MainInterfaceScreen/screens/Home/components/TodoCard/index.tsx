@@ -1,9 +1,10 @@
 import { useState } from 'react'
-import { type GestureResponderEvent, Pressable, View } from 'react-native'
+import type { GestureResponderEvent } from 'react-native'
+import { Pressable, View } from 'react-native'
 
 import { ThemeText } from '@/components/common'
 import { Collapse } from '@/components/common/Collapse'
-import { type Todo } from '@/types/todo'
+import type { Todo } from '@/types/todo'
 
 interface TodoCardProps {
   todo: Todo

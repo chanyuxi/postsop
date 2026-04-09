@@ -1,19 +1,7 @@
-import {
-  type PropsWithChildren,
-  type Ref,
-  useCallback,
-  useImperativeHandle,
-  useRef,
-  useState,
-} from 'react'
-import {
-  Animated,
-  Dimensions,
-  type GestureResponderEvent,
-  type LayoutChangeEvent,
-  Modal,
-  Pressable,
-} from 'react-native'
+import type { PropsWithChildren, Ref } from 'react'
+import { useCallback, useImperativeHandle, useRef, useState } from 'react'
+import type { GestureResponderEvent, LayoutChangeEvent } from 'react-native'
+import { Animated, Dimensions, Modal, Pressable } from 'react-native'
 import { useSafeAreaInsets } from 'react-native-safe-area-context'
 
 export interface ContextMenuImperativeHandle {

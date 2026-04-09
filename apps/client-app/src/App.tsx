@@ -26,7 +26,8 @@ import {
   storage,
   StrorageKeys,
 } from '@/utils/storage'
-import { setTheme, type ThemeName } from '@/utils/theme'
+import type { ThemeName } from '@/utils/theme'
+import { setTheme } from '@/utils/theme'
 
 import { useAppDispatch } from './hooks'
 

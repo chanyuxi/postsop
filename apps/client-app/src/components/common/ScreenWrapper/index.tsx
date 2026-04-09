@@ -1,4 +1,4 @@
-import { type PropsWithChildren } from 'react'
+import type { PropsWithChildren } from 'react'
 import { View } from 'react-native'
 import { twMerge } from 'tailwind-merge'
 

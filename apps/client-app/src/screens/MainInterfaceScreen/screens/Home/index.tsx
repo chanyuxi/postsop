@@ -4,7 +4,7 @@ import { View } from 'react-native'
 import { Icons, TopBar } from '@/components/common'
 import { ScreenWrapper } from '@/components/common/ScreenWrapper'
 import { getTodos } from '@/services/todos'
-import { type Todo } from '@/types/todo'
+import type { Todo } from '@/types/todo'
 
 import { StatsPanel } from './components/StatsPanel'
 import { TodoList } from './components/TodoList'

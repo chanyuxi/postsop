@@ -1,4 +1,5 @@
-import { type Cache, CACHE_MANAGER } from '@nestjs/cache-manager'
+import type { Cache } from '@nestjs/cache-manager'
+import { CACHE_MANAGER } from '@nestjs/cache-manager'
 import { Inject, Injectable } from '@nestjs/common'
 
 import { PrismaService } from '@/database/prisma.service'

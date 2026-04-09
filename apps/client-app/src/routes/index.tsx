@@ -1,9 +1,9 @@
 import AsyncStorage from '@react-native-async-storage/async-storage'
+import type { NavigationState } from '@react-navigation/native'
 import {
   DarkTheme,
   DefaultTheme,
   NavigationContainer,
-  type NavigationState,
 } from '@react-navigation/native'
 import { createNativeStackNavigator } from '@react-navigation/native-stack'
 import { useEffect, useState } from 'react'
@@ -15,7 +15,7 @@ import { useAuth } from '@/hooks/useAuth'
 
 import { AuthStack } from './AuthStack'
 import { MainStack } from './MainStack'
-import { type RootStackParamList } from './type'
+import type { RootStackParamList } from './type'
 
 const Stack = createNativeStackNavigator<RootStackParamList>()
 

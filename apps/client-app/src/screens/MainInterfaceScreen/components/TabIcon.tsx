@@ -1,6 +1,7 @@
 import { useCSSVariable } from 'uniwind'
 
-import { Icons, type IconsName } from '@/components/common/MaterialDesignIcons'
+import type { IconsName } from '@/components/common/MaterialDesignIcons'
+import { Icons } from '@/components/common/MaterialDesignIcons'
 
 export interface TabIconProps {
   focused: boolean

@@ -1,17 +1,10 @@
 import { useRef } from 'react'
-import {
-  type GestureResponderEvent,
-  ScrollView,
-  StyleSheet,
-  Text,
-  View,
-} from 'react-native'
+import type { GestureResponderEvent } from 'react-native'
+import { ScrollView, StyleSheet, Text, View } from 'react-native'
 
-import {
-  ContextMenu,
-  type ContextMenuImperativeHandle,
-} from '@/components/common/ContextMenu'
-import { type Todo } from '@/types/todo'
+import type { ContextMenuImperativeHandle } from '@/components/common/ContextMenu'
+import { ContextMenu } from '@/components/common/ContextMenu'
+import type { Todo } from '@/types/todo'
 
 import { TodoCard } from '../TodoCard'
 

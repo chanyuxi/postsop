@@ -1,4 +1,5 @@
-import { type Cache, CACHE_MANAGER } from '@nestjs/cache-manager'
+import type { Cache } from '@nestjs/cache-manager'
+import { CACHE_MANAGER } from '@nestjs/cache-manager'
 import { Inject, Injectable, UnauthorizedException } from '@nestjs/common'
 import { ConfigService } from '@nestjs/config'
 import { JwtService } from '@nestjs/jwt'

@@ -1,4 +1,5 @@
-import { type ApiErrorType, BizStatus, HttpStatus } from '@/types/api'
+import type { ApiErrorType } from '@/types/api'
+import { BizStatus, HttpStatus } from '@/types/api'
 
 const HTTP_MESSAGE_MAP: Partial<Record<number, string>> = {
   [HttpStatus.BAD_REQUEST]: 'Bad request',

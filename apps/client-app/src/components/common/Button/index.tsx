@@ -1,6 +1,7 @@
-import { type PropsWithChildren } from 'react'
+import type { PropsWithChildren } from 'react'
 import { Pressable } from 'react-native'
-import { tv, type VariantProps } from 'tailwind-variants'
+import type { VariantProps } from 'tailwind-variants'
+import { tv } from 'tailwind-variants'
 
 import { ThemeText } from '../ThemeText'
 
