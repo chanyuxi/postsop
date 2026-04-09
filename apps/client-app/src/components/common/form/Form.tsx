@@ -1,10 +1,6 @@
 import type { PropsWithChildren } from 'react'
-import type {
-  Controller,
-  type FieldValues,
-  FormProvider,
-  useForm,
-} from 'react-hook-form'
+import type { FieldValues } from 'react-hook-form'
+import { Controller, FormProvider, useForm } from 'react-hook-form'
 import { View } from 'react-native'
 import Animated, { FadeIn, FadeOut } from 'react-native-reanimated'
 import { twMerge } from 'tailwind-merge'
