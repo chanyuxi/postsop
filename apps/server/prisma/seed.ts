@@ -38,6 +38,11 @@ async function main() {
     data: {
       email: 'admin@example.com',
       password: adminPasswordHash,
+      profile: {
+        create: {
+          nickname: 'Seven Star',
+        },
+      },
       roles: {
         connect: [{ id: 1 }],
       },

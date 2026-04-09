@@ -7,15 +7,55 @@ datasource db {
   provider = "postgresql"
 }
 
-model User {
-  id        Int      @id @default(autoincrement())
-  email     String   @unique
-  password  String
-  createdAt DateTime @default(now()) @map("created_at")
-  updatedAt DateTime @updatedAt @map("updated_at")
-  roles     Role[]
+enum UserStatus {
+  ACTIVE
+  DELETED
+  DISABLED
+  LOCKED
+  PENDING
+}
 
+enum Gender {
+  MALE
+  FEMALE
+  OTHER
+  UNSPECIFIED
+}
+
+model User {
+  id           Int         @id @default(autoincrement())
+  username     String?     @unique
+  email        String      @unique
+  phone        String?     @unique
+  password     String
+  status       UserStatus  @default(ACTIVE)
+  lastSignInIp String?     @map("last_sign_in_ip")
+  lastSignInAt DateTime?   @map("last_sign_in_at")
+  createdAt    DateTime    @default(now()) @map("created_at")
+  updatedAt    DateTime    @updatedAt @map("updated_at")
+  roles        Role[]
+  profile      UserProfile @relation(fields: [profileId], references: [id])
+  profileId    Int         @unique @map("profile_id")
+
+  @@index([status])
   @@map("users")
+}
+
+model UserProfile {
+  id        Int       @id @default(autoincrement())
+  nickname  String?
+  avatarUrl String?   @map("avatar_url")
+  birthday  DateTime? @db.Date
+  gender    Gender    @default(UNSPECIFIED)
+  bio       String?
+  country   String?
+  city      String?
+  address   String?
+  createdAt DateTime  @default(now()) @map("created_at")
+  updatedAt DateTime  @updatedAt @map("updated_at")
+  user      User?
+
+  @@map("user_profile")
 }
 
 model Role {

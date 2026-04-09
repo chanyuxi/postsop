@@ -3,18 +3,17 @@ import type { AxiosError, AxiosRequestConfig, AxiosResponse } from 'axios'
 import axios from 'axios'
 
 import type { ApiResponse } from '@postsop/contracts/type'
-import { ResponseCode } from '@postsop/contracts/type'
+import { ResponseStatus } from '@postsop/contracts/type'
 
 import { getStoredAccessToken } from '@/utils/storage'
 
 import { ApiError } from './error'
+import { assemblyMessage, injectAuthenticationInformation } from './utils'
 
 const service = axios.create({
   baseURL: REACT_APP_API_URL,
   timeout: 5000,
 })
-
-console.log(REACT_APP_API_URL)
 
 // Request interceptor
 service.interceptors.request.use(
@@ -22,9 +21,8 @@ service.interceptors.request.use(
     config.headers['Content-Type'] = 'application/json'
 
     const accessToken = getStoredAccessToken()
-
     if (accessToken) {
-      config.headers.Authorization = `Bearer ${accessToken}`
+      injectAuthenticationInformation(config, accessToken)
     }
 
     return config
@@ -43,7 +41,7 @@ service.interceptors.response.use(
   (response: AxiosResponse<ApiResponse>) => {
     const res = response.data
 
-    if (res.code !== ResponseCode.SUCCESS) {
+    if (res.code !== ResponseStatus.SUCCESS) {
       return Promise.reject(
         new ApiError(res.message, response.status, res.code)
       )
@@ -66,13 +64,7 @@ service.interceptors.response.use(
       throw new ApiError(data.message, status, data.code)
     }
 
-    const rawMessage = data?.message
-    const message =
-      typeof rawMessage === 'string'
-        ? rawMessage
-        : Array.isArray(rawMessage)
-          ? rawMessage.join(', ')
-          : undefined
+    const message = assemblyMessage(data?.message)
 
     if (message) {
       throw ApiError.http(status, message)
@@ -83,16 +75,16 @@ service.interceptors.response.use(
 )
 
 // Typed request helpers
-async function request<T>(config: AxiosRequestConfig): Promise<ApiResponse<T>> {
-  const response = await service.request<ApiResponse<T>>(config)
-  return response.data
+async function request<T = null>(config: AxiosRequestConfig): Promise<T> {
+  const { data: unwrapResponse } = await service.request<ApiResponse<T>>(config)
+  return unwrapResponse.data
 }
 
-export function get<T>(url: string, config?: AxiosRequestConfig) {
+export function get<T = null>(url: string, config?: AxiosRequestConfig) {
   return request<T>({ ...config, method: 'GET', url })
 }
 
-export function post<T>(
+export function post<T = null>(
   url: string,
   data?: unknown,
   config?: AxiosRequestConfig
@@ -100,7 +92,7 @@ export function post<T>(
   return request<T>({ ...config, method: 'POST', url, data })
 }
 
-export function put<T>(
+export function put<T = null>(
   url: string,
   data?: unknown,
   config?: AxiosRequestConfig
@@ -108,7 +100,7 @@ export function put<T>(
   return request<T>({ ...config, method: 'PUT', url, data })
 }
 
-export function patch<T>(
+export function patch<T = null>(
   url: string,
   data?: unknown,
   config?: AxiosRequestConfig
@@ -116,7 +108,7 @@ export function patch<T>(
   return request<T>({ ...config, method: 'PATCH', url, data })
 }
 
-export function del<T>(url: string, config?: AxiosRequestConfig) {
+export function del<T = null>(url: string, config?: AxiosRequestConfig) {
   return request<T>({ ...config, method: 'DELETE', url })
 }
 

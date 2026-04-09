@@ -7,9 +7,7 @@ interface ToastOptions {
 }
 
 export function toast(options: ToastOptions | string) {
-  if (typeof options === 'string') {
-    options = { message: options }
-  }
+  if (typeof options === 'string') options = { message: options }
 
   const { message, duration = 3000 } = options
 

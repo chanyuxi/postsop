@@ -5,7 +5,7 @@ import { ScreenWrapper } from '@/components/common/ScreenWrapper'
 import { TopBar } from '@/components/common/TopBar'
 import { APP_VERSION } from '@/constants'
 import { useAuth } from '@/hooks'
-import { toast } from '@/utils/toast'
+import { toast } from '@/libs/toast'
 
 import { ConfigItem } from './components/ConfigItem'
 import { ThemeToggle } from './components/ThemeToggle'
