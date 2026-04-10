@@ -20,7 +20,12 @@ const server = ['apps/server/**/*.{js,ts}']
 const serverIgnores = ['apps/server/src/generated/prisma/**']
 
 export default defineConfig(
-  globalIgnores(['**/dist/**', ...clientAppIgnores, ...serverIgnores]),
+  globalIgnores([
+    '**/dist/**',
+    '**/.turbo/**',
+    ...clientAppIgnores,
+    ...serverIgnores,
+  ]),
 
   base,
   jsonc,

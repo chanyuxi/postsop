@@ -11,7 +11,7 @@ export class ResponseBuilder {
     }
   }
 
-  static failure<T = unknown>(message: string): Response<T> {
+  static failure(message: string): Response<null> {
     return {
       code: ResponseStatus.FAIL,
       message,

@@ -1,11 +1,10 @@
 {
   "extends": "@react-native/typescript-config",
   "include": ["**/*.ts", "**/*.tsx", "env.d.ts", "nativewind-env.d.ts"],
-  "exclude": ["**/node_modules", "**/Pods", "eslint.config.mts"],
   "compilerOptions": {
     "baseUrl": ".",
     "paths": {
-      "@/*": ["src/*"]
+      "@/*": ["./src/*"]
     },
     "types": ["jest"],
     "verbatimModuleSyntax": true

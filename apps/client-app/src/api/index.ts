@@ -1,3 +1,4 @@
+// eslint-disable-next-line import-x/no-unresolved
 import { REACT_APP_API_URL } from '@env'
 import type { AxiosError, AxiosRequestConfig, AxiosResponse } from 'axios'
 import axios from 'axios'

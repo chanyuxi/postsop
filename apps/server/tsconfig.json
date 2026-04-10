@@ -1,12 +1,12 @@
 {
-  "extends": "../../packages/configs/tsconfig.base.json",
-  "exclude": ["dist", "node_modules", "eslint.config.mts"],
+  "extends": "../../tsconfig.base.json",
+  "exclude": ["dist", "node_modules"],
   "compilerOptions": {
     "incremental": true,
     "target": "ES2023",
     "emitDecoratorMetadata": true,
     "experimentalDecorators": true,
-    "baseUrl": "./",
+    "baseUrl": ".",
     "module": "nodenext",
     "moduleResolution": "nodenext",
     "paths": {

@@ -1,6 +1,6 @@
 {
-  "extends": "./tsconfig.base.json",
-  "include": ["src/**/*.ts"],
+  "extends": "../../tsconfig.base.json",
+  "include": ["src/**/*.ts", "../../module-shim.d.ts"],
   "compilerOptions": {
     "target": "ES2023",
     "module": "nodenext",

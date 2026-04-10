@@ -12,10 +12,17 @@
       "import": "./dist/types/index.js",
       "require": "./dist/types/index.js",
       "default": "./dist/types/index.js"
+    },
+    "./permission": {
+      "types": "./dist/permission/index.d.ts",
+      "import": "./dist/permission/index.js",
+      "require": "./dist/permission/index.js",
+      "default": "./dist/permission/index.js"
     }
   },
   "scripts": {
     "build": "tsc",
-    "dev": "tsc -w"
+    "dev": "tsc -w",
+    "type-check": "tsc --noEmit"
   }
 }
