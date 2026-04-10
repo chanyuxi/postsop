@@ -2,7 +2,7 @@ import type {
   SignInDto,
   SignInResult,
   SignUpDto,
-} from '@postsop/contracts/type'
+} from '@postsop/contracts/types'
 
 import { post } from '@/api'
 

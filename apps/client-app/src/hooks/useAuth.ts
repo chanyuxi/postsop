@@ -1,4 +1,4 @@
-import type { SignInResult } from '@postsop/contracts/type'
+import type { SignInResult } from '@postsop/contracts/types'
 
 import { signInAction, signOutAction } from '@/store/authSlice'
 import { clearStoredAuthSession, persistAuthSession } from '@/utils/storage'

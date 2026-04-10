@@ -1,7 +1,9 @@
 {
   "name": "@postsop/client-app",
-  "version": "0.1.91",
+  "version": "0.1.0",
   "private": true,
+  "description": "React Native mobile client application for postsop",
+  "author": "chanyuxi",
   "engines": {
     "node": ">=22.11.0"
   },

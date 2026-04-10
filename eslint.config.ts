@@ -9,22 +9,17 @@ import {
   testing,
 } from '@postsop/configs/eslint'
 
-const clientApp = ['apps/client-app/**/*.{js,jsx,ts,tsx}']
-const clientAppIgnores = [
-  'apps/client-app/android/**',
-  'apps/client-app/ios/**',
-  '**/uniwind-types.d.ts',
-]
-
-const server = ['apps/server/**/*.{js,ts}']
-const serverIgnores = ['apps/server/src/generated/prisma/**']
-
+/**
+ * Monorepo level configuration
+ */
 export default defineConfig(
   globalIgnores([
-    '**/dist/**',
     '**/.turbo/**',
-    ...clientAppIgnores,
-    ...serverIgnores,
+    '**/dist/**',
+    'apps/client-app/android/**',
+    'apps/client-app/ios/**',
+    '**/uniwind-types.d.ts',
+    'apps/server/src/generated/prisma/**',
   ]),
 
   base,
@@ -32,12 +27,12 @@ export default defineConfig(
   testing,
 
   {
-    files: clientApp,
+    files: ['apps/client-app/**/*.{js,jsx,ts,tsx}'],
     extends: [react, reactNative],
   },
 
   {
-    files: server,
+    files: ['apps/server/**/*.{js,ts}'],
     languageOptions: {
       globals: globals.node,
     },

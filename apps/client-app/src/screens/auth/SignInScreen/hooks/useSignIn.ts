@@ -1,7 +1,7 @@
 import { zodResolver } from '@hookform/resolvers/zod'
 import { useForm } from 'react-hook-form'
 
-import { SignInDto } from '@postsop/contracts/type'
+import { SignInDto } from '@postsop/contracts/types'
 
 import { useAuth } from '@/hooks'
 import { toast } from '@/libs/toast'

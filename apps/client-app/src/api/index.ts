@@ -3,8 +3,8 @@ import { REACT_APP_API_URL } from '@env'
 import type { AxiosError, AxiosRequestConfig, AxiosResponse } from 'axios'
 import axios from 'axios'
 
-import type { ApiResponse } from '@postsop/contracts/type'
-import { ResponseStatus } from '@postsop/contracts/type'
+import type { ApiResponse } from '@postsop/contracts/types'
+import { ResponseStatus } from '@postsop/contracts/types'
 
 import { getStoredAccessToken } from '@/utils/storage'
 

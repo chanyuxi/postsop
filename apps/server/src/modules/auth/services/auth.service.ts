@@ -10,7 +10,7 @@ import type {
   SignInDto,
   SignInResult,
   SignUpDto,
-} from '@postsop/contracts/type'
+} from '@postsop/contracts/types'
 
 import { verifyPassword } from '@/common/utils/password.util'
 import { UserService } from '@/modules/user/services/user.service'

@@ -1,6 +1,6 @@
 import { Controller, Get, Post } from '@nestjs/common'
 
-import { RefreshTokenDto, SignInDto, SignUpDto } from '@postsop/contracts/type'
+import { RefreshTokenDto, SignInDto, SignUpDto } from '@postsop/contracts/types'
 
 import { AuthContext } from '@/common/decorators/auth-context.decorator'
 import { Public } from '@/common/decorators/public.decorator'

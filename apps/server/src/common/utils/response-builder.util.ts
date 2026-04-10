@@ -1,4 +1,4 @@
-﻿import { ResponseStatus } from '@postsop/contracts/type'
+﻿import { ResponseStatus } from '@postsop/contracts/types'
 
 import type { Response } from '../interfaces/response.interface'
 

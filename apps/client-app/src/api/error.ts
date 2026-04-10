@@ -3,7 +3,7 @@ import {
   HttpStatus,
   RESPONSE_MESSAGE_MAP,
   ResponseStatus,
-} from '@postsop/contracts/type'
+} from '@postsop/contracts/types'
 
 export type ApiErrorType = 'network' | 'http' | 'business'
 

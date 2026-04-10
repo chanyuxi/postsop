@@ -1,23 +1,17 @@
 {
   "name": "@postsop/contracts",
-  "version": "1.0.0",
+  "version": "0.1.0",
+  "private": true,
   "packageManager": "pnpm@10.31.0",
-  "description": "",
-  "author": "",
+  "description": "Shared type definitions and API contracts between client and server",
+  "author": "chanyuxi",
   "license": "ISC",
-  "keywords": [],
   "exports": {
-    "./type": {
-      "types": "./dist/types/index.d.ts",
-      "import": "./dist/types/index.js",
-      "require": "./dist/types/index.js",
-      "default": "./dist/types/index.js"
-    },
-    "./permission": {
-      "types": "./dist/permission/index.d.ts",
-      "import": "./dist/permission/index.js",
-      "require": "./dist/permission/index.js",
-      "default": "./dist/permission/index.js"
+    "./*": {
+      "types": "./dist/*/index.d.ts",
+      "import": "./dist/*/index.js",
+      "require": "./dist/*/index.js",
+      "default": "./dist/*/index.js"
     }
   },
   "scripts": {

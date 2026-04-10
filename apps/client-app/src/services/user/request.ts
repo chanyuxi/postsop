@@ -1,4 +1,4 @@
-import { UserProfileView } from '@postsop/contracts/type'
+import { UserProfileView } from '@postsop/contracts/types'
 
 import { get } from '@/api'
 

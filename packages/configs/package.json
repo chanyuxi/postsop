@@ -1,13 +1,12 @@
 {
   "name": "@postsop/configs",
   "type": "module",
-  "version": "1.0.0",
+  "version": "0.1.0",
   "private": true,
   "packageManager": "pnpm@10.31.0",
-  "description": "",
-  "author": "",
+  "description": "Shared ESLint and TypeScript configurations for postsop monorepo",
+  "author": "chanyuxi",
   "license": "ISC",
-  "keywords": [],
   "exports": {
     "./eslint": {
       "types": "./src/eslint/index.ts",

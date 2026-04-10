@@ -1,6 +1,6 @@
 import { Injectable } from '@nestjs/common'
 
-import type { SignUpDto, UserProfileView } from '@postsop/contracts/type'
+import type { SignUpDto, UserProfileView } from '@postsop/contracts/types'
 
 import { hashPassword } from '@/common/utils/password.util'
 import { PrismaService } from '@/database/prisma.service'

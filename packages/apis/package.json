@@ -1,11 +1,11 @@
 {
   "name": "@postsop/apis",
-  "version": "1.0.0",
+  "version": "0.1.0",
+  "private": true,
   "packageManager": "pnpm@10.31.0",
-  "description": "",
-  "author": "",
+  "description": "Shared API interfaces and client utilities for postsop",
+  "author": "chanyuxi",
   "license": "ISC",
-  "keywords": [],
   "scripts": {
     "build": "tsc",
     "dev": "tsc -w"

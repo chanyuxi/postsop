@@ -1,9 +1,9 @@
 {
   "name": "@postsop/uitls",
-  "version": "1.0.0",
+  "version": "0.1.0",
+  "private": true,
   "packageManager": "pnpm@10.31.0",
-  "description": "",
-  "author": "",
-  "license": "ISC",
-  "keywords": []
+  "description": "Shared utility functions and helpers for postsop monorepo",
+  "author": "chanyuxi",
+  "license": "ISC"
 }

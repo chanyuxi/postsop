@@ -1,6 +1,6 @@
 import { useMutation } from '@tanstack/react-query'
 
-import type { SignUpDto } from '@postsop/contracts/type'
+import type { SignUpDto } from '@postsop/contracts/types'
 
 import { requestSignUp } from '../request'
 

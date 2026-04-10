@@ -1,6 +1,6 @@
 import { useMutation, useQueryClient } from '@tanstack/react-query'
 
-import type { SignInDto } from '@postsop/contracts/type'
+import type { SignInDto } from '@postsop/contracts/types'
 
 import { userKey } from '@/services/queryKeys'
 
