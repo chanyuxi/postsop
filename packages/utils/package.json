@@ -1,5 +1,5 @@
 {
-  "name": "@postsop/uitls",
+  "name": "@postsop/utils",
   "version": "0.1.0",
   "private": true,
   "packageManager": "pnpm@10.31.0",

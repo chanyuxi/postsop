@@ -1,4 +1,3 @@
-// eslint-disable-next-line import-x/no-unresolved
 import { REACT_APP_API_URL } from '@env'
 import type { AxiosError, AxiosRequestConfig, AxiosResponse } from 'axios'
 import axios from 'axios'
@@ -77,8 +76,12 @@ service.interceptors.response.use(
 
 // Typed request helpers
 async function request<T = null>(config: AxiosRequestConfig): Promise<T> {
-  const { data: unwrapResponse } = await service.request<ApiResponse<T>>(config)
-  return unwrapResponse.data
+  const response = await service.request<ApiResponse<T>>(config)
+
+  const { data: internalResponse } = response
+  const { data } = internalResponse
+
+  return data
 }
 
 export function get<T = null>(url: string, config?: AxiosRequestConfig) {

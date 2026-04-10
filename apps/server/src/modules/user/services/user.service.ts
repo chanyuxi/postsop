@@ -1,6 +1,9 @@
 import { Injectable } from '@nestjs/common'
 
-import type { SignUpDto, UserProfileView } from '@postsop/contracts/types'
+import type {
+  SignUpSchema,
+  UserProfileViewSchema,
+} from '@postsop/contracts/schemas'
 
 import { hashPassword } from '@/common/utils/password.util'
 import { PrismaService } from '@/database/prisma.service'
@@ -21,8 +24,8 @@ export class UserService {
     return email
   }
 
-  async createUser(signUpDto: SignUpDto) {
-    const { email, password } = signUpDto
+  async createUser(signUpSchema: SignUpSchema) {
+    const { email, password } = signUpSchema
 
     const passwordHash = await hashPassword(password)
     const nickname = this.generateNickname(email)
@@ -82,7 +85,7 @@ export class UserService {
 
   async findUserProfileByUserId(
     userId: number,
-  ): Promise<UserProfileView | null> {
+  ): Promise<UserProfileViewSchema | null> {
     const user = await this.prismaService.user.findUnique({
       where: {
         id: userId,

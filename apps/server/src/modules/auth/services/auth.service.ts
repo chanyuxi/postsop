@@ -7,10 +7,10 @@ import {
 import type {
   AuthTokens,
   RefreshTokenResult,
-  SignInDto,
   SignInResult,
-  SignUpDto,
-} from '@postsop/contracts/types'
+  SignInSchema,
+  SignUpSchema,
+} from '@postsop/contracts/schemas'
 
 import { verifyPassword } from '@/common/utils/password.util'
 import { UserService } from '@/modules/user/services/user.service'
@@ -26,18 +26,21 @@ export class AuthService {
     private readonly tokenService: TokenService,
   ) {}
 
-  async signUp(signUpDto: SignUpDto) {
-    const user = await this.userService.createUser(signUpDto)
+  async signUp(signUpSchema: SignUpSchema) {
+    const user = await this.userService.createUser(signUpSchema)
 
     if (!user) {
       throw new BadRequestException('User already exists')
     }
   }
 
-  async signIn(signInDto: SignInDto): Promise<SignInResult> {
-    const user = await this.userService.findAuthUserByEmail(signInDto.email)
+  async signIn(signInSchema: SignInSchema): Promise<SignInResult> {
+    const user = await this.userService.findAuthUserByEmail(signInSchema.email)
 
-    if (!user || !(await verifyPassword(signInDto.password, user.password))) {
+    if (
+      !user ||
+      !(await verifyPassword(signInSchema.password, user.password))
+    ) {
       throw new UnauthorizedException('Invalid email or password')
     }
 

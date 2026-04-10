@@ -1,9 +1,9 @@
-import { UserProfileView } from '@postsop/contracts/types'
+import { UserProfileViewSchema } from '@postsop/contracts/schemas'
 
 import { get } from '@/api'
 
-const UserProfileResponse = UserProfileView.nullable()
+const UserProfileResponse = UserProfileViewSchema.nullable()
 
-export async function requestProfile(): Promise<UserProfileView | null> {
+export async function requestProfile(): Promise<UserProfileViewSchema | null> {
   return UserProfileResponse.parse(await get<unknown>('/user/profile'))
 }

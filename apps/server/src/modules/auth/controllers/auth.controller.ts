@@ -1,6 +1,10 @@
 import { Controller, Get, Post } from '@nestjs/common'
 
-import { RefreshTokenDto, SignInDto, SignUpDto } from '@postsop/contracts/types'
+import {
+  RefreshTokenSchema,
+  SignInSchema,
+  SignUpSchema,
+} from '@postsop/contracts/schemas'
 
 import { AuthContext } from '@/common/decorators/auth-context.decorator'
 import { Public } from '@/common/decorators/public.decorator'
@@ -19,14 +23,14 @@ export class AuthController {
 
   @Public()
   @Post('sign-up')
-  signUp(@ZodBody(SignUpDto) signUpDto: SignUpDto) {
-    return this.authService.signUp(signUpDto)
+  signUp(@ZodBody(SignUpSchema) signUpSchema: SignUpSchema) {
+    return this.authService.signUp(signUpSchema)
   }
 
   @Public()
   @Post('sign-in')
-  signIn(@ZodBody(SignInDto) signInDto: SignInDto) {
-    return this.authService.signIn(signInDto)
+  signIn(@ZodBody(SignInSchema) signInSchema: SignInSchema) {
+    return this.authService.signIn(signInSchema)
   }
 
   @Post('sign-out')
@@ -36,7 +40,9 @@ export class AuthController {
 
   @Public()
   @Post('refresh-token')
-  refreshToken(@ZodBody(RefreshTokenDto) refreshTokenDto: RefreshTokenDto) {
-    return this.authService.refreshToken(refreshTokenDto.refreshToken)
+  refreshToken(
+    @ZodBody(RefreshTokenSchema) refreshTokenSchema: RefreshTokenSchema,
+  ) {
+    return this.authService.refreshToken(refreshTokenSchema.refreshToken)
   }
 }

@@ -1,12 +1,12 @@
 import { useMutation } from '@tanstack/react-query'
 
-import type { SignUpDto } from '@postsop/contracts/types'
+import type { SignUpSchema } from '@postsop/contracts/schemas'
 
 import { requestSignUp } from '../request'
 
 export function useSignUpMutation() {
   return useMutation({
-    mutationFn: (signUpDto: SignUpDto) => requestSignUp(signUpDto),
+    mutationFn: (signUpSchema: SignUpSchema) => requestSignUp(signUpSchema),
     mutationKey: ['auth', 'sign-up'],
   })
 }

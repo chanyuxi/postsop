@@ -1,6 +1,6 @@
 import { useMutation, useQueryClient } from '@tanstack/react-query'
 
-import type { SignInDto } from '@postsop/contracts/types'
+import type { SignInSchema } from '@postsop/contracts/schemas'
 
 import { userKey } from '@/services/queryKeys'
 
@@ -10,7 +10,7 @@ export function useSignInMutation() {
   const queryClient = useQueryClient()
 
   return useMutation({
-    mutationFn: (signInDto: SignInDto) => requestSignIn(signInDto),
+    mutationFn: (signInSchema: SignInSchema) => requestSignIn(signInSchema),
     mutationKey: ['auth', 'sign-in'],
 
     onSuccess: () => {
