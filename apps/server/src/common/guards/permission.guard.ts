@@ -1,12 +1,8 @@
-import {
-  CanActivate,
-  ExecutionContext,
-  ForbiddenException,
-  Injectable,
-} from '@nestjs/common'
+import { CanActivate, ExecutionContext, Injectable } from '@nestjs/common'
 import { Reflector } from '@nestjs/core'
 import { Request } from 'express'
 
+import { AppException } from '@/common/exceptions/app.exception'
 import { PermissionService } from '@/modules/permission/services/permission.service'
 
 import { PERMISSIONS_KEY } from '../decorators/permissions.decorator'
@@ -32,7 +28,7 @@ export class PermissionGuard implements CanActivate {
     const userId = request.jwtPayload?.user.id
 
     if (!userId) {
-      throw new ForbiddenException('Missing authenticated user context')
+      throw AppException.unauthorized('Missing authenticated user context')
     }
 
     const grantedPermissions =
@@ -43,7 +39,7 @@ export class PermissionGuard implements CanActivate {
     )
 
     if (!hasAllPermissions) {
-      throw new ForbiddenException('Insufficient permissions')
+      throw AppException.permissionDenied('Insufficient permissions')
     }
 
     return true

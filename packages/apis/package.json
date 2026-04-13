@@ -6,8 +6,21 @@
   "description": "Shared API interfaces and client utilities for postsop",
   "author": "chanyuxi",
   "license": "ISC",
+  "exports": {
+    ".": {
+      "types": "./dist/index.d.ts",
+      "import": "./dist/index.js",
+      "require": "./dist/index.js",
+      "default": "./dist/index.js"
+    }
+  },
   "scripts": {
     "build": "tsc",
-    "dev": "tsc -w"
+    "dev": "tsc -w",
+    "type-check": "tsc --noEmit"
+  },
+  "dependencies": {
+    "@postsop/contracts": "workspace:*",
+    "axios": "^1.13.6"
   }
 }

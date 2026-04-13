@@ -1,23 +1,33 @@
+import { ApiError } from '@postsop/apis'
 import type { SignInResult } from '@postsop/contracts/schemas'
 
-import { signInAction, signOutAction } from '@/store/authSlice'
-import { clearStoredAuthSession, persistAuthSession } from '@/utils/storage'
+import { toast } from '@/libs/toast'
+import { requestSignOut } from '@/services/auth/request'
+import { applyAuthSession, clearAuthSession } from '@/services/auth/session'
 
-import { useAppDispatch, useAppSelector } from './useStore'
+import { useAppSelector } from './useStore'
 
 export function useAuth() {
-  const dispatch = useAppDispatch()
-
   const user = useAppSelector((state) => state.auth.user)
 
   const signIn = (authSession: SignInResult) => {
-    persistAuthSession(authSession)
-    dispatch(signInAction(authSession.user))
+    applyAuthSession(authSession)
   }
 
-  const signOut = () => {
-    clearStoredAuthSession()
-    dispatch(signOutAction())
+  const signOut = async () => {
+    try {
+      await requestSignOut()
+    } catch (error) {
+      if (error instanceof ApiError) {
+        if (!error.needsRefresh) {
+          toast(error.displayMessage)
+        }
+      } else if (error instanceof Error) {
+        toast(error.message)
+      }
+    } finally {
+      await clearAuthSession()
+    }
   }
 
   return {

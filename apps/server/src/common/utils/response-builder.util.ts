@@ -1,19 +1,25 @@
-﻿import { ResponseStatus } from '@postsop/contracts/types'
+import {
+  INTERNAL_MESSAGE_MAP,
+  InternalStatusCodes,
+} from '@postsop/contracts/http'
 
 import type { Response } from '../interfaces/response.interface'
 
 export class ResponseBuilder {
   static success<T = unknown>(data: T): Response<T> {
     return {
-      code: ResponseStatus.SUCCESS,
-      message: 'success',
+      code: InternalStatusCodes.SUCCESS,
+      message: INTERNAL_MESSAGE_MAP[InternalStatusCodes.SUCCESS],
       data,
     }
   }
 
-  static failure(message: string): Response<null> {
+  static failure(
+    code: InternalStatusCodes,
+    message = INTERNAL_MESSAGE_MAP[code],
+  ): Response<null> {
     return {
-      code: ResponseStatus.FAIL,
+      code,
       message,
       data: null,
     }

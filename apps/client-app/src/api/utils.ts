@@ -1,19 +1,16 @@
-import type { InternalAxiosRequestConfig } from 'axios'
+import atob from 'atob'
 
-export function injectAuthenticationInformation(
-  config: InternalAxiosRequestConfig,
-  accessToken: string
-) {
-  config.headers.Authorization = `Bearer ${accessToken}`
-}
+export function isTokenExpiringSoon(token?: string | null): boolean {
+  if (!token) {
+    return false
+  }
 
-export function assemblyMessage(rawMessage: string | string[] | undefined) {
-  const message =
-    typeof rawMessage === 'string'
-      ? rawMessage
-      : Array.isArray(rawMessage)
-        ? rawMessage.join(', ')
-        : undefined
+  try {
+    const payload = JSON.parse(atob(token.split('.')[1] ?? ''))
+    const exp = payload.exp
 
-  return message
+    return typeof exp === 'number' && exp * 1000 - Date.now() < 60_000
+  } catch {
+    return false
+  }
 }

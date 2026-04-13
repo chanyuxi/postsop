@@ -1,11 +1,13 @@
 import type { Cache } from '@nestjs/cache-manager'
 import { CACHE_MANAGER } from '@nestjs/cache-manager'
-import { UnauthorizedException } from '@nestjs/common'
 import { ConfigService } from '@nestjs/config'
 import { JwtService } from '@nestjs/jwt'
 import { Test } from '@nestjs/testing'
 
+import { InternalStatusCodes } from '@postsop/contracts/http'
+
 import { ENV_CONSTANTS } from '@/common/constants/env'
+import { AppException } from '@/common/exceptions/app.exception'
 
 import { TokenService } from './token.service'
 
@@ -99,9 +101,12 @@ describe('TokenService', () => {
     expect(rotatedSession.sessionId).toBe(initialSession.sessionId)
     expect(rotatedSession.refreshToken).not.toBe(initialSession.refreshToken)
 
-    await expect(
-      service.rotateSession(initialSession.refreshToken),
-    ).rejects.toThrow(UnauthorizedException)
+    const invalidRotation = service.rotateSession(initialSession.refreshToken)
+
+    await expect(invalidRotation).rejects.toBeInstanceOf(AppException)
+    await expect(invalidRotation).rejects.toMatchObject({
+      internalCode: InternalStatusCodes.TOKEN_INVALID,
+    })
   })
 
   it('invalidates sessions by session id', async () => {

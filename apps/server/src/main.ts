@@ -3,6 +3,7 @@ import { NestFactory } from '@nestjs/core'
 
 import { AppModule } from '@/app.module'
 import { ENV_CONSTANTS } from '@/common/constants/env'
+import { ApiExceptionFilter } from '@/common/filters/api-exception.filter'
 import { ResponseEncapsulationInterceptor } from '@/common/interceptors/response-encapsulation.interceptor'
 
 async function bootstrap() {
@@ -11,6 +12,7 @@ async function bootstrap() {
   const configService = app.get(ConfigService)
 
   app.enableShutdownHooks()
+  app.useGlobalFilters(new ApiExceptionFilter())
   app.useGlobalInterceptors(new ResponseEncapsulationInterceptor())
 
   await app.listen(Number(configService.getOrThrow(ENV_CONSTANTS.PORT)))

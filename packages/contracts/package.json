@@ -18,5 +18,9 @@
     "build": "tsc",
     "dev": "tsc -w",
     "type-check": "tsc --noEmit"
+  },
+  "dependencies": {
+    "http-status-codes": "^2.3.0",
+    "zod": "^4.3.6"
   }
 }

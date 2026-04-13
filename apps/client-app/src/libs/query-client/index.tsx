@@ -4,11 +4,9 @@ import { QueryClient } from '@tanstack/react-query'
 import { PersistQueryClientProvider } from '@tanstack/react-query-persist-client'
 import type { PropsWithChildren } from 'react'
 
-import { ApiError } from '@/api/error'
+import { ApiError, ApiErrorType } from '@postsop/apis'
+
 import { toast } from '@/libs/toast'
-import { store } from '@/store'
-import { signOutAction } from '@/store/authSlice'
-import { clearStoredAuthSession } from '@/utils/storage'
 
 interface AppMutationMeta extends Record<string, unknown> {
   skipGlobalErrorHandler?: boolean
@@ -24,10 +22,10 @@ const queryClient = new QueryClient({
     queries: {
       retry: (failureCount, error) => {
         if (error instanceof ApiError) {
-          if (error.needsReLogin || error.type === 'business') return false
+          if (error.needsRefresh || error.type === ApiErrorType.Internal)
+            return false
 
-          if (error.isNetworkError || error.isServerError)
-            return failureCount < 2
+          if (error.isNetworkError || error.isTimeout) return failureCount < 2
         }
         return false
       },
@@ -58,11 +56,6 @@ function getMutationMeta(
 }
 
 const handleError = (error: ApiError) => {
-  if (error.needsReLogin) {
-    clearStoredAuthSession()
-    store.dispatch(signOutAction())
-  }
-
   toast(error.displayMessage)
 }
 
@@ -73,6 +66,12 @@ const handleUnknownError = (error: unknown) => {
   }
 
   toast('Request failed')
+}
+
+export async function clearPersistedQueryClient() {
+  await queryClient.cancelQueries()
+  queryClient.clear()
+  await persister.removeClient()
 }
 
 export function Provider({ children }: PropsWithChildren) {

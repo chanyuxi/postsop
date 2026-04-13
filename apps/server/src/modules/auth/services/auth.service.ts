@@ -1,8 +1,4 @@
-import {
-  BadRequestException,
-  Injectable,
-  UnauthorizedException,
-} from '@nestjs/common'
+import { Injectable } from '@nestjs/common'
 
 import type {
   AuthTokens,
@@ -12,6 +8,7 @@ import type {
   SignUpSchema,
 } from '@postsop/contracts/schemas'
 
+import { AppException } from '@/common/exceptions/app.exception'
 import { verifyPassword } from '@/common/utils/password.util'
 import { UserService } from '@/modules/user/services/user.service'
 
@@ -30,7 +27,7 @@ export class AuthService {
     const user = await this.userService.createUser(signUpSchema)
 
     if (!user) {
-      throw new BadRequestException('User already exists')
+      throw AppException.resourceAlreadyExists('User already exists')
     }
   }
 
@@ -41,7 +38,7 @@ export class AuthService {
       !user ||
       !(await verifyPassword(signInSchema.password, user.password))
     ) {
-      throw new UnauthorizedException('Invalid email or password')
+      throw AppException.unauthorized('Invalid email or password')
     }
 
     const session = await this.tokenService.createSession(user.id)
@@ -67,7 +64,7 @@ export class AuthService {
 
     if (!user) {
       await this.tokenService.invalidateSession(session.sessionId)
-      throw new UnauthorizedException('Refresh token user no longer exists')
+      throw AppException.tokenInvalid('Refresh token user no longer exists')
     }
 
     return this.issueTokenPair(session)

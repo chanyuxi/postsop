@@ -1,119 +1,63 @@
-import { REACT_APP_API_URL } from '@env'
-import type { AxiosError, AxiosRequestConfig, AxiosResponse } from 'axios'
-import axios from 'axios'
+import { REACT_APP_API_TIMEOUT, REACT_APP_API_URL } from '@env'
 
-import type { ApiResponse } from '@postsop/contracts/types'
-import { ResponseStatus } from '@postsop/contracts/types'
+import type { ApiClientRequestConfig } from '@postsop/apis'
+import {
+  ApiError,
+  attachBearerToken,
+  ClientPlatform,
+  configureJsonHeaders,
+  createApiClient,
+} from '@postsop/apis'
+import { authEndpoints } from '@postsop/contracts/endpoints'
 
-import { getStoredAccessToken } from '@/utils/storage'
+import { APP_VERSION } from '@/constants'
+import { clearAuthSession } from '@/services/auth/session'
+import {
+  getStoredAccessToken,
+  getStoredRefreshToken,
+  getStoredUser,
+  persistAuthTokens,
+} from '@/utils/storage'
 
-import { ApiError } from './error'
-import { assemblyMessage, injectAuthenticationInformation } from './utils'
+import { isTokenExpiringSoon } from './utils'
 
-const service = axios.create({
+export type AppRequestConfig<D = unknown> = ApiClientRequestConfig<D>
+
+const apiClient = createApiClient({
+  auth: {
+    attachAccessToken: attachBearerToken,
+    getAccessToken: getStoredAccessToken,
+    getRefreshToken: getStoredRefreshToken,
+    isTokenExpiringSoon,
+    onRefreshFailure: clearAuthSession,
+    onRefreshSuccess: (tokens) => {
+      const refreshToken = tokens.refreshToken ?? getStoredRefreshToken()
+
+      if (!refreshToken || !getStoredUser()) {
+        throw ApiError.http(401, 'Session cleared')
+      }
+
+      persistAuthTokens({
+        accessToken: tokens.accessToken,
+        refreshToken,
+      })
+    },
+    refreshAccessToken: ({ bareRequestEndpoint, refreshToken }) =>
+      bareRequestEndpoint(authEndpoints.refreshToken, {
+        refreshToken,
+      }),
+    shouldSkipAuthRefresh: (config) => !!config.skipAuthRefresh,
+  },
   baseURL: REACT_APP_API_URL,
-  timeout: 5000,
+  configureHeaders: configureJsonHeaders,
+  defaultHeaders: {
+    'X-Postsop-Platform': ClientPlatform.App,
+    'X-Postsop-V': APP_VERSION,
+  },
+  timeout: Number(REACT_APP_API_TIMEOUT) || 10000,
 })
 
-// Request interceptor
-service.interceptors.request.use(
-  (config) => {
-    config.headers['Content-Type'] = 'application/json'
+export const { del, get, patch, post, put, request, requestEndpoint } =
+  apiClient
 
-    const accessToken = getStoredAccessToken()
-    if (accessToken) {
-      injectAuthenticationInformation(config, accessToken)
-    }
-
-    return config
-  },
-  (error: AxiosError) => {
-    console.warn(
-      'Attempt to build or initiate request failed:',
-      error.message || error
-    )
-    return Promise.reject(error)
-  }
-)
-
-// Response interceptor
-service.interceptors.response.use(
-  (response: AxiosResponse<ApiResponse>) => {
-    const res = response.data
-
-    if (res.code !== ResponseStatus.SUCCESS) {
-      return Promise.reject(
-        new ApiError(res.message, response.status, res.code)
-      )
-    }
-
-    return response
-  },
-  (error: AxiosError<{ code?: number; message?: string | string[] }>) => {
-    if (error.code === 'ECONNABORTED' || error.message?.includes('timeout')) {
-      throw ApiError.timeout()
-    }
-
-    if (!error.response) {
-      throw ApiError.network()
-    }
-
-    const { status, data } = error.response
-
-    if (data?.code && typeof data.message === 'string') {
-      throw new ApiError(data.message, status, data.code)
-    }
-
-    const message = assemblyMessage(data?.message)
-
-    if (message) {
-      throw ApiError.http(status, message)
-    }
-
-    throw ApiError.http(status, error.message)
-  }
-)
-
-// Typed request helpers
-async function request<T = null>(config: AxiosRequestConfig): Promise<T> {
-  const response = await service.request<ApiResponse<T>>(config)
-
-  const { data: internalResponse } = response
-  const { data } = internalResponse
-
-  return data
-}
-
-export function get<T = null>(url: string, config?: AxiosRequestConfig) {
-  return request<T>({ ...config, method: 'GET', url })
-}
-
-export function post<T = null>(
-  url: string,
-  data?: unknown,
-  config?: AxiosRequestConfig
-) {
-  return request<T>({ ...config, method: 'POST', url, data })
-}
-
-export function put<T = null>(
-  url: string,
-  data?: unknown,
-  config?: AxiosRequestConfig
-) {
-  return request<T>({ ...config, method: 'PUT', url, data })
-}
-
-export function patch<T = null>(
-  url: string,
-  data?: unknown,
-  config?: AxiosRequestConfig
-) {
-  return request<T>({ ...config, method: 'PATCH', url, data })
-}
-
-export function del<T = null>(url: string, config?: AxiosRequestConfig) {
-  return request<T>({ ...config, method: 'DELETE', url })
-}
-
-export default service
+export default apiClient.client

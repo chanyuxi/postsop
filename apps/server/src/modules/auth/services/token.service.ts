@@ -1,11 +1,12 @@
 import type { Cache } from '@nestjs/cache-manager'
 import { CACHE_MANAGER } from '@nestjs/cache-manager'
-import { Inject, Injectable, UnauthorizedException } from '@nestjs/common'
+import { Inject, Injectable } from '@nestjs/common'
 import { ConfigService } from '@nestjs/config'
 import { JwtService } from '@nestjs/jwt'
 import { createHash, randomBytes, timingSafeEqual } from 'node:crypto'
 
 import { ENV_CONSTANTS } from '@/common/constants/env'
+import { AppException } from '@/common/exceptions/app.exception'
 
 import type { JwtPayload } from '../interfaces/jwt-payload.interface'
 
@@ -66,7 +67,7 @@ export class TokenService {
       !session ||
       !this.compareHashes(session.refreshTokenHash, this.hashValue(secret))
     ) {
-      throw new UnauthorizedException('Invalid refresh token')
+      throw AppException.tokenInvalid('Invalid refresh token')
     }
 
     const nextSecret = this.createOpaqueTokenPart()
@@ -127,7 +128,7 @@ export class TokenService {
     const [sessionId, secret] = refreshToken.split('.')
 
     if (!sessionId || !secret) {
-      throw new UnauthorizedException('Invalid refresh token')
+      throw AppException.tokenInvalid('Invalid refresh token')
     }
 
     return {

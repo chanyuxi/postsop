@@ -1,13 +1,9 @@
-import {
-  CanActivate,
-  ExecutionContext,
-  Injectable,
-  UnauthorizedException,
-} from '@nestjs/common'
+import { CanActivate, ExecutionContext, Injectable } from '@nestjs/common'
 import { Reflector } from '@nestjs/core'
 import { TokenExpiredError } from '@nestjs/jwt'
 import { Request } from 'express'
 
+import { AppException } from '@/common/exceptions/app.exception'
 import { JwtPayloadSchema } from '@/modules/auth/interfaces/jwt-payload.interface'
 import { TokenService } from '@/modules/auth/services/token.service'
 
@@ -34,7 +30,7 @@ export class AuthGuard implements CanActivate {
     const request = context.switchToHttp().getRequest<Request>()
     const token = this.extractTokenFromRequest(request)
     if (!token) {
-      throw new UnauthorizedException('Missing authorization token')
+      throw AppException.unauthorized('Missing authorization token')
     }
 
     try {
@@ -43,15 +39,18 @@ export class AuthGuard implements CanActivate {
       const parsedPayload = JwtPayloadSchema.safeParse(payload)
 
       if (!parsedPayload.success) {
-        throw new UnauthorizedException('Invalid authorization token')
+        throw AppException.tokenInvalid('Invalid authorization token')
       }
 
       request.jwtPayload = parsedPayload.data
     } catch (error) {
       if (error instanceof TokenExpiredError) {
-        throw new UnauthorizedException('Token expired')
+        throw AppException.tokenExpired('Token expired')
       }
-      throw new UnauthorizedException('Invalid authorization token')
+      if (error instanceof AppException) {
+        throw error
+      }
+      throw AppException.tokenInvalid('Invalid authorization token')
     }
 
     return true

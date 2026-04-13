@@ -1,5 +1,6 @@
-import { UnauthorizedException } from '@nestjs/common'
+import { InternalStatusCodes } from '@postsop/contracts/http'
 
+import { AppException } from '@/common/exceptions/app.exception'
 import { hashPassword } from '@/common/utils/password.util'
 import type { UserService } from '@/modules/user/services/user.service'
 
@@ -87,9 +88,12 @@ describe('AuthService', () => {
     userService.findUserById = findUserById
     tokenService.invalidateSession = invalidateSession
 
-    await expect(authService.refreshToken('refresh-token-1')).rejects.toThrow(
-      UnauthorizedException,
-    )
+    const refreshAttempt = authService.refreshToken('refresh-token-1')
+
+    await expect(refreshAttempt).rejects.toBeInstanceOf(AppException)
+    await expect(refreshAttempt).rejects.toMatchObject({
+      internalCode: InternalStatusCodes.TOKEN_INVALID,
+    })
     expect(invalidateSession).toHaveBeenCalledWith('session-1')
   })
 })

@@ -1,7 +1,9 @@
 import type { ExecutionContext } from '@nestjs/common'
-import { ForbiddenException } from '@nestjs/common'
 import type { Reflector } from '@nestjs/core'
 
+import { InternalStatusCodes } from '@postsop/contracts/http'
+
+import { AppException } from '@/common/exceptions/app.exception'
 import type { PermissionService } from '@/modules/permission/services/permission.service'
 
 import { PermissionGuard } from './permission.guard'
@@ -70,9 +72,12 @@ describe('PermissionGuard', () => {
     } as unknown as PermissionService
     const guard = new PermissionGuard(reflector, permissionService)
 
-    await expect(guard.canActivate(createContext(1))).rejects.toThrow(
-      ForbiddenException,
-    )
+    const permissionCheck = guard.canActivate(createContext(1))
+
+    await expect(permissionCheck).rejects.toBeInstanceOf(AppException)
+    await expect(permissionCheck).rejects.toMatchObject({
+      internalCode: InternalStatusCodes.PERMISSION_DENIED,
+    })
   })
 
   it('rejects access when the request is missing user context', async () => {
@@ -85,8 +90,11 @@ describe('PermissionGuard', () => {
     } as unknown as PermissionService
     const guard = new PermissionGuard(reflector, permissionService)
 
-    await expect(guard.canActivate(createContext())).rejects.toThrow(
-      ForbiddenException,
-    )
+    const permissionCheck = guard.canActivate(createContext())
+
+    await expect(permissionCheck).rejects.toBeInstanceOf(AppException)
+    await expect(permissionCheck).rejects.toMatchObject({
+      internalCode: InternalStatusCodes.UNAUTHORIZED,
+    })
   })
 })
