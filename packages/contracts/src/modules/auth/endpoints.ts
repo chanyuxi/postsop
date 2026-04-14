@@ -15,14 +15,14 @@ export const authEndpoints = {
   refreshToken: defineApiEndpoint({
     method: 'POST',
     path: '/auth/refresh-token',
-    requestSchema: RefreshTokenRequestSchema,
+    bodySchema: RefreshTokenRequestSchema,
     responseSchema: RefreshTokenResponseSchema,
     skipAuthRefresh: true,
   }),
   signIn: defineApiEndpoint({
     method: 'POST',
     path: '/auth/sign-in',
-    requestSchema: SignInRequestSchema,
+    bodySchema: SignInRequestSchema,
     responseSchema: SignInResponseSchema,
     skipAuthRefresh: true,
   }),
@@ -34,7 +34,7 @@ export const authEndpoints = {
   signUp: defineApiEndpoint({
     method: 'POST',
     path: '/auth/sign-up',
-    requestSchema: SignUpRequestSchema,
+    bodySchema: SignUpRequestSchema,
     responseSchema: z.void(),
     skipAuthRefresh: true,
   }),

@@ -11,9 +11,59 @@ import type { ApiResponse } from '@postsop/contracts/http'
 import { ApiError, InternalStatusCodes } from '@postsop/contracts/http'
 import type { MaybePromise } from '@postsop/types'
 
-type AnyApiEndpoint = ApiEndpoint<unknown, unknown>
+type AnyApiEndpoint = ApiEndpoint<unknown, unknown, unknown, unknown>
+type EndpointRequestPart<TKey extends string, TValue> = [TValue] extends [
+  undefined,
+]
+  ? // eslint-disable-next-line @typescript-eslint/no-empty-object-type
+    {}
+  : Record<TKey, TValue>
+type Simplify<T> = {
+  [K in keyof T]: T[K]
+}
+type CompositeApiEndpointRequest<TParams, TQuery, TBody> = Simplify<
+  EndpointRequestPart<'params', TParams> &
+    EndpointRequestPart<'query', TQuery> &
+    EndpointRequestPart<'body', TBody>
+>
+type ApiEndpointRequestInput<TParams, TQuery, TBody> = [TParams] extends [
+  undefined,
+]
+  ? [TQuery] extends [undefined]
+    ? [TBody] extends [undefined]
+      ? undefined
+      : TBody
+    : [TBody] extends [undefined]
+      ? TQuery
+      : CompositeApiEndpointRequest<TParams, TQuery, TBody>
+  : [TQuery] extends [undefined]
+    ? [TBody] extends [undefined]
+      ? TParams
+      : CompositeApiEndpointRequest<TParams, TQuery, TBody>
+    : CompositeApiEndpointRequest<TParams, TQuery, TBody>
 type ApiEndpointResult<TEndpoint extends AnyApiEndpoint> =
-  TEndpoint extends ApiEndpoint<unknown, infer TResponse> ? TResponse : never
+  TEndpoint extends ApiEndpoint<unknown, unknown, unknown, infer TResponse>
+    ? TResponse
+    : never
+type EndpointRequestData<TEndpoint extends AnyApiEndpoint> =
+  ApiEndpointRequestInput<
+    TEndpoint extends ApiEndpoint<infer TParams, unknown, unknown, unknown>
+      ? TParams
+      : never,
+    TEndpoint extends ApiEndpoint<unknown, infer TQuery, unknown, unknown>
+      ? TQuery
+      : never,
+    TEndpoint extends ApiEndpoint<unknown, unknown, infer TBody, unknown>
+      ? TBody
+      : never
+  >
+
+interface ResolvedEndpointRequest {
+  body: unknown
+  config?: ApiClientRequestConfig
+  query: unknown
+  url: string
+}
 
 export interface ApiClientRequestConfig<
   D = unknown,
@@ -37,15 +87,15 @@ interface RequestQueueEntry {
  * Sends a request using a shared endpoint contract.
  */
 export interface ApiEndpointRequester {
-  <TEndpoint extends ApiEndpoint<undefined, unknown>>(
+  <TEndpoint extends ApiEndpoint<undefined, undefined, undefined, unknown>>(
     endpoint: TEndpoint,
     config?: ApiClientRequestConfig
   ): Promise<ApiEndpointResult<TEndpoint>>
-  <TRequest, TEndpoint extends ApiEndpoint<TRequest, unknown>>(
-    endpoint: TEndpoint,
-    requestData: TRequest,
+  <TParams, TQuery, TBody, TResponse>(
+    endpoint: ApiEndpoint<TParams, TQuery, TBody, TResponse>,
+    requestData: ApiEndpointRequestInput<TParams, TQuery, TBody>,
     config?: ApiClientRequestConfig
-  ): Promise<ApiEndpointResult<TEndpoint>>
+  ): Promise<TResponse>
 }
 
 /**
@@ -185,22 +235,27 @@ export function createApiClient(options: CreateApiClientOptions): ApiClient {
     }
   }
 
-  const bareRequestEndpoint: ApiEndpointRequester = async <TRequest, TResponse>(
-    endpoint: ApiEndpoint<TRequest, TResponse>,
-    requestDataOrConfig?: ApiClientRequestConfig | TRequest,
+  const bareRequestEndpoint: ApiEndpointRequester = async <
+    TEndpoint extends AnyApiEndpoint,
+  >(
+    endpoint: TEndpoint,
+    requestDataOrConfig?:
+      | ApiClientRequestConfig
+      | EndpointRequestData<TEndpoint>,
     maybeConfig?: ApiClientRequestConfig
-  ): Promise<TResponse> => {
-    const { config, requestData } = resolveEndpointRequestArguments(
+  ): Promise<ApiEndpointResult<TEndpoint>> => {
+    const { body, config, query, url } = resolveEndpointRequestArguments(
       endpoint,
       requestDataOrConfig,
       maybeConfig
     )
-    const responseData = await bareRequest<TResponse>({
+    const responseData = await bareRequest<ApiEndpointResult<TEndpoint>>({
       ...config,
-      data: requestData,
+      data: body,
       method: endpoint.method,
+      params: query,
       skipAuthRefresh: endpoint.skipAuthRefresh ?? config?.skipAuthRefresh,
-      url: endpoint.path,
+      url,
     })
 
     return parseEndpointResponse(endpoint, responseData)
@@ -392,22 +447,25 @@ export function createApiClient(options: CreateApiClientOptions): ApiClient {
       request({ ...config, data, method: 'POST', url }),
     put: (url, data, config) =>
       request({ ...config, data, method: 'PUT', url }),
-    requestEndpoint: async <TRequest, TResponse>(
-      endpoint: ApiEndpoint<TRequest, TResponse>,
-      requestDataOrConfig?: ApiClientRequestConfig | TRequest,
+    requestEndpoint: async <TEndpoint extends AnyApiEndpoint>(
+      endpoint: TEndpoint,
+      requestDataOrConfig?:
+        | ApiClientRequestConfig
+        | EndpointRequestData<TEndpoint>,
       maybeConfig?: ApiClientRequestConfig
     ) => {
-      const { config, requestData } = resolveEndpointRequestArguments(
+      const { body, config, query, url } = resolveEndpointRequestArguments(
         endpoint,
         requestDataOrConfig,
         maybeConfig
       )
-      const responseData = await request<TResponse>({
+      const responseData = await request<ApiEndpointResult<TEndpoint>>({
         ...config,
-        data: requestData,
+        data: body,
         method: endpoint.method,
+        params: query,
         skipAuthRefresh: endpoint.skipAuthRefresh ?? config?.skipAuthRefresh,
-        url: endpoint.path,
+        url,
       })
 
       return parseEndpointResponse(endpoint, responseData)
@@ -458,31 +516,144 @@ function unwrapApiResponseData<T>(response: AxiosResponse<ApiResponse<T>>): T {
   return data
 }
 
-function parseEndpointResponse<TRequest, TResponse>(
-  endpoint: ApiEndpoint<TRequest, TResponse>,
-  responseData: TResponse
+function parseEndpointResponse<TEndpoint extends AnyApiEndpoint>(
+  endpoint: TEndpoint,
+  responseData: ApiEndpointResult<TEndpoint>
 ) {
   if (!endpoint.responseSchema) {
     return responseData
   }
 
-  return endpoint.responseSchema.parse(responseData) as TResponse
+  return endpoint.responseSchema.parse(
+    responseData
+  ) as ApiEndpointResult<TEndpoint>
 }
 
-function resolveEndpointRequestArguments<TRequest, TResponse>(
-  endpoint: ApiEndpoint<TRequest, TResponse>,
-  requestDataOrConfig?: ApiClientRequestConfig | TRequest,
+function resolveEndpointRequestArguments<TEndpoint extends AnyApiEndpoint>(
+  endpoint: TEndpoint,
+  requestDataOrConfig?: ApiClientRequestConfig | EndpointRequestData<TEndpoint>,
   maybeConfig?: ApiClientRequestConfig
-) {
-  if (endpoint.requestSchema) {
+): ResolvedEndpointRequest {
+  if (!hasEndpointRequest(endpoint)) {
     return {
-      config: maybeConfig,
-      requestData: endpoint.requestSchema.parse(requestDataOrConfig),
+      body: undefined,
+      config: requestDataOrConfig as ApiClientRequestConfig | undefined,
+      query: undefined,
+      url: endpoint.path,
+    }
+  }
+
+  const requestData = requestDataOrConfig as EndpointRequestData<TEndpoint>
+  const { body, params, query } = parseEndpointRequestData(
+    endpoint,
+    requestData
+  )
+
+  return {
+    body,
+    config: maybeConfig,
+    query,
+    url: buildEndpointUrl(endpoint.path, params),
+  }
+}
+
+function hasEndpointRequest(endpoint: AnyApiEndpoint) {
+  return !!(
+    endpoint.bodySchema ||
+    endpoint.paramsSchema ||
+    endpoint.querySchema
+  )
+}
+
+function parseEndpointRequestData<TEndpoint extends AnyApiEndpoint>(
+  endpoint: TEndpoint,
+  requestData: EndpointRequestData<TEndpoint>
+) {
+  if (endpoint.paramsSchema && endpoint.querySchema) {
+    const compositeRequest = requestData as {
+      body?: unknown
+      params: unknown
+      query: unknown
+    }
+
+    return {
+      body: endpoint.bodySchema?.parse(compositeRequest.body),
+      params: endpoint.paramsSchema.parse(compositeRequest.params),
+      query: endpoint.querySchema.parse(compositeRequest.query),
+    }
+  }
+
+  if (endpoint.paramsSchema && endpoint.bodySchema) {
+    const compositeRequest = requestData as {
+      body: unknown
+      params: unknown
+    }
+
+    return {
+      body: endpoint.bodySchema.parse(compositeRequest.body),
+      params: endpoint.paramsSchema.parse(compositeRequest.params),
+      query: undefined,
+    }
+  }
+
+  if (endpoint.querySchema && endpoint.bodySchema) {
+    const compositeRequest = requestData as {
+      body: unknown
+      query: unknown
+    }
+
+    return {
+      body: endpoint.bodySchema.parse(compositeRequest.body),
+      params: undefined,
+      query: endpoint.querySchema.parse(compositeRequest.query),
+    }
+  }
+
+  if (endpoint.paramsSchema) {
+    return {
+      body: undefined,
+      params: endpoint.paramsSchema.parse(requestData),
+      query: undefined,
+    }
+  }
+
+  if (endpoint.querySchema) {
+    return {
+      body: undefined,
+      params: undefined,
+      query: endpoint.querySchema.parse(requestData),
     }
   }
 
   return {
-    config: requestDataOrConfig as ApiClientRequestConfig | undefined,
-    requestData: undefined,
+    body: endpoint.bodySchema?.parse(requestData),
+    params: undefined,
+    query: undefined,
   }
+}
+
+function buildEndpointUrl(path: string, params: unknown) {
+  if (!path.includes(':')) {
+    return path
+  }
+
+  if (!isRecord(params)) {
+    throw new TypeError(
+      `Endpoint path "${path}" requires params to be provided as an object`
+    )
+  }
+
+  return path.replace(/:([A-Za-z0-9_]+)/g, (_, key: string) => {
+    const value = params[key]
+
+    if (value === undefined || value === null) {
+      throw new TypeError(`Missing path param "${key}" for endpoint "${path}"`)
+    }
+
+    return encodeURIComponent(String(value))
+  })
+}
+
+function isRecord(value: unknown): value is Record<string, unknown> {
+  return typeof value === 'object' && value !== null
 }
