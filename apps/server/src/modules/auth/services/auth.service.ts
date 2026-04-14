@@ -2,11 +2,11 @@ import { Injectable } from '@nestjs/common'
 
 import type {
   AuthTokens,
-  RefreshTokenResult,
-  SignInResult,
-  SignInSchema,
-  SignUpSchema,
-} from '@postsop/contracts/schemas'
+  RefreshTokenResponse,
+  SignInRequest,
+  SignInResponse,
+  SignUpRequest,
+} from '@postsop/contracts/auth'
 
 import { AppException } from '@/common/exceptions/app.exception'
 import { verifyPassword } from '@/common/utils/password.util'
@@ -23,20 +23,20 @@ export class AuthService {
     private readonly tokenService: TokenService,
   ) {}
 
-  async signUp(signUpSchema: SignUpSchema) {
-    const user = await this.userService.createUser(signUpSchema)
+  async signUp(signUpRequest: SignUpRequest) {
+    const user = await this.userService.createUser(signUpRequest)
 
     if (!user) {
       throw AppException.resourceAlreadyExists('User already exists')
     }
   }
 
-  async signIn(signInSchema: SignInSchema): Promise<SignInResult> {
-    const user = await this.userService.findAuthUserByEmail(signInSchema.email)
+  async signIn(signInRequest: SignInRequest): Promise<SignInResponse> {
+    const user = await this.userService.findAuthUserByEmail(signInRequest.email)
 
     if (
       !user ||
-      !(await verifyPassword(signInSchema.password, user.password))
+      !(await verifyPassword(signInRequest.password, user.password))
     ) {
       throw AppException.unauthorized('Invalid email or password')
     }
@@ -58,7 +58,7 @@ export class AuthService {
     await this.tokenService.invalidateSession(sessionId)
   }
 
-  async refreshToken(refreshToken: string): Promise<RefreshTokenResult> {
+  async refreshToken(refreshToken: string): Promise<RefreshTokenResponse> {
     const session = await this.tokenService.rotateSession(refreshToken)
     const user = await this.userService.findUserById(session.userId)
 

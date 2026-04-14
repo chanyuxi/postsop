@@ -4,6 +4,7 @@ export type {
   ApiClientAuthRefreshContext,
   ApiClientAuthRefreshResult,
   ApiClientRequestConfig,
+  ApiEndpointRequester,
   CreateApiClientOptions,
 } from './create-api-client'
 export {

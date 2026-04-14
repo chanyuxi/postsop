@@ -10,10 +10,12 @@ export interface ApiEndpoint<TRequest = undefined, TResponse = unknown> {
   skipAuthRefresh?: boolean
 }
 
-export type ApiEndpointRequest<TEndpoint extends ApiEndpoint> =
+export type AnyApiEndpoint = ApiEndpoint<unknown, unknown>
+
+export type ApiEndpointRequest<TEndpoint extends AnyApiEndpoint> =
   TEndpoint extends ApiEndpoint<infer TRequest, unknown> ? TRequest : never
 
-export type ApiEndpointResponse<TEndpoint extends ApiEndpoint> =
+export type ApiEndpointResponse<TEndpoint extends AnyApiEndpoint> =
   TEndpoint extends ApiEndpoint<unknown, infer TResponse> ? TResponse : never
 
 export function defineApiEndpoint<TRequest = undefined, TResponse = unknown>(

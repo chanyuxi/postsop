@@ -1,4 +1,4 @@
-export type { SessionUser as User } from '@postsop/contracts/schemas'
+export type { SessionUser as User } from '@postsop/contracts/auth'
 
 export interface Toast {
   id: string

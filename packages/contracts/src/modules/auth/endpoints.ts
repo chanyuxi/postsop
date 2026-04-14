@@ -1,27 +1,29 @@
 import { z } from 'zod'
 
+import { defineApiEndpoint } from '../../core'
 import {
-  RefreshTokenResultSchema,
-  RefreshTokenSchema,
-  SignInResultSchema,
-  SignInSchema,
-  SignUpSchema,
-} from '../schemas'
-import { defineApiEndpoint } from './shared'
+  RefreshTokenRequestSchema,
+  SignInRequestSchema,
+  SignUpRequestSchema,
+} from './request-schemas'
+import {
+  RefreshTokenResponseSchema,
+  SignInResponseSchema,
+} from './response-schemas'
 
 export const authEndpoints = {
   refreshToken: defineApiEndpoint({
     method: 'POST',
     path: '/auth/refresh-token',
-    requestSchema: RefreshTokenSchema,
-    responseSchema: RefreshTokenResultSchema,
+    requestSchema: RefreshTokenRequestSchema,
+    responseSchema: RefreshTokenResponseSchema,
     skipAuthRefresh: true,
   }),
   signIn: defineApiEndpoint({
     method: 'POST',
     path: '/auth/sign-in',
-    requestSchema: SignInSchema,
-    responseSchema: SignInResultSchema,
+    requestSchema: SignInRequestSchema,
+    responseSchema: SignInResponseSchema,
     skipAuthRefresh: true,
   }),
   signOut: defineApiEndpoint({
@@ -32,7 +34,7 @@ export const authEndpoints = {
   signUp: defineApiEndpoint({
     method: 'POST',
     path: '/auth/sign-up',
-    requestSchema: SignUpSchema,
+    requestSchema: SignUpRequestSchema,
     responseSchema: z.void(),
     skipAuthRefresh: true,
   }),

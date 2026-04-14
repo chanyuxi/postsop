@@ -1,8 +1,7 @@
-import { userEndpoints } from '@postsop/contracts/endpoints'
-import type { UserProfileViewSchema } from '@postsop/contracts/schemas'
+import { userEndpoints } from '@postsop/contracts/user'
 
-import { requestEndpoint } from '@/api/helpers'
+import { requestEndpoint } from '@/api'
 
-export async function requestProfile(): Promise<UserProfileViewSchema | null> {
+export async function requestProfile() {
   return requestEndpoint(userEndpoints.profile)
 }

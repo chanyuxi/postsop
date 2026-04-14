@@ -8,7 +8,7 @@ import {
   configureJsonHeaders,
   createApiClient,
 } from '@postsop/apis'
-import { authEndpoints } from '@postsop/contracts/endpoints'
+import { authEndpoints } from '@postsop/contracts/auth'
 
 import { APP_VERSION } from '@/constants'
 import { clearAuthSession } from '@/services/auth/session'
@@ -57,7 +57,13 @@ const apiClient = createApiClient({
   timeout: Number(REACT_APP_API_TIMEOUT) || 10000,
 })
 
-export const { del, get, patch, post, put, request, requestEndpoint } =
-  apiClient
+export const del: typeof apiClient.del = apiClient.del
+export const get: typeof apiClient.get = apiClient.get
+export const patch: typeof apiClient.patch = apiClient.patch
+export const post: typeof apiClient.post = apiClient.post
+export const put: typeof apiClient.put = apiClient.put
+export const request: typeof apiClient.request = apiClient.request
+export const requestEndpoint: typeof apiClient.requestEndpoint =
+  apiClient.requestEndpoint
 
 export default apiClient.client

@@ -1,20 +1,19 @@
-import { authEndpoints } from '@postsop/contracts/endpoints'
-import type {
-  SignInResult,
-  SignInSchema,
-  SignUpSchema,
-} from '@postsop/contracts/schemas'
+import {
+  authEndpoints,
+  type SignInRequest,
+  type SignUpRequest,
+} from '@postsop/contracts/auth'
 
-import { requestEndpoint } from '@/api/helpers'
+import { requestEndpoint } from '@/api'
 
-export function requestSignIn(params: SignInSchema): Promise<SignInResult> {
+export function requestSignIn(params: SignInRequest) {
   return requestEndpoint(authEndpoints.signIn, params)
 }
 
-export async function requestSignUp(params: SignUpSchema): Promise<void> {
+export async function requestSignUp(params: SignUpRequest) {
   await requestEndpoint(authEndpoints.signUp, params)
 }
 
-export async function requestSignOut(): Promise<void> {
+export async function requestSignOut() {
   await requestEndpoint(authEndpoints.signOut)
 }

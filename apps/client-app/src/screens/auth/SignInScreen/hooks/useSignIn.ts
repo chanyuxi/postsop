@@ -1,7 +1,7 @@
 import { zodResolver } from '@hookform/resolvers/zod'
 import { useForm } from 'react-hook-form'
 
-import { SignInSchema } from '@postsop/contracts/schemas'
+import { SignInRequestSchema } from '@postsop/contracts/auth'
 
 import { useAuth } from '@/hooks'
 import { toast } from '@/libs/toast'
@@ -19,7 +19,7 @@ export function useSignIn() {
 
   const loginForm = useForm({
     defaultValues,
-    resolver: zodResolver(SignInSchema),
+    resolver: zodResolver(SignInRequestSchema),
   })
 
   const handleSignIn = loginForm.handleSubmit(async (data) => {

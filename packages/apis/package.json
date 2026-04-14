@@ -21,6 +21,7 @@
   },
   "dependencies": {
     "@postsop/contracts": "workspace:*",
+    "@postsop/types": "workspace:*",
     "axios": "^1.13.6"
   }
 }

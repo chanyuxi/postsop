@@ -17,3 +17,7 @@ For package-specific work, prefer `pnpm --filter @postsop/client-app <script>` o
 ## Shared Packages
 
 - `@postsop/contracts` is the reference implementation for new shared packages.
+
+## Docs
+
+- [Contracts Naming](./docs/contracts-naming.md)

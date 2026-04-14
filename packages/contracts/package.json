@@ -7,11 +7,29 @@
   "author": "chanyuxi",
   "license": "ISC",
   "exports": {
+    "./core": {
+      "types": "./dist/core/index.d.ts",
+      "import": "./dist/core/index.js",
+      "require": "./dist/core/index.js",
+      "default": "./dist/core/index.js"
+    },
+    "./http": {
+      "types": "./dist/core/http.d.ts",
+      "import": "./dist/core/http.js",
+      "require": "./dist/core/http.js",
+      "default": "./dist/core/http.js"
+    },
+    "./permissions": {
+      "types": "./dist/core/permissions.d.ts",
+      "import": "./dist/core/permissions.js",
+      "require": "./dist/core/permissions.js",
+      "default": "./dist/core/permissions.js"
+    },
     "./*": {
-      "types": "./dist/*/index.d.ts",
-      "import": "./dist/*/index.js",
-      "require": "./dist/*/index.js",
-      "default": "./dist/*/index.js"
+      "types": "./dist/modules/*/index.d.ts",
+      "import": "./dist/modules/*/index.js",
+      "require": "./dist/modules/*/index.js",
+      "default": "./dist/modules/*/index.js"
     }
   },
   "scripts": {

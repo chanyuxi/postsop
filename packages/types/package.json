@@ -1,0 +1,10 @@
+{
+  "name": "@postsop/types",
+  "version": "0.1.0",
+  "private": true,
+  "packageManager": "pnpm@10.31.0",
+  "description": "Shared types",
+  "author": "chanyuxi",
+  "license": "ISC",
+  "types": "./src/index.ts"
+}

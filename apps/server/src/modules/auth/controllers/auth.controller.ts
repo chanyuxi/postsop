@@ -1,10 +1,13 @@
 import { Controller, Get, Post } from '@nestjs/common'
 
 import {
-  RefreshTokenSchema,
-  SignInSchema,
-  SignUpSchema,
-} from '@postsop/contracts/schemas'
+  type RefreshTokenRequest,
+  RefreshTokenRequestSchema,
+  type SignInRequest,
+  SignInRequestSchema,
+  type SignUpRequest,
+  SignUpRequestSchema,
+} from '@postsop/contracts/auth'
 
 import { AuthContext } from '@/common/decorators/auth-context.decorator'
 import { Public } from '@/common/decorators/public.decorator'
@@ -23,14 +26,14 @@ export class AuthController {
 
   @Public()
   @Post('sign-up')
-  signUp(@ZodBody(SignUpSchema) signUpSchema: SignUpSchema) {
-    return this.authService.signUp(signUpSchema)
+  signUp(@ZodBody(SignUpRequestSchema) signUpRequest: SignUpRequest) {
+    return this.authService.signUp(signUpRequest)
   }
 
   @Public()
   @Post('sign-in')
-  signIn(@ZodBody(SignInSchema) signInSchema: SignInSchema) {
-    return this.authService.signIn(signInSchema)
+  signIn(@ZodBody(SignInRequestSchema) signInRequest: SignInRequest) {
+    return this.authService.signIn(signInRequest)
   }
 
   @Post('sign-out')
@@ -41,8 +44,9 @@ export class AuthController {
   @Public()
   @Post('refresh-token')
   refreshToken(
-    @ZodBody(RefreshTokenSchema) refreshTokenSchema: RefreshTokenSchema,
+    @ZodBody(RefreshTokenRequestSchema)
+    refreshTokenRequest: RefreshTokenRequest,
   ) {
-    return this.authService.refreshToken(refreshTokenSchema.refreshToken)
+    return this.authService.refreshToken(refreshTokenRequest.refreshToken)
   }
 }

@@ -1,5 +1,5 @@
-import { UserProfileViewSchema } from '../schemas'
-import { defineApiEndpoint } from './shared'
+import { defineApiEndpoint } from '../../core'
+import { UserProfileViewSchema } from './response-schemas'
 
 export const userEndpoints = {
   profile: defineApiEndpoint({

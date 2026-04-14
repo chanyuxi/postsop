@@ -6,11 +6,14 @@ import type {
 } from 'axios'
 import axios, { AxiosError } from 'axios'
 
-import type { ApiEndpoint } from '@postsop/contracts/endpoints'
+import type { ApiEndpoint } from '@postsop/contracts/core'
 import type { ApiResponse } from '@postsop/contracts/http'
 import { ApiError, InternalStatusCodes } from '@postsop/contracts/http'
+import type { MaybePromise } from '@postsop/types'
 
-type MaybePromise<T> = Promise<T> | T
+type AnyApiEndpoint = ApiEndpoint<unknown, unknown>
+type ApiEndpointResult<TEndpoint extends AnyApiEndpoint> =
+  TEndpoint extends ApiEndpoint<unknown, infer TResponse> ? TResponse : never
 
 export interface ApiClientRequestConfig<
   D = unknown,
@@ -30,18 +33,24 @@ interface RequestQueueEntry {
   resolve: (token: string) => void
 }
 
-interface ApiEndpointRequester {
-  <TResponse, TEndpoint extends ApiEndpoint<undefined, TResponse>>(
+/**
+ * Sends a request using a shared endpoint contract.
+ */
+export interface ApiEndpointRequester {
+  <TEndpoint extends ApiEndpoint<undefined, unknown>>(
     endpoint: TEndpoint,
     config?: ApiClientRequestConfig
-  ): Promise<TResponse>
-  <TRequest, TResponse, TEndpoint extends ApiEndpoint<TRequest, TResponse>>(
+  ): Promise<ApiEndpointResult<TEndpoint>>
+  <TRequest, TEndpoint extends ApiEndpoint<TRequest, unknown>>(
     endpoint: TEndpoint,
     requestData: TRequest,
     config?: ApiClientRequestConfig
-  ): Promise<TResponse>
+  ): Promise<ApiEndpointResult<TEndpoint>>
 }
 
+/**
+ * Runtime dependencies needed by the refresh flow.
+ */
 export interface ApiClientAuthRefreshContext {
   bareClient: AxiosInstance
   bareRequest: <T = unknown, D = unknown>(
@@ -51,11 +60,17 @@ export interface ApiClientAuthRefreshContext {
   refreshToken: string
 }
 
+/**
+ * Tokens returned after a successful refresh.
+ */
 export interface ApiClientAuthRefreshResult {
   accessToken: string
   refreshToken?: string
 }
 
+/**
+ * Strategy hooks for authenticated requests and token refresh.
+ */
 export interface ApiClientAuthOptions {
   getAccessToken: () => MaybePromise<string | undefined>
   getRefreshToken: () => MaybePromise<string | undefined>
@@ -77,6 +92,9 @@ export interface ApiClientAuthOptions {
   ) => boolean
 }
 
+/**
+ * Factory options for the shared API client.
+ */
 export interface CreateApiClientOptions {
   auth?: ApiClientAuthOptions
   baseURL: string
@@ -85,6 +103,9 @@ export interface CreateApiClientOptions {
   timeout?: number
 }
 
+/**
+ * Public API surface returned by `createApiClient`.
+ */
 export interface ApiClient {
   bareClient: AxiosInstance
   client: AxiosInstance
@@ -112,10 +133,16 @@ export interface ApiClient {
   ) => Promise<T>
 }
 
+/**
+ * Adds JSON request headers to an axios config.
+ */
 export function configureJsonHeaders(config: InternalAxiosRequestConfig) {
   setHeader(config, 'Content-Type', 'application/json')
 }
 
+/**
+ * Attaches a bearer token when one is available.
+ */
 export function attachBearerToken(
   config: InternalAxiosRequestConfig,
   accessToken: string | undefined
@@ -127,6 +154,9 @@ export function attachBearerToken(
   setHeader(config, 'Authorization', `Bearer ${accessToken}`)
 }
 
+/**
+ * Creates a reusable API client with optional auth refresh support.
+ */
 export function createApiClient(options: CreateApiClientOptions): ApiClient {
   const { auth } = options
   const bareClient = axios.create({

@@ -6,7 +6,7 @@ import {
 import type { Request } from 'express'
 import get from 'lodash/get'
 
-import type { NestedPath } from '@postsop/contracts/types'
+import type { NestedPath } from '@postsop/types'
 
 import type { JwtPayload } from '@/modules/auth/interfaces/jwt-payload.interface'
 

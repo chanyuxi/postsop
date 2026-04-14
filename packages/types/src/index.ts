@@ -16,3 +16,8 @@ export type NestedPath<T> = T extends Primitive | readonly unknown[]
         ? K
         : K | `${K}.${NestedPath<T[K]>}`
     }[Extract<keyof T, string>]
+
+/**
+ * A value that may be returned synchronously or asynchronously.
+ */
+export type MaybePromise<T> = Promise<T> | T

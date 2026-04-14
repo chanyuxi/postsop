@@ -33,6 +33,7 @@
     "@nestjs/jwt": "^11.0.2",
     "@nestjs/platform-express": "^11.0.1",
     "@postsop/contracts": "workspace:*",
+    "@postsop/types": "workspace:*",
     "@prisma/adapter-pg": "^7.5.0",
     "@prisma/client": "^7.5.0",
     "@types/lodash": "^4.17.24",
