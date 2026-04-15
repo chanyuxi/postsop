@@ -1,7 +1,6 @@
 export type {
   ApiClient,
-  ApiClientAuthOptions,
-  ApiClientAuthRefreshContext,
+  ApiClientAuthenticationOptions,
   ApiClientAuthRefreshResult,
   ApiClientRequestConfig,
   ApiEndpointRequester,

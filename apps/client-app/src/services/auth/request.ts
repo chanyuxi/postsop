@@ -6,12 +6,12 @@ import {
 
 import { requestEndpoint } from '@/api'
 
-export function requestSignIn(params: SignInRequest) {
-  return requestEndpoint(authEndpoints.signIn, params)
+export function requestSignIn(data: SignInRequest) {
+  return requestEndpoint(authEndpoints.signIn, { data })
 }
 
-export async function requestSignUp(params: SignUpRequest) {
-  await requestEndpoint(authEndpoints.signUp, params)
+export async function requestSignUp(data: SignUpRequest) {
+  await requestEndpoint(authEndpoints.signUp, { data })
 }
 
 export async function requestSignOut() {

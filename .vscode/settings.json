@@ -19,5 +19,8 @@
   },
   "[prisma]": {
     "editor.defaultFormatter": "Prisma.prisma-insider"
+  },
+  "[typescript]": {
+    "editor.defaultFormatter": "esbenp.prettier-vscode"
   }
 }

@@ -412,6 +412,10 @@ importers:
       axios:
         specifier: ^1.13.6
         version: 1.15.0
+    devDependencies:
+      http-status-codes:
+        specifier: ^2.3.0
+        version: 2.3.0
 
   packages/configs:
     dependencies:

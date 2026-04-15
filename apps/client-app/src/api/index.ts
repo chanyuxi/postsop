@@ -1,14 +1,18 @@
 import { REACT_APP_API_TIMEOUT, REACT_APP_API_URL } from '@env'
 
-import type { ApiClientRequestConfig } from '@postsop/apis'
+import type { ApiClientRequestConfig, ApiResponse } from '@postsop/apis'
 import {
   ApiError,
   attachBearerToken,
   ClientPlatform,
   configureJsonHeaders,
   createApiClient,
+  InternalStatusCodes,
 } from '@postsop/apis'
-import { authEndpoints } from '@postsop/contracts/auth'
+import {
+  authEndpoints,
+  type RefreshTokenResponse,
+} from '@postsop/contracts/auth'
 
 import { APP_VERSION } from '@/constants'
 import { clearAuthSession } from '@/services/auth/session'
@@ -24,8 +28,8 @@ import { isTokenExpiringSoon } from './utils'
 export type AppRequestConfig<D = unknown> = ApiClientRequestConfig<D>
 
 const apiClient = createApiClient({
-  auth: {
-    attachAccessToken: attachBearerToken,
+  authentication: {
+    authAttacher: attachBearerToken,
     getAccessToken: getStoredAccessToken,
     getRefreshToken: getStoredRefreshToken,
     isTokenExpiringSoon,
@@ -42,15 +46,30 @@ const apiClient = createApiClient({
         refreshToken,
       })
     },
-    refreshAccessToken: ({ bareRequestEndpoint, refreshToken }) =>
-      bareRequestEndpoint(authEndpoints.refreshToken, {
-        refreshToken,
-      }),
+    refreshAccessToken: async (bareClient, refreshToken) => {
+      const response = await bareClient.request<
+        ApiResponse<RefreshTokenResponse>
+      >({
+        data: {
+          refreshToken,
+        },
+        method: authEndpoints.refreshToken.method,
+        url: authEndpoints.refreshToken.path,
+      })
+
+      if (response.data.code !== InternalStatusCodes.SUCCESS) {
+        throw ApiError.internal(response.data.code, response.data.message)
+      }
+
+      return authEndpoints.refreshToken.responseSchema
+        ? authEndpoints.refreshToken.responseSchema.parse(response.data.data)
+        : response.data.data
+    },
     shouldSkipAuthRefresh: (config) => !!config.skipAuthRefresh,
   },
   baseURL: REACT_APP_API_URL,
   configureHeaders: configureJsonHeaders,
-  defaultHeaders: {
+  headers: {
     'X-Postsop-Platform': ClientPlatform.App,
     'X-Postsop-V': APP_VERSION,
   },
