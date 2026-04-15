@@ -1,9 +1,9 @@
 import { createMMKV } from 'react-native-mmkv'
 
 import type {
+  AuthSession,
   AuthTokens,
   SessionUser,
-  SignInResponse,
 } from '@postsop/contracts/auth'
 
 import {
@@ -45,7 +45,7 @@ export function getStoredUser(): SessionUser | null {
   }
 }
 
-export function persistAuthSession(authSession: SignInResponse) {
+export function persistAuthSession(authSession: AuthSession) {
   persistAuthTokens(authSession.tokens)
   storage.set(StrorageKeys.USER, JSON.stringify(authSession.user))
 }

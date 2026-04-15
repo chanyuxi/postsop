@@ -15,15 +15,18 @@ export const AuthTokensSchema = z.strictObject({
   refreshToken: z.string(),
 })
 
-export const SignInResponseSchema = z.strictObject({
+export const AuthSessionSchema = z.strictObject({
   tokens: AuthTokensSchema,
   user: SessionUserSchema,
 })
 
-export const RefreshTokenResponseSchema = AuthTokensSchema
+export const SignInResponseSchema = AuthSessionSchema
+
+export const RefreshTokenResponseSchema = AuthSessionSchema
 
 export type RoleSummary = z.infer<typeof RoleSummarySchema>
 export type SessionUser = z.infer<typeof SessionUserSchema>
 export type AuthTokens = z.infer<typeof AuthTokensSchema>
-export type SignInResponse = z.infer<typeof SignInResponseSchema>
-export type RefreshTokenResponse = z.infer<typeof RefreshTokenResponseSchema>
+export type AuthSession = z.infer<typeof AuthSessionSchema>
+export type SignInResponse = AuthSession
+export type RefreshTokenResponse = AuthSession

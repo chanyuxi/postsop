@@ -10,6 +10,8 @@ import type {
 
 import { AppException } from '@/common/exceptions/app.exception'
 import { verifyPassword } from '@/common/utils/password.util'
+import type { SessionUserSource } from '@/modules/user/serializers/session-user.serializer'
+import { toSessionUser } from '@/modules/user/serializers/session-user.serializer'
 import { UserService } from '@/modules/user/services/user.service'
 
 import type { JwtPayload } from '../interfaces/jwt-payload.interface'
@@ -32,7 +34,9 @@ export class AuthService {
   }
 
   async signIn(signInRequest: SignInRequest): Promise<SignInResponse> {
-    const user = await this.userService.findAuthUserByEmail(signInRequest.email)
+    const user = await this.userService.findUserForSignInByEmail(
+      signInRequest.email,
+    )
 
     if (
       !user ||
@@ -42,16 +46,7 @@ export class AuthService {
     }
 
     const session = await this.tokenService.createSession(user.id)
-    const tokens = await this.issueTokenPair(session)
-
-    return {
-      tokens,
-      user: {
-        id: user.id,
-        email: user.email,
-        roles: user.roles,
-      },
-    }
+    return this.issueAuthSession(session, user)
   }
 
   async signOut(sessionId: string) {
@@ -60,14 +55,26 @@ export class AuthService {
 
   async refreshToken(refreshToken: string): Promise<RefreshTokenResponse> {
     const session = await this.tokenService.rotateSession(refreshToken)
-    const user = await this.userService.findUserById(session.userId)
+    const user = await this.userService.findSessionUserById(session.userId)
 
     if (!user) {
       await this.tokenService.invalidateSession(session.sessionId)
       throw AppException.tokenInvalid('Refresh token user no longer exists')
     }
 
-    return this.issueTokenPair(session)
+    return this.issueAuthSession(session, user)
+  }
+
+  private async issueAuthSession(
+    session: AuthSession,
+    user: SessionUserSource,
+  ): Promise<SignInResponse> {
+    const tokens = await this.issueTokenPair(session)
+
+    return {
+      tokens,
+      user: toSessionUser(user),
+    }
   }
 
   private async issueTokenPair(session: AuthSession): Promise<AuthTokens> {

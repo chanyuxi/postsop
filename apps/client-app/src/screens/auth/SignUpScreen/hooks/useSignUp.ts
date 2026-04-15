@@ -2,10 +2,8 @@ import { zodResolver } from '@hookform/resolvers/zod'
 import { useForm } from 'react-hook-form'
 import { z } from 'zod'
 
-import {
-  type SignUpRequest,
-  SignUpRequestSchema,
-} from '@postsop/contracts/auth'
+import type { SignUpRequest } from '@postsop/contracts/auth'
+import { SignUpRequestSchema } from '@postsop/contracts/auth'
 
 import { toast } from '@/libs/toast'
 import { useSignUpMutation } from '@/services/auth/mutations/useSignUpMutation'

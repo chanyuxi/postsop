@@ -430,10 +430,6 @@ function parseEndpointResponse<TEndpoint extends AnyApiEndpoint>(
   endpoint: TEndpoint,
   responseData: ApiEndpointResponse<TEndpoint>
 ) {
-  if (!endpoint.responseSchema) {
-    return responseData
-  }
-
   return endpoint.responseSchema.parse(
     responseData
   ) as ApiEndpointResponse<TEndpoint>

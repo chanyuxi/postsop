@@ -49,6 +49,7 @@ export const base = defineConfig(
       'import-x/no-unresolved': 'off',
       'import-x/first': 'error',
       'import-x/newline-after-import': 'error',
+      'import-x/consistent-type-specifier-style': 'error',
     },
   },
   {

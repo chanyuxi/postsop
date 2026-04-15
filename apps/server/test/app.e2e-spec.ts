@@ -66,7 +66,7 @@ describe('App (e2e)', () => {
   })
 
   it('rejects unauthenticated access to protected routes', () => {
-    return request(app.getHttpServer()).get('/auth/greeting').expect(401)
+    return request(app.getHttpServer()).get('/user/profile').expect(401)
   })
 
   it('validates the public sign-in payload before touching the database', () => {

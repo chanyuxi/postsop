@@ -9,19 +9,12 @@ import {
   createApiClient,
   InternalStatusCodes,
 } from '@postsop/apis'
-import {
-  authEndpoints,
-  type RefreshTokenResponse,
-} from '@postsop/contracts/auth'
+import type { RefreshTokenResponse } from '@postsop/contracts/auth'
+import { refreshTokenEndpoint } from '@postsop/contracts/auth'
 
 import { APP_VERSION } from '@/constants'
-import { clearAuthSession } from '@/services/auth/session'
-import {
-  getStoredAccessToken,
-  getStoredRefreshToken,
-  getStoredUser,
-  persistAuthTokens,
-} from '@/utils/storage'
+import { applyAuthSession, clearAuthSession } from '@/services/auth/session'
+import { getStoredAccessToken, getStoredRefreshToken } from '@/utils/storage'
 
 import { isTokenExpiringSoon } from './utils'
 
@@ -34,18 +27,6 @@ const apiClient = createApiClient({
     getRefreshToken: getStoredRefreshToken,
     isTokenExpiringSoon,
     onRefreshFailure: clearAuthSession,
-    onRefreshSuccess: (tokens) => {
-      const refreshToken = tokens.refreshToken ?? getStoredRefreshToken()
-
-      if (!refreshToken || !getStoredUser()) {
-        throw ApiError.http(401, 'Session cleared')
-      }
-
-      persistAuthTokens({
-        accessToken: tokens.accessToken,
-        refreshToken,
-      })
-    },
     refreshAccessToken: async (bareClient, refreshToken) => {
       const response = await bareClient.request<
         ApiResponse<RefreshTokenResponse>
@@ -53,17 +34,21 @@ const apiClient = createApiClient({
         data: {
           refreshToken,
         },
-        method: authEndpoints.refreshToken.method,
-        url: authEndpoints.refreshToken.path,
+        method: refreshTokenEndpoint.method,
+        url: refreshTokenEndpoint.path,
       })
 
       if (response.data.code !== InternalStatusCodes.SUCCESS) {
         throw ApiError.internal(response.data.code, response.data.message)
       }
 
-      return authEndpoints.refreshToken.responseSchema
-        ? authEndpoints.refreshToken.responseSchema.parse(response.data.data)
-        : response.data.data
+      const authSession = refreshTokenEndpoint.responseSchema.parse(
+        response.data.data
+      )
+
+      applyAuthSession(authSession)
+
+      return authSession.tokens
     },
     shouldSkipAuthRefresh: (config) => !!config.skipAuthRefresh,
   },

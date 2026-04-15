@@ -1,15 +1,19 @@
-import { Controller, Get } from '@nestjs/common'
+import { availablePermissionsEndpoint } from '@postsop/contracts/permission'
 
-import { Public } from '@/common/decorators/public.decorator'
+import {
+  EndpointController,
+  EndpointHandler,
+  Public,
+} from '@/common/decorators'
 
 import { PermissionService } from '../services/permission.service'
 
-@Controller('permission')
+@EndpointController('permission')
 export class PermissionController {
   constructor(private readonly permissionService: PermissionService) {}
 
   @Public()
-  @Get('available')
+  @EndpointHandler(availablePermissionsEndpoint)
   async getAvailablePermissionNames() {
     return this.permissionService.findAllPermissionNames()
   }

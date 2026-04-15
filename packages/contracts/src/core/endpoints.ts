@@ -21,7 +21,7 @@ export interface ApiEndpoint<
   path: string
   paramsSchema?: ZodType<TParams>
   dataSchema?: ZodType<TData>
-  responseSchema?: ZodType<TResponse>
+  responseSchema: ZodType<TResponse>
   skipAuthRefresh?: boolean
 }
 

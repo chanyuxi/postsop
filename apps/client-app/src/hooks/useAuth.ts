@@ -1,5 +1,5 @@
 import { ApiError } from '@postsop/apis'
-import type { SignInResponse } from '@postsop/contracts/auth'
+import type { AuthSession } from '@postsop/contracts/auth'
 
 import { toast } from '@/libs/toast'
 import { requestSignOut } from '@/services/auth/request'
@@ -10,7 +10,7 @@ import { useAppSelector } from './useStore'
 export function useAuth() {
   const user = useAppSelector((state) => state.auth.user)
 
-  const signIn = (authSession: SignInResponse) => {
+  const signIn = (authSession: AuthSession) => {
     applyAuthSession(authSession)
   }
 

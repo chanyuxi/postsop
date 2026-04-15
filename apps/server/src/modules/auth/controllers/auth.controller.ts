@@ -1,50 +1,50 @@
-import { Controller, Get, Post } from '@nestjs/common'
+import {
+  refreshTokenEndpoint,
+  signInEndpoint,
+  signOutEndpoint,
+  signUpEndpoint,
+} from '@postsop/contracts/auth'
+import type { ApiEndpointData } from '@postsop/contracts/core'
 
 import {
-  type RefreshTokenRequest,
-  RefreshTokenRequestSchema,
-  type SignInRequest,
-  SignInRequestSchema,
-  type SignUpRequest,
-  SignUpRequestSchema,
-} from '@postsop/contracts/auth'
-
-import { AuthContext } from '@/common/decorators/auth-context.decorator'
-import { Public } from '@/common/decorators/public.decorator'
-import { ZodBody } from '@/common/decorators/zod-body.decorator'
+  AuthContext,
+  EndpointBody,
+  EndpointController,
+  EndpointHandler,
+  Public,
+} from '@/common/decorators'
 
 import { AuthService } from '../services/auth.service'
 
-@Controller('auth')
+type RefreshTokenRequest = ApiEndpointData<typeof refreshTokenEndpoint>
+type SignInRequest = ApiEndpointData<typeof signInEndpoint>
+type SignUpRequest = ApiEndpointData<typeof signUpEndpoint>
+
+@EndpointController('auth')
 export class AuthController {
   constructor(private readonly authService: AuthService) {}
 
-  @Get('greeting')
-  greeting(@AuthContext('user.id') userId: number) {
-    return { message: `Welcome to Coco, ${userId}` }
-  }
-
   @Public()
-  @Post('sign-up')
-  signUp(@ZodBody(SignUpRequestSchema) signUpRequest: SignUpRequest) {
+  @EndpointHandler(signUpEndpoint)
+  signUp(@EndpointBody(signUpEndpoint) signUpRequest: SignUpRequest) {
     return this.authService.signUp(signUpRequest)
   }
 
   @Public()
-  @Post('sign-in')
-  signIn(@ZodBody(SignInRequestSchema) signInRequest: SignInRequest) {
+  @EndpointHandler(signInEndpoint)
+  signIn(@EndpointBody(signInEndpoint) signInRequest: SignInRequest) {
     return this.authService.signIn(signInRequest)
   }
 
-  @Post('sign-out')
+  @EndpointHandler(signOutEndpoint)
   signOut(@AuthContext('sessionId') sessionId: string) {
     return this.authService.signOut(sessionId)
   }
 
   @Public()
-  @Post('refresh-token')
+  @EndpointHandler(refreshTokenEndpoint)
   refreshToken(
-    @ZodBody(RefreshTokenRequestSchema)
+    @EndpointBody(refreshTokenEndpoint)
     refreshTokenRequest: RefreshTokenRequest,
   ) {
     return this.authService.refreshToken(refreshTokenRequest.refreshToken)

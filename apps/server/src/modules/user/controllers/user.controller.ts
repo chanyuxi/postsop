@@ -1,14 +1,18 @@
-import { Controller, Get } from '@nestjs/common'
+import { userProfileEndpoint } from '@postsop/contracts/user'
 
-import { AuthContext } from '@/common/decorators/auth-context.decorator'
+import {
+  AuthContext,
+  EndpointController,
+  EndpointHandler,
+} from '@/common/decorators'
 
 import { UserService } from '../services/user.service'
 
-@Controller('user')
+@EndpointController('user')
 export class UserController {
-  constructor(private userService: UserService) {}
+  constructor(private readonly userService: UserService) {}
 
-  @Get('profile')
+  @EndpointHandler(userProfileEndpoint)
   getProfile(@AuthContext('user.id') userId: number) {
     return this.userService.findUserProfileByUserId(userId)
   }

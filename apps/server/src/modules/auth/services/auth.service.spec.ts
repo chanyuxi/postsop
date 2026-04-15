@@ -16,8 +16,8 @@ describe('AuthService', () => {
 
   const userService = {
     createUser: jest.fn(),
-    findAuthUserByEmail: jest.fn(),
-    findUserById: jest.fn(),
+    findSessionUserById: jest.fn(),
+    findUserForSignInByEmail: jest.fn(),
   } as unknown as UserService
 
   const tokenService = {
@@ -34,11 +34,12 @@ describe('AuthService', () => {
 
   it('signs in successfully when the stored password is hashed', async () => {
     const passwordHash = await hashPassword('password')
-    const findAuthUserByEmail = jest.fn().mockResolvedValue({
+    const findUserForSignInByEmail = jest.fn().mockResolvedValue({
       email: 'admin@example.com',
       id: 1,
       password: passwordHash,
       roles: [{ name: 'admin' }],
+      status: 'ACTIVE',
     })
     const createSession = jest.fn().mockResolvedValue({
       refreshToken: 'refresh-token',
@@ -47,7 +48,7 @@ describe('AuthService', () => {
     })
     const generateAccessToken = jest.fn().mockResolvedValue('access-token')
 
-    userService.findAuthUserByEmail = findAuthUserByEmail
+    userService.findUserForSignInByEmail = findUserForSignInByEmail
     tokenService.createSession = createSession
     tokenService.generateAccessToken = generateAccessToken
 
@@ -81,11 +82,11 @@ describe('AuthService', () => {
       sessionId: 'session-1',
       userId: 1,
     })
-    const findUserById = jest.fn().mockResolvedValue(null)
+    const findSessionUserById = jest.fn().mockResolvedValue(null)
     const invalidateSession = jest.fn().mockResolvedValue(undefined)
 
     tokenService.rotateSession = rotateSession
-    userService.findUserById = findUserById
+    userService.findSessionUserById = findSessionUserById
     tokenService.invalidateSession = invalidateSession
 
     const refreshAttempt = authService.refreshToken('refresh-token-1')
@@ -95,5 +96,37 @@ describe('AuthService', () => {
       internalCode: InternalStatusCodes.TOKEN_INVALID,
     })
     expect(invalidateSession).toHaveBeenCalledWith('session-1')
+  })
+
+  it('refreshes auth sessions with the latest user snapshot', async () => {
+    const rotateSession = jest.fn().mockResolvedValue({
+      refreshToken: 'refresh-token-2',
+      sessionId: 'session-1',
+      userId: 1,
+    })
+    const findSessionUserById = jest.fn().mockResolvedValue({
+      email: 'admin@example.com',
+      id: 1,
+      roles: [{ name: 'admin' }],
+    })
+    const generateAccessToken = jest.fn().mockResolvedValue('access-token-2')
+
+    tokenService.rotateSession = rotateSession
+    userService.findSessionUserById = findSessionUserById
+    tokenService.generateAccessToken = generateAccessToken
+
+    const result = await authService.refreshToken('refresh-token-1')
+
+    expect(result).toEqual({
+      tokens: {
+        accessToken: 'access-token-2',
+        refreshToken: 'refresh-token-2',
+      },
+      user: {
+        email: 'admin@example.com',
+        id: 1,
+        roles: [{ name: 'admin' }],
+      },
+    })
   })
 })

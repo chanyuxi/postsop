@@ -1,4 +1,4 @@
-import type { SignInResponse } from '@postsop/contracts/auth'
+import type { AuthSession } from '@postsop/contracts/auth'
 
 import { clearPersistedQueryClient } from '@/libs/query-client'
 import { store } from '@/store'
@@ -7,7 +7,7 @@ import { clearStoredAuthSession, persistAuthSession } from '@/utils/storage'
 
 let clearAuthSessionPromise: Promise<void> | null = null
 
-export function applyAuthSession(authSession: SignInResponse) {
+export function applyAuthSession(authSession: AuthSession) {
   persistAuthSession(authSession)
   store.dispatch(signInAction(authSession.user))
 }
