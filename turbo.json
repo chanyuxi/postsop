@@ -4,16 +4,43 @@
   "tasks": {
     "build": {
       "dependsOn": ["^build"],
-      "inputs": ["$TURBO_DEFAULT$", "!dist/**", "!.turbo/**", "!coverage/**"],
+      "inputs": [
+        "$TURBO_DEFAULT$",
+        "../../module-shim.d.ts",
+        "../../scripts/**",
+        "../../tsconfig.json",
+        "../../configs/typescript/tsconfig*.json",
+        "!dist/**",
+        "!.turbo/**",
+        "!coverage/**"
+      ],
       "outputs": ["dist/**"]
     },
     "build:watch": {
-      "inputs": ["$TURBO_DEFAULT$", "!dist/**", "!.turbo/**", "!coverage/**"],
+      "inputs": [
+        "$TURBO_DEFAULT$",
+        "../../module-shim.d.ts",
+        "../../scripts/**",
+        "../../tsconfig.json",
+        "../../configs/typescript/tsconfig*.json",
+        "!dist/**",
+        "!.turbo/**",
+        "!coverage/**"
+      ],
       "cache": false,
       "persistent": true
     },
     "dev": {
-      "inputs": ["$TURBO_DEFAULT$", "!dist/**", "!.turbo/**", "!coverage/**"],
+      "inputs": [
+        "$TURBO_DEFAULT$",
+        "../../module-shim.d.ts",
+        "../../scripts/**",
+        "../../tsconfig.json",
+        "../../configs/typescript/tsconfig*.json",
+        "!dist/**",
+        "!.turbo/**",
+        "!coverage/**"
+      ],
       "cache": false,
       "persistent": true
     },
@@ -22,7 +49,15 @@
       "outputs": []
     },
     "type-check": {
-      "inputs": ["$TURBO_DEFAULT$", "!dist/**", "!.turbo/**", "!coverage/**"],
+      "inputs": [
+        "$TURBO_DEFAULT$",
+        "../../module-shim.d.ts",
+        "../../tsconfig.json",
+        "../../configs/typescript/tsconfig*.json",
+        "!dist/**",
+        "!.turbo/**",
+        "!coverage/**"
+      ],
       "outputs": []
     },
     "test": {

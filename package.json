@@ -41,6 +41,7 @@
     "@eslint/js": "^9.39.4",
     "@postsop/configs": "workspace:*",
     "@react-native/eslint-plugin": "^0.84.1",
+    "esbuild": "0.27.7",
     "eslint": "^9.39.4",
     "eslint-config-prettier": "^10.0.1",
     "eslint-import-resolver-typescript": "^4.4.4",
