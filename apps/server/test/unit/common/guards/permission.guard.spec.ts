@@ -5,7 +5,7 @@ import {
   encodePermissionMask,
   permissionRegistryVersion,
 } from '@postsop/access-control'
-import { InternalStatusCodes } from '@postsop/contracts/http'
+import { Codes } from '@postsop/contracts/http'
 
 import { AppException } from '@/common/exceptions/app.exception'
 import { PermissionGuard } from '@/common/guards/permission.guard'
@@ -69,7 +69,7 @@ describe('PermissionGuard', () => {
 
     await expect(permissionCheck).rejects.toBeInstanceOf(AppException)
     await expect(permissionCheck).rejects.toMatchObject({
-      internalCode: InternalStatusCodes.PERMISSION_DENIED,
+      code: Codes.PERMISSION_DENIED,
     })
   })
 
@@ -83,7 +83,7 @@ describe('PermissionGuard', () => {
 
     await expect(permissionCheck).rejects.toBeInstanceOf(AppException)
     await expect(permissionCheck).rejects.toMatchObject({
-      internalCode: InternalStatusCodes.UNAUTHORIZED,
+      code: Codes.UNAUTHORIZED,
     })
   })
 })

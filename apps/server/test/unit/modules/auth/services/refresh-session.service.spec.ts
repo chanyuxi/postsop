@@ -3,7 +3,7 @@ import { CACHE_MANAGER } from '@nestjs/cache-manager'
 import { ConfigService } from '@nestjs/config'
 import { Test } from '@nestjs/testing'
 
-import { InternalStatusCodes } from '@postsop/contracts/http'
+import { Codes } from '@postsop/contracts/http'
 
 import { envs } from '@/common/constants/env'
 import { AppException } from '@/common/exceptions/app.exception'
@@ -89,7 +89,7 @@ describe('RefreshSessionService', () => {
 
     await expect(invalidRotation).rejects.toBeInstanceOf(AppException)
     await expect(invalidRotation).rejects.toMatchObject({
-      internalCode: InternalStatusCodes.TOKEN_INVALID,
+      code: Codes.TOKEN_INVALID,
     })
   })
 

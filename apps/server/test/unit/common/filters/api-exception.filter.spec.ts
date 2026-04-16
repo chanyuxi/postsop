@@ -1,10 +1,7 @@
 import type { ArgumentsHost } from '@nestjs/common'
 import { BadRequestException, HttpStatus, Logger } from '@nestjs/common'
 
-import {
-  INTERNAL_MESSAGE_MAP,
-  InternalStatusCodes,
-} from '@postsop/contracts/http'
+import { Codes, getCodeReasonPhrase } from '@postsop/contracts/http'
 
 import { AppException } from '@/common/exceptions/app.exception'
 import { ApiExceptionFilter } from '@/common/filters/api-exception.filter'
@@ -49,7 +46,7 @@ describe('ApiExceptionFilter', () => {
 
     expect(status).toHaveBeenCalledWith(HttpStatus.FORBIDDEN)
     expect(json).toHaveBeenCalledWith({
-      code: InternalStatusCodes.TOKEN_EXPIRED,
+      code: Codes.TOKEN_EXPIRED,
       data: null,
       message: 'Token expired',
     })
@@ -63,7 +60,7 @@ describe('ApiExceptionFilter', () => {
 
     expect(status).toHaveBeenCalledWith(HttpStatus.BAD_REQUEST)
     expect(json).toHaveBeenCalledWith({
-      code: InternalStatusCodes.INVALID_PARAMS,
+      code: Codes.INVALID_PARAMS,
       data: null,
       message: 'Validation failed',
     })
@@ -77,9 +74,9 @@ describe('ApiExceptionFilter', () => {
 
     expect(status).toHaveBeenCalledWith(HttpStatus.INTERNAL_SERVER_ERROR)
     expect(json).toHaveBeenCalledWith({
-      code: InternalStatusCodes.INTERNAL_ERROR,
+      code: Codes.INTERNAL_ERROR,
       data: null,
-      message: INTERNAL_MESSAGE_MAP[InternalStatusCodes.INTERNAL_ERROR],
+      message: getCodeReasonPhrase(Codes.INTERNAL_ERROR),
     })
   })
 })

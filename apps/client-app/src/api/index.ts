@@ -5,9 +5,9 @@ import {
   ApiError,
   attachBearerToken,
   ClientPlatform,
+  Codes,
   configureJsonHeaders,
   createApiClient,
-  InternalStatusCodes,
 } from '@postsop/apis'
 import type { RefreshTokenResponse } from '@postsop/contracts/auth'
 import { refreshTokenEndpoint } from '@postsop/contracts/auth'
@@ -38,8 +38,8 @@ const apiClient = createApiClient({
         url: refreshTokenEndpoint.path,
       })
 
-      if (response.data.code !== InternalStatusCodes.SUCCESS) {
-        throw ApiError.internal(response.data.code, response.data.message)
+      if (response.data.code !== Codes.SUCCESS) {
+        throw ApiError.code(response.data.code, response.data.message)
       }
 
       const authSession = refreshTokenEndpoint.responseSchema.parse(

@@ -2,7 +2,7 @@ import {
   encodePermissionMask,
   permissionRegistryVersion,
 } from '@postsop/access-control'
-import { InternalStatusCodes } from '@postsop/contracts/http'
+import { Codes } from '@postsop/contracts/http'
 
 import { AppException } from '@/common/exceptions/app.exception'
 import type { AccessTokenService } from '@/modules/auth/services/access-token.service'
@@ -64,7 +64,7 @@ describe('RefreshAuthSessionUseCase', () => {
 
     await expect(refreshAttempt).rejects.toBeInstanceOf(AppException)
     await expect(refreshAttempt).rejects.toMatchObject({
-      internalCode: InternalStatusCodes.TOKEN_INVALID,
+      code: Codes.TOKEN_INVALID,
     })
     expect(refreshSessionService.invalidateSession).toHaveBeenCalledWith(
       'session-1',

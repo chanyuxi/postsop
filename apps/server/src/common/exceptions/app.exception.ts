@@ -1,42 +1,39 @@
 import { HttpException, HttpStatus } from '@nestjs/common'
 
-import {
-  INTERNAL_MESSAGE_MAP,
-  InternalStatusCodes,
-} from '@postsop/contracts/http'
+import { Codes, getCodeReasonPhrase } from '@postsop/contracts/http'
 
 interface AppExceptionOptions {
   cause?: unknown
   details?: unknown
   httpStatus: HttpStatus | number
-  internalCode: InternalStatusCodes
+  code: Codes
   message?: string
 }
 
 export class AppException extends HttpException {
   readonly details?: unknown
-  readonly internalCode: InternalStatusCodes
+  readonly code: Codes
 
   constructor({
     cause,
     details,
     httpStatus,
-    internalCode,
+    code,
     message,
   }: AppExceptionOptions) {
-    super(message ?? INTERNAL_MESSAGE_MAP[internalCode], httpStatus, {
+    super(message ?? getCodeReasonPhrase(code), httpStatus, {
       cause,
     })
 
     this.details = details
-    this.internalCode = internalCode
+    this.code = code
   }
 
   static invalidParams(message?: string, details?: unknown) {
     return new AppException({
       details,
       httpStatus: HttpStatus.BAD_REQUEST,
-      internalCode: InternalStatusCodes.INVALID_PARAMS,
+      code: Codes.INVALID_PARAMS,
       message,
     })
   }
@@ -44,15 +41,15 @@ export class AppException extends HttpException {
   static unauthorized(message?: string) {
     return new AppException({
       httpStatus: HttpStatus.UNAUTHORIZED,
-      internalCode: InternalStatusCodes.UNAUTHORIZED,
+      code: Codes.UNAUTHORIZED,
       message,
     })
   }
 
   static tokenExpired(message?: string) {
     return new AppException({
-      httpStatus: HttpStatus.FORBIDDEN,
-      internalCode: InternalStatusCodes.TOKEN_EXPIRED,
+      httpStatus: HttpStatus.UNAUTHORIZED,
+      code: Codes.TOKEN_EXPIRED,
       message,
     })
   }
@@ -60,7 +57,7 @@ export class AppException extends HttpException {
   static tokenInvalid(message?: string) {
     return new AppException({
       httpStatus: HttpStatus.UNAUTHORIZED,
-      internalCode: InternalStatusCodes.TOKEN_INVALID,
+      code: Codes.TOKEN_INVALID,
       message,
     })
   }
@@ -68,7 +65,7 @@ export class AppException extends HttpException {
   static permissionDenied(message?: string) {
     return new AppException({
       httpStatus: HttpStatus.FORBIDDEN,
-      internalCode: InternalStatusCodes.PERMISSION_DENIED,
+      code: Codes.PERMISSION_DENIED,
       message,
     })
   }
@@ -76,7 +73,7 @@ export class AppException extends HttpException {
   static resourceAlreadyExists(message?: string) {
     return new AppException({
       httpStatus: HttpStatus.CONFLICT,
-      internalCode: InternalStatusCodes.RESOURCE_ALREADY_EXISTS,
+      code: Codes.RESOURCE_ALREADY_EXISTS,
       message,
     })
   }
@@ -85,7 +82,7 @@ export class AppException extends HttpException {
     return new AppException({
       details,
       httpStatus: HttpStatus.INTERNAL_SERVER_ERROR,
-      internalCode: InternalStatusCodes.INTERNAL_ERROR,
+      code: Codes.INTERNAL_ERROR,
       message,
     })
   }

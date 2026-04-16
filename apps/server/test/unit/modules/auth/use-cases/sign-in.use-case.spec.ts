@@ -2,7 +2,7 @@ import {
   encodePermissionMask,
   permissionRegistryVersion,
 } from '@postsop/access-control'
-import { InternalStatusCodes } from '@postsop/contracts/http'
+import { Codes } from '@postsop/contracts/http'
 
 import { AppException } from '@/common/exceptions/app.exception'
 import { hashPassword } from '@/common/utils/password.util'
@@ -114,7 +114,7 @@ describe('SignInUseCase', () => {
 
     await expect(attempt).rejects.toBeInstanceOf(AppException)
     await expect(attempt).rejects.toMatchObject({
-      internalCode: InternalStatusCodes.UNAUTHORIZED,
+      code: Codes.UNAUTHORIZED,
     })
   })
 })

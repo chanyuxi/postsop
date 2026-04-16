@@ -16,7 +16,6 @@ export {
   ApiError,
   ApiErrorType,
   ClientPlatform,
-  INTERNAL_MESSAGE_MAP,
-  InternalStatusCodes,
+  Codes,
   NetworkStatusCodes,
 } from '@postsop/contracts/http'

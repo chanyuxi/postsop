@@ -3,7 +3,7 @@ import { lastValueFrom, of } from 'rxjs'
 import { z } from 'zod'
 
 import { defineApiEndpoint } from '@postsop/contracts'
-import { InternalStatusCodes } from '@postsop/contracts/http'
+import { Codes } from '@postsop/contracts/http'
 
 import { AppException } from '@/common/exceptions/app.exception'
 import { EndpointResponseValidationInterceptor } from '@/common/interceptors/endpoint-response-validation.interceptor'
@@ -46,7 +46,7 @@ describe('EndpointResponseValidationInterceptor', () => {
 
     await expect(response).rejects.toBeInstanceOf(AppException)
     await expect(response).rejects.toMatchObject({
-      internalCode: InternalStatusCodes.INTERNAL_ERROR,
+      code: Codes.INTERNAL_ERROR,
     })
   })
 })

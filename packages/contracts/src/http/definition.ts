@@ -1,3 +1,5 @@
+import { getReasonPhrase, StatusCodes } from 'http-status-codes'
+
 /**
  * Represents supported client platforms.
  */
@@ -42,7 +44,7 @@ export enum NetworkStatusCodes {
  * - 105xxx - System / Infrastructure
  * - 106xxx - Business Logic
  */
-export enum InternalStatusCodes {
+export enum Codes {
   /** Successful operation */
   SUCCESS = 6,
 
@@ -87,29 +89,33 @@ export enum InternalStatusCodes {
  * Standard API response structure.
  */
 export interface ApiResponse<T = unknown> {
-  code: InternalStatusCodes
+  code: Codes
   message: string
   data: T
+}
+
+const CODE_MESSAGE_MAP: Record<Codes, string> = {
+  [Codes.SUCCESS]: 'Success',
+  [Codes.TOKEN_EXPIRED]: 'Token expired',
+  [Codes.TOKEN_INVALID]: 'Token invalid',
+  [Codes.PERMISSION_DENIED]: 'Permission denied',
+  [Codes.UNAUTHORIZED]: 'Unauthorized',
+  [Codes.INVALID_PARAMS]: 'Invalid parameters',
+  [Codes.MISSING_PARAMS]: 'Missing required parameters',
+  [Codes.INVALID_FORMAT]: 'Invalid data format',
+  [Codes.RESOURCE_NOT_FOUND]: 'Resource not found',
+  [Codes.RESOURCE_ALREADY_EXISTS]: 'Resource already exists',
+  [Codes.TOO_MANY_REQUESTS]: 'Too many requests',
+  [Codes.INTERNAL_ERROR]: 'Internal server error',
+  [Codes.SERVICE_UNAVAILABLE]: 'Service unavailable',
+  [Codes.DEPENDENCY_FAILURE]: 'Dependency service failure',
+  [Codes.OPERATION_FAILED]: 'Operation failed',
+  [Codes.STATE_INVALID]: 'Invalid state for operation',
 }
 
 /**
  * Default mapping from internal status codes to fallback messages.
  */
-export const INTERNAL_MESSAGE_MAP: Record<InternalStatusCodes, string> = {
-  [InternalStatusCodes.SUCCESS]: 'Success',
-  [InternalStatusCodes.TOKEN_EXPIRED]: 'Token expired',
-  [InternalStatusCodes.TOKEN_INVALID]: 'Token invalid',
-  [InternalStatusCodes.PERMISSION_DENIED]: 'Permission denied',
-  [InternalStatusCodes.UNAUTHORIZED]: 'Unauthorized',
-  [InternalStatusCodes.INVALID_PARAMS]: 'Invalid parameters',
-  [InternalStatusCodes.MISSING_PARAMS]: 'Missing required parameters',
-  [InternalStatusCodes.INVALID_FORMAT]: 'Invalid data format',
-  [InternalStatusCodes.RESOURCE_NOT_FOUND]: 'Resource not found',
-  [InternalStatusCodes.RESOURCE_ALREADY_EXISTS]: 'Resource already exists',
-  [InternalStatusCodes.TOO_MANY_REQUESTS]: 'Too many requests',
-  [InternalStatusCodes.INTERNAL_ERROR]: 'Internal server error',
-  [InternalStatusCodes.SERVICE_UNAVAILABLE]: 'Service unavailable',
-  [InternalStatusCodes.DEPENDENCY_FAILURE]: 'Dependency service failure',
-  [InternalStatusCodes.OPERATION_FAILED]: 'Operation failed',
-  [InternalStatusCodes.STATE_INVALID]: 'Invalid state for operation',
-}
+export const getCodeReasonPhrase = (code: Codes) => CODE_MESSAGE_MAP[code]
+
+export { getReasonPhrase, StatusCodes }

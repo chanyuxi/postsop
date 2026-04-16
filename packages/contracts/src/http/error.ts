@@ -2,10 +2,10 @@ import { getReasonPhrase, StatusCodes } from 'http-status-codes'
 
 import {
   ApiErrorType,
-  INTERNAL_MESSAGE_MAP,
-  InternalStatusCodes,
+  Codes,
+  getCodeReasonPhrase,
   NetworkStatusCodes,
-} from './types'
+} from './definition'
 
 export type HttpStatus = NetworkStatusCodes | StatusCodes
 
@@ -18,7 +18,7 @@ export class ApiError extends Error {
   constructor(
     message: string,
     public readonly httpStatus: HttpStatus,
-    public readonly internalStatus: InternalStatusCodes | null = null
+    public readonly code: Codes | null = null
   ) {
     super(message)
 
@@ -26,8 +26,8 @@ export class ApiError extends Error {
       this.type = ApiErrorType.Network
     } else if (
       httpStatus === StatusCodes.OK &&
-      internalStatus !== null &&
-      internalStatus !== InternalStatusCodes.SUCCESS
+      code !== null &&
+      code !== Codes.SUCCESS
     ) {
       this.type = ApiErrorType.Internal
     } else {
@@ -64,15 +64,15 @@ export class ApiError extends Error {
   }
 
   get isTokenExpired() {
-    return this.internalStatus === InternalStatusCodes.TOKEN_EXPIRED
+    return this.code === Codes.TOKEN_EXPIRED
   }
 
   get isTokenInvalid() {
-    return this.internalStatus === InternalStatusCodes.TOKEN_INVALID
+    return this.code === Codes.TOKEN_INVALID
   }
 
   get isPermissionDenied() {
-    return this.internalStatus === InternalStatusCodes.PERMISSION_DENIED
+    return this.code === Codes.PERMISSION_DENIED
   }
 
   get needsRefresh() {
@@ -82,7 +82,7 @@ export class ApiError extends Error {
   get displayMessage() {
     return (
       this.message ||
-      (this.internalStatus && INTERNAL_MESSAGE_MAP[this.internalStatus]) ||
+      (this.code && getCodeReasonPhrase(this.code)) ||
       getReasonPhrase(this.httpStatus)
     )
   }
@@ -99,11 +99,11 @@ export class ApiError extends Error {
     return new ApiError(message ?? getReasonPhrase(httpStatus), httpStatus)
   }
 
-  static internal(internalStatus: InternalStatusCodes, message?: string) {
+  static code(code: Codes, message?: string) {
     return new ApiError(
-      message ?? INTERNAL_MESSAGE_MAP[internalStatus],
+      message ?? getCodeReasonPhrase(code),
       StatusCodes.OK,
-      internalStatus
+      code
     )
   }
 }

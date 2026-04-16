@@ -1,4 +1,4 @@
-import { InternalStatusCodes } from '@postsop/contracts/http'
+import { Codes } from '@postsop/contracts/http'
 
 import { AppException } from '@/common/exceptions/app.exception'
 import { SignUpUseCase } from '@/modules/auth/use-cases/sign-up.use-case'
@@ -30,7 +30,7 @@ describe('SignUpUseCase', () => {
 
     await expect(attempt).rejects.toBeInstanceOf(AppException)
     await expect(attempt).rejects.toMatchObject({
-      internalCode: InternalStatusCodes.RESOURCE_ALREADY_EXISTS,
+      code: Codes.RESOURCE_ALREADY_EXISTS,
     })
   })
 })

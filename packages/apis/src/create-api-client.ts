@@ -14,11 +14,7 @@ import type {
   ApiEndpointRequest,
   ApiEndpointResponse,
 } from '@postsop/contracts'
-import {
-  ApiError,
-  ApiResponse,
-  InternalStatusCodes,
-} from '@postsop/contracts/http'
+import { ApiError, ApiResponse, Codes } from '@postsop/contracts/http'
 import { MaybePromise } from '@postsop/types'
 
 /**
@@ -214,8 +210,8 @@ export function createApiClient(options: CreateApiClientOptions): ApiClient {
 
   client.interceptors.response.use(
     (response) => {
-      if (response.data.code !== InternalStatusCodes.SUCCESS) {
-        throw ApiError.internal(response.data.code, response.data.message)
+      if (response.data.code !== Codes.SUCCESS) {
+        throw ApiError.code(response.data.code, response.data.message)
       }
 
       return response

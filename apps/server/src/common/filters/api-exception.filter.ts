@@ -8,17 +8,14 @@ import {
 } from '@nestjs/common'
 import type { Request, Response } from 'express'
 
-import {
-  INTERNAL_MESSAGE_MAP,
-  InternalStatusCodes,
-} from '@postsop/contracts/http'
+import { Codes, getCodeReasonPhrase } from '@postsop/contracts/http'
 
 import { AppException } from '../exceptions/app.exception'
 import { ResponseBuilder } from '../utils/response-builder.util'
 
 interface ResolvedException {
   httpStatus: number
-  internalCode: InternalStatusCodes
+  code: Codes
   message: string
 }
 
@@ -44,7 +41,7 @@ export class ApiExceptionFilter implements ExceptionFilter {
       .status(resolvedException.httpStatus)
       .json(
         ResponseBuilder.failure(
-          resolvedException.internalCode,
+          resolvedException.code,
           resolvedException.message,
         ),
       )
@@ -54,52 +51,52 @@ export class ApiExceptionFilter implements ExceptionFilter {
     if (exception instanceof AppException) {
       return {
         httpStatus: exception.getStatus(),
-        internalCode: exception.internalCode,
+        code: exception.code,
         message: exception.message,
       }
     }
 
     if (exception instanceof HttpException) {
       const httpStatus = exception.getStatus()
-      const internalCode = this.mapHttpStatusToInternalCode(httpStatus)
+      const code = this.mapHttpStatusToCode(httpStatus)
 
       return {
         httpStatus,
-        internalCode,
+        code,
         message:
           httpStatus >= HttpStatus.INTERNAL_SERVER_ERROR
-            ? INTERNAL_MESSAGE_MAP[internalCode]
+            ? getCodeReasonPhrase(code)
             : (this.extractMessage(exception.getResponse()) ??
-              INTERNAL_MESSAGE_MAP[internalCode]),
+              getCodeReasonPhrase(code)),
       }
     }
 
     return {
       httpStatus: HttpStatus.INTERNAL_SERVER_ERROR,
-      internalCode: InternalStatusCodes.INTERNAL_ERROR,
-      message: INTERNAL_MESSAGE_MAP[InternalStatusCodes.INTERNAL_ERROR],
+      code: Codes.INTERNAL_ERROR,
+      message: getCodeReasonPhrase(Codes.INTERNAL_ERROR),
     }
   }
 
-  private mapHttpStatusToInternalCode(status: number): InternalStatusCodes {
+  private mapHttpStatusToCode(status: number): Codes {
     switch (status) {
       case HttpStatus.BAD_REQUEST:
       case HttpStatus.UNPROCESSABLE_ENTITY:
-        return InternalStatusCodes.INVALID_PARAMS
+        return Codes.INVALID_PARAMS
       case HttpStatus.UNAUTHORIZED:
-        return InternalStatusCodes.UNAUTHORIZED
+        return Codes.UNAUTHORIZED
       case HttpStatus.FORBIDDEN:
-        return InternalStatusCodes.PERMISSION_DENIED
+        return Codes.PERMISSION_DENIED
       case HttpStatus.NOT_FOUND:
-        return InternalStatusCodes.RESOURCE_NOT_FOUND
+        return Codes.RESOURCE_NOT_FOUND
       case HttpStatus.CONFLICT:
-        return InternalStatusCodes.RESOURCE_ALREADY_EXISTS
+        return Codes.RESOURCE_ALREADY_EXISTS
       case HttpStatus.TOO_MANY_REQUESTS:
-        return InternalStatusCodes.TOO_MANY_REQUESTS
+        return Codes.TOO_MANY_REQUESTS
       case HttpStatus.SERVICE_UNAVAILABLE:
-        return InternalStatusCodes.SERVICE_UNAVAILABLE
+        return Codes.SERVICE_UNAVAILABLE
       default:
-        return InternalStatusCodes.INTERNAL_ERROR
+        return Codes.INTERNAL_ERROR
     }
   }
 
