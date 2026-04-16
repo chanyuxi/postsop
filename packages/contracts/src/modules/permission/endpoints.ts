@@ -1,5 +1,5 @@
-import { defineApiEndpoint } from '../../core'
-import { AvailablePermissionNamesSchema } from './response-schemas'
+import { defineApiEndpoint } from '../..'
+import { AvailablePermissionNamesSchema } from './schemas'
 
 /**
  * Returns every permission name that can be assigned inside the system.

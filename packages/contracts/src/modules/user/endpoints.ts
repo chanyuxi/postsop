@@ -1,5 +1,5 @@
-import { defineApiEndpoint } from '../../core'
-import { UserProfileViewSchema } from './response-schemas'
+import { defineApiEndpoint } from '../..'
+import { UserProfileViewSchema } from './schemas'
 
 /**
  * Returns the current authenticated user's profile.

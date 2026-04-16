@@ -5,14 +5,14 @@ import { Request } from 'express'
 
 import { AppException } from '@/common/exceptions/app.exception'
 import { JwtPayloadSchema } from '@/modules/auth/interfaces/jwt-payload.interface'
-import { TokenService } from '@/modules/auth/services/token.service'
+import { AccessTokenService } from '@/modules/auth/services/access-token.service'
 
 import { PUBLIC_KEY } from '../decorators/public.decorator'
 
 @Injectable()
 export class AuthGuard implements CanActivate {
   constructor(
-    private readonly tokenService: TokenService,
+    private readonly accessTokenService: AccessTokenService,
     private reflector: Reflector,
   ) {}
 
@@ -34,8 +34,7 @@ export class AuthGuard implements CanActivate {
     }
 
     try {
-      const payload =
-        await this.tokenService.attemptToExtractPayloadFromAccessToken(token)
+      const payload = await this.accessTokenService.verifyAccessToken(token)
       const parsedPayload = JwtPayloadSchema.safeParse(payload)
 
       if (!parsedPayload.success) {

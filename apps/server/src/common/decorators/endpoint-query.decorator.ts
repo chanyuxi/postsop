@@ -1,4 +1,4 @@
-import type { AnyApiEndpoint } from '@postsop/contracts/core'
+import type { AnyApiEndpoint } from '@postsop/contracts'
 
 import { ZodQuery } from './zod-query.decorator'
 

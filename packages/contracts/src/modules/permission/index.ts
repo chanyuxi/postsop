@@ -1,2 +1,2 @@
 export * from './endpoints'
-export * from './response-schemas'
+export * from './schemas'

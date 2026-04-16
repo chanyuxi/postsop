@@ -2,12 +2,14 @@ import { Module } from '@nestjs/common'
 
 import { RoleModule } from '../role/role.module'
 import { UserController } from './controllers/user.controller'
-import { UserService } from './services/user.service'
+import { UserAuthQueryService } from './queries/user-auth.query.service'
+import { UserProfileQueryService } from './queries/user-profile.query.service'
+import { CreateUserUseCase } from './use-cases/create-user.use-case'
 
 @Module({
   imports: [RoleModule],
-  providers: [UserService],
+  providers: [CreateUserUseCase, UserAuthQueryService, UserProfileQueryService],
   controllers: [UserController],
-  exports: [UserService],
+  exports: [CreateUserUseCase, UserAuthQueryService, UserProfileQueryService],
 })
 export class UserModule {}

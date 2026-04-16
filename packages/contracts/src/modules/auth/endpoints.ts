@@ -1,15 +1,13 @@
 import { z } from 'zod'
 
-import { defineApiEndpoint } from '../../core'
+import { defineApiEndpoint } from '../..'
 import {
   RefreshTokenRequestSchema,
-  SignInRequestSchema,
-  SignUpRequestSchema,
-} from './request-schemas'
-import {
   RefreshTokenResponseSchema,
+  SignInRequestSchema,
   SignInResponseSchema,
-} from './response-schemas'
+  SignUpRequestSchema,
+} from './schemas'
 
 /**
  * Refreshes an authenticated session using a valid refresh token.

@@ -9,7 +9,7 @@ import {
   UseInterceptors,
 } from '@nestjs/common'
 
-import type { AnyApiEndpoint, ApiEndpointMethod } from '@postsop/contracts/core'
+import type { AnyApiEndpoint, ApiEndpointMethod } from '@postsop/contracts'
 
 import { EndpointResponseValidationInterceptor } from '@/common/interceptors/endpoint-response-validation.interceptor'
 

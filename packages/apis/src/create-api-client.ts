@@ -13,7 +13,7 @@ import type {
   ApiEndpoint,
   ApiEndpointRequest,
   ApiEndpointResponse,
-} from '@postsop/contracts/core'
+} from '@postsop/contracts'
 import {
   ApiError,
   ApiResponse,

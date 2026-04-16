@@ -6,14 +6,16 @@ import {
   EndpointHandler,
 } from '@/common/decorators'
 
-import { UserService } from '../services/user.service'
+import { UserProfileQueryService } from '../queries/user-profile.query.service'
 
 @EndpointController('user')
 export class UserController {
-  constructor(private readonly userService: UserService) {}
+  constructor(
+    private readonly userProfileQueryService: UserProfileQueryService,
+  ) {}
 
   @EndpointHandler(userProfileEndpoint)
   getProfile(@AuthContext('user.id') userId: number) {
-    return this.userService.findUserProfileByUserId(userId)
+    return this.userProfileQueryService.findUserProfileByUserId(userId)
   }
 }

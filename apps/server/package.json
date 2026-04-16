@@ -2,26 +2,26 @@
   "name": "@postsop/server",
   "version": "0.1.0",
   "private": true,
-  "description": "NestJS backend server for postsop with RBAC and Prisma ORM",
+  "description": "NestJS backend server for postsop",
   "author": "chanyuxi",
   "license": "UNLICENSED",
   "scripts": {
     "build": "nest build",
     "build:watch": "nest build --watch",
+    "dev": "cross-env NODE_ENV=development nest start --watch",
     "db:generate": "prisma generate",
     "db:migrate": "prisma migrate dev",
     "db:seed": "prisma db seed",
     "db:studio": "prisma studio",
-    "dev": "cross-env NODE_ENV=development nest start --watch",
     "lint": "pnpm --dir ../.. exec eslint apps/server --cache",
     "lint:fix": "pnpm --dir ../.. exec eslint apps/server --fix --cache",
     "start": "node dist/main",
     "start:debug": "nest start --debug --watch",
-    "test": "jest",
-    "test:cov": "jest --coverage",
-    "test:debug": "node --inspect-brk -r tsconfig-paths/register -r ts-node/register node_modules/.bin/jest --runInBand",
-    "test:e2e": "jest --config ./test/jest-e2e.json",
-    "test:watch": "jest --watch",
+    "test": "jest --config ./jest.unit.config.json",
+    "test:cov": "jest --config ./jest.unit.config.json --coverage",
+    "test:debug": "node --inspect-brk -r tsconfig-paths/register -r ts-node/register node_modules/.bin/jest --config ./jest.unit.config.json --runInBand",
+    "test:e2e": "jest --config ./jest.e2e.config.json",
+    "test:watch": "jest --config ./jest.unit.config.json --watch",
     "type-check": "tsc --noEmit"
   },
   "dependencies": {
@@ -69,25 +69,5 @@
     "tsconfig-paths": "^4.2.0",
     "tsx": "^4.21.0",
     "typescript": "^5.7.3"
-  },
-  "jest": {
-    "moduleFileExtensions": [
-      "js",
-      "json",
-      "ts"
-    ],
-    "rootDir": "src",
-    "testRegex": ".*\\.spec\\.ts$",
-    "transform": {
-      "^.+\\.(t|j)s$": "ts-jest"
-    },
-    "moduleNameMapper": {
-      "^@/(.*)$": "<rootDir>/$1"
-    },
-    "collectCoverageFrom": [
-      "**/*.(t|j)s"
-    ],
-    "coverageDirectory": "../coverage",
-    "testEnvironment": "node"
   }
 }

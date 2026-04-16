@@ -1,10 +1,10 @@
+import type { ApiEndpointData } from '@postsop/contracts'
 import {
   refreshTokenEndpoint,
   signInEndpoint,
   signOutEndpoint,
   signUpEndpoint,
 } from '@postsop/contracts/auth'
-import type { ApiEndpointData } from '@postsop/contracts/core'
 
 import {
   AuthContext,
@@ -43,7 +43,7 @@ export class AuthController {
 
   @Public()
   @EndpointHandler(refreshTokenEndpoint)
-  refreshToken(
+  refresh(
     @EndpointBody(refreshTokenEndpoint)
     refreshTokenRequest: RefreshTokenRequest,
   ) {

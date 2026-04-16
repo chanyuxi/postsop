@@ -2,7 +2,7 @@ import { CallHandler, ExecutionContext, NestInterceptor } from '@nestjs/common'
 import type { Observable } from 'rxjs'
 import { map } from 'rxjs'
 
-import type { AnyApiEndpoint } from '@postsop/contracts/core'
+import type { AnyApiEndpoint } from '@postsop/contracts'
 
 import { AppException } from '@/common/exceptions/app.exception'
 
