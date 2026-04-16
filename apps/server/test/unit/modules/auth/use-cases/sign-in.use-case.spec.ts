@@ -67,10 +67,8 @@ describe('SignInUseCase', () => {
     })
 
     expect(accessTokenService.generateAccessToken).toHaveBeenCalledWith({
-      sessionId: 'session-1',
-      user: {
-        id: 1,
-      },
+      sid: 'session-1',
+      sub: 1,
     })
     expect(result).toEqual({
       tokens: {

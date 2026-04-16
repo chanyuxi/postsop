@@ -5,7 +5,7 @@ import { Test } from '@nestjs/testing'
 
 import { InternalStatusCodes } from '@postsop/contracts/http'
 
-import { ENV_CONSTANTS } from '@/common/constants/env'
+import { envs } from '@/common/constants/env'
 import { AppException } from '@/common/exceptions/app.exception'
 import { RefreshSessionService } from '@/modules/auth/services/refresh-session.service'
 
@@ -25,7 +25,7 @@ describe('RefreshSessionService', () => {
 
   const configService = {
     getOrThrow: jest.fn((key: string) => {
-      if (key === ENV_CONSTANTS.REFRESH_TOKEN_EXPIRATION_TIME) {
+      if (key === envs.REFRESH_TOKEN_EXPIRATION_TIME) {
         return '60000'
       }
 

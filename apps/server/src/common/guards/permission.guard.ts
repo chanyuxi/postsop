@@ -2,6 +2,8 @@ import { CanActivate, ExecutionContext, Injectable } from '@nestjs/common'
 import { Reflector } from '@nestjs/core'
 import { Request } from 'express'
 
+import type { PermissionName } from '@postsop/contracts/permissions'
+
 import { AppException } from '@/common/exceptions/app.exception'
 import { PermissionService } from '@/modules/permission/services/permission.service'
 
@@ -15,17 +17,16 @@ export class PermissionGuard implements CanActivate {
   ) {}
 
   async canActivate(context: ExecutionContext): Promise<boolean> {
-    const requiredPermissions = this.reflector.getAllAndOverride<string[]>(
-      PERMISSIONS_KEY,
-      [context.getHandler(), context.getClass()],
-    )
+    const requiredPermissions = this.reflector.getAllAndOverride<
+      PermissionName[]
+    >(PERMISSIONS_KEY, [context.getHandler(), context.getClass()])
 
     if (!requiredPermissions?.length) {
       return true
     }
 
     const request = context.switchToHttp().getRequest<Request>()
-    const userId = request.jwtPayload?.user.id
+    const userId = request.authContext?.sub
 
     if (!userId) {
       throw AppException.unauthorized('Missing authenticated user context')

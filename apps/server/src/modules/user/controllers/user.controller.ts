@@ -15,7 +15,7 @@ export class UserController {
   ) {}
 
   @EndpointHandler(userProfileEndpoint)
-  getProfile(@AuthContext('user.id') userId: number) {
+  getProfile(@AuthContext('sub') userId: number) {
     return this.userProfileQueryService.findUserProfileByUserId(userId)
   }
 }

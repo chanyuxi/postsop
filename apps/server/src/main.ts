@@ -2,7 +2,7 @@ import { ConfigService } from '@nestjs/config'
 import { NestFactory } from '@nestjs/core'
 
 import { AppModule } from '@/app.module'
-import { ENV_CONSTANTS } from '@/common/constants/env'
+import { envs } from '@/common/constants/env'
 import { ApiExceptionFilter } from '@/common/filters/api-exception.filter'
 import { ResponseEncapsulationInterceptor } from '@/common/interceptors/response-encapsulation.interceptor'
 
@@ -15,7 +15,7 @@ async function bootstrap() {
   app.useGlobalFilters(new ApiExceptionFilter())
   app.useGlobalInterceptors(new ResponseEncapsulationInterceptor())
 
-  await app.listen(Number(configService.getOrThrow(ENV_CONSTANTS.PORT)))
+  await app.listen(Number(configService.getOrThrow(envs.PORT)))
 }
 
 bootstrap()

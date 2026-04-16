@@ -1,6 +1,8 @@
 import { z } from 'zod'
 
-export const AvailablePermissionNamesSchema = z.array(z.string())
+import { PermissionNameSchema } from '../../core/permissions'
+
+export const AvailablePermissionNamesSchema = z.array(PermissionNameSchema)
 export type AvailablePermissionNames = z.infer<
   typeof AvailablePermissionNamesSchema
 >

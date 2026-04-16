@@ -9,8 +9,20 @@ import { AuthController } from '@/modules/auth/controllers/auth.controller'
 import { PermissionController } from '@/modules/permission/controllers/permission.controller'
 import { UserController } from '@/modules/user/controllers/user.controller'
 
-jest.mock('@/modules/auth/services/auth.service', () => ({
-  AuthService: class AuthService {},
+jest.mock('@/modules/auth/use-cases/refresh-auth-session.use-case', () => ({
+  RefreshAuthSessionUseCase: class RefreshAuthSessionUseCase {},
+}))
+
+jest.mock('@/modules/auth/use-cases/sign-in.use-case', () => ({
+  SignInUseCase: class SignInUseCase {},
+}))
+
+jest.mock('@/modules/auth/use-cases/sign-out.use-case', () => ({
+  SignOutUseCase: class SignOutUseCase {},
+}))
+
+jest.mock('@/modules/auth/use-cases/sign-up.use-case', () => ({
+  SignUpUseCase: class SignUpUseCase {},
 }))
 
 jest.mock('@/modules/permission/services/permission.service', () => ({

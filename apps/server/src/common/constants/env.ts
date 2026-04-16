@@ -1,4 +1,4 @@
-export const ENV_CONSTANTS = {
+export const envs = {
   PORT: 'PORT',
   JWT_SECRET: 'JWT_SECRET',
   JWT_EXPIRATION_TIME: 'JWT_EXPIRATION_TIME',

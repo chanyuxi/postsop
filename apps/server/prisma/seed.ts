@@ -2,6 +2,8 @@ import 'dotenv/config'
 
 import { PrismaPg } from '@prisma/adapter-pg'
 
+import { permissionNames } from '@postsop/contracts/permissions'
+
 import { hashPassword } from '../src/common/utils/password.util'
 import { PrismaClient } from '../src/generated/prisma/client'
 
@@ -10,15 +12,9 @@ const prisma = new PrismaClient({ adapter })
 
 async function main() {
   const adminPasswordHash = await hashPassword('password')
-  // 84dddbce8e3f511041cbdc6c8e50326c:8fcfac334ef2b82bc610cf6cd5fcf7d38a1fc85cdee74dd00eb9ec5f11fa10f00360204f63c0c0b31edc040fdf9ddf34eb40b70302d006c4d638a94055badaac
 
   await prisma.permission.createMany({
-    data: [
-      { name: 'create:user' },
-      { name: 'read:user' },
-      { name: 'update:user' },
-      { name: 'delete:user' },
-    ],
+    data: permissionNames.map((name) => ({ name })),
   })
 
   await prisma.role.createMany({
@@ -26,10 +22,10 @@ async function main() {
   })
 
   await prisma.role.update({
-    where: { id: 1 },
+    where: { name: 'admin' },
     data: {
       permissions: {
-        connect: [{ id: 1 }, { id: 2 }, { id: 3 }, { id: 4 }],
+        connect: permissionNames.map((name) => ({ name })),
       },
     },
   })
@@ -44,7 +40,7 @@ async function main() {
         },
       },
       roles: {
-        connect: [{ id: 1 }],
+        connect: [{ name: 'admin' }],
       },
     },
   })

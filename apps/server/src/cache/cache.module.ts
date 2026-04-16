@@ -3,7 +3,7 @@ import { CacheModule as NestCacheModule } from '@nestjs/cache-manager'
 import { Module } from '@nestjs/common'
 import { ConfigModule, ConfigService } from '@nestjs/config'
 
-import { ENV_CONSTANTS } from '@/common/constants/env'
+import { envs } from '@/common/constants/env'
 
 @Module({
   imports: [
@@ -13,9 +13,7 @@ import { ENV_CONSTANTS } from '@/common/constants/env'
       inject: [ConfigService],
       useFactory: (configService: ConfigService) => {
         return {
-          stores: [
-            new KeyvRedis(configService.getOrThrow(ENV_CONSTANTS.REDIS_URL)),
-          ],
+          stores: [new KeyvRedis(configService.getOrThrow(envs.REDIS_URL))],
         }
       },
     }),

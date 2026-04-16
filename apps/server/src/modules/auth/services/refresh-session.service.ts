@@ -4,7 +4,7 @@ import { Inject, Injectable } from '@nestjs/common'
 import { ConfigService } from '@nestjs/config'
 import { createHash, randomBytes, timingSafeEqual } from 'node:crypto'
 
-import { ENV_CONSTANTS } from '@/common/constants/env'
+import { envs } from '@/common/constants/env'
 import { AppException } from '@/common/exceptions/app.exception'
 
 import type { AuthSession } from '../interfaces/auth-session.interface'
@@ -24,7 +24,7 @@ export class RefreshSessionService {
     @Inject(CACHE_MANAGER) private readonly cacheManager: Cache,
   ) {
     this.refreshTokenTtl = this.getPositiveNumberConfig(
-      ENV_CONSTANTS.REFRESH_TOKEN_EXPIRATION_TIME,
+      envs.REFRESH_TOKEN_EXPIRATION_TIME,
     )
   }
 

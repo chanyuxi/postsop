@@ -1,17 +1,17 @@
 import { Injectable } from '@nestjs/common'
 import { JwtService } from '@nestjs/jwt'
 
-import type { JwtPayload } from '../interfaces/jwt-payload.interface'
+import type { AuthContextPayload, Claims } from '../interfaces/claims.interface'
 
 @Injectable()
 export class AccessTokenService {
   constructor(private readonly jwtService: JwtService) {}
 
-  generateAccessToken(payload: JwtPayload) {
+  generateAccessToken(payload: AuthContextPayload) {
     return this.jwtService.signAsync(payload)
   }
 
   verifyAccessToken(token: string) {
-    return this.jwtService.verifyAsync<JwtPayload>(token)
+    return this.jwtService.verifyAsync<Claims>(token)
   }
 }

@@ -74,6 +74,10 @@ describe('RefreshAuthSessionUseCase', () => {
 
     const result = await useCase.execute('refresh-token-1')
 
+    expect(accessTokenService.generateAccessToken).toHaveBeenCalledWith({
+      sid: 'session-1',
+      sub: 1,
+    })
     expect(result).toEqual({
       tokens: {
         accessToken: 'access-token-2',

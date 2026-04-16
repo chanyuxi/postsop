@@ -1,4 +1,8 @@
-import type { ApiEndpointData } from '@postsop/contracts'
+import type {
+  RefreshTokenRequest,
+  SignInRequest,
+  SignUpRequest,
+} from '@postsop/contracts/auth'
 import {
   refreshTokenEndpoint,
   signInEndpoint,
@@ -14,31 +18,35 @@ import {
   Public,
 } from '@/common/decorators'
 
-import { AuthService } from '../services/auth.service'
-
-type RefreshTokenRequest = ApiEndpointData<typeof refreshTokenEndpoint>
-type SignInRequest = ApiEndpointData<typeof signInEndpoint>
-type SignUpRequest = ApiEndpointData<typeof signUpEndpoint>
+import { RefreshAuthSessionUseCase } from '../use-cases/refresh-auth-session.use-case'
+import { SignInUseCase } from '../use-cases/sign-in.use-case'
+import { SignOutUseCase } from '../use-cases/sign-out.use-case'
+import { SignUpUseCase } from '../use-cases/sign-up.use-case'
 
 @EndpointController('auth')
 export class AuthController {
-  constructor(private readonly authService: AuthService) {}
+  constructor(
+    private readonly signUpUseCase: SignUpUseCase,
+    private readonly signInUseCase: SignInUseCase,
+    private readonly signOutUseCase: SignOutUseCase,
+    private readonly refreshAuthSessionUseCase: RefreshAuthSessionUseCase,
+  ) {}
 
   @Public()
   @EndpointHandler(signUpEndpoint)
   signUp(@EndpointBody(signUpEndpoint) signUpRequest: SignUpRequest) {
-    return this.authService.signUp(signUpRequest)
+    return this.signUpUseCase.execute(signUpRequest)
   }
 
   @Public()
   @EndpointHandler(signInEndpoint)
   signIn(@EndpointBody(signInEndpoint) signInRequest: SignInRequest) {
-    return this.authService.signIn(signInRequest)
+    return this.signInUseCase.execute(signInRequest)
   }
 
   @EndpointHandler(signOutEndpoint)
-  signOut(@AuthContext('sessionId') sessionId: string) {
-    return this.authService.signOut(sessionId)
+  signOut(@AuthContext('sid') sessionId: string) {
+    return this.signOutUseCase.execute(sessionId)
   }
 
   @Public()
@@ -47,6 +55,8 @@ export class AuthController {
     @EndpointBody(refreshTokenEndpoint)
     refreshTokenRequest: RefreshTokenRequest,
   ) {
-    return this.authService.refreshToken(refreshTokenRequest.refreshToken)
+    return this.refreshAuthSessionUseCase.execute(
+      refreshTokenRequest.refreshToken,
+    )
   }
 }

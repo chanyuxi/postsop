@@ -7,7 +7,7 @@ import {
 import { ConfigService } from '@nestjs/config'
 import { PrismaPg } from '@prisma/adapter-pg'
 
-import { ENV_CONSTANTS } from '@/common/constants/env'
+import { envs } from '@/common/constants/env'
 import { Prisma, PrismaClient } from '@/generated/prisma/client'
 
 import { PrismaErrorIdentification } from './prisma-error-identification'
@@ -49,9 +49,7 @@ export class PrismaService
 
   constructor(configService: ConfigService) {
     super(
-      createPrismaClientOptions(
-        configService.getOrThrow(ENV_CONSTANTS.DATABASE_URL),
-      ),
+      createPrismaClientOptions(configService.getOrThrow(envs.DATABASE_URL)),
     )
     this.registerSlowQueryLogging()
   }

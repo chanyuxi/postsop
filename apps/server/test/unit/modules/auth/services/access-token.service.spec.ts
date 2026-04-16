@@ -21,10 +21,8 @@ describe('AccessTokenService', () => {
 
   it('generates and verifies access tokens through JwtService', async () => {
     const payload = {
-      sessionId: 'session-1',
-      user: {
-        id: 42,
-      },
+      sid: 'session-1',
+      sub: 42,
     }
 
     const token = await service.generateAccessToken(payload)

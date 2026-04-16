@@ -8,31 +8,31 @@ import get from 'lodash/get'
 
 import type { NestedPath } from '@postsop/types'
 
-import type { JwtPayload } from '@/modules/auth/interfaces/jwt-payload.interface'
+import type { AuthContextPayload } from '@/modules/auth/interfaces/claims.interface'
 
-type JwtPayloadPath = NestedPath<JwtPayload>
+type AuthContextPath = NestedPath<AuthContextPayload>
 
 const authContextDecorator = createParamDecorator(
-  (path: JwtPayloadPath | undefined, ctx: ExecutionContext) => {
+  (path: AuthContextPath | undefined, ctx: ExecutionContext) => {
     const request = ctx.switchToHttp().getRequest<Request>()
 
-    if (!request.jwtPayload) {
+    if (!request.authContext) {
       throw new InternalServerErrorException(
-        'Unable to obtain JWT payload information, please ensure that your route is included in AuthGuard',
+        'Unable to obtain authentication context, please ensure that your route is included in AuthGuard',
       )
     }
 
     if (!path) {
-      return request.jwtPayload
+      return request.authContext
     }
 
-    return get(request.jwtPayload, path)
+    return get(request.authContext, path)
   },
 )
 
 /**
  * Do not use this decorator with `@Public` routes.
  */
-export function AuthContext(path?: JwtPayloadPath): ParameterDecorator {
+export function AuthContext(path?: AuthContextPath): ParameterDecorator {
   return authContextDecorator(path)
 }

@@ -11,7 +11,7 @@ import { AppException } from '@/common/exceptions/app.exception'
 import { UserAuthQueryService } from '@/modules/user/queries/user-auth.query.service'
 
 import type { AuthSession } from '../interfaces/auth-session.interface'
-import type { JwtPayload } from '../interfaces/jwt-payload.interface'
+import type { AuthContextPayload } from '../interfaces/claims.interface'
 import { AccessTokenService } from '../services/access-token.service'
 import { RefreshSessionService } from '../services/refresh-session.service'
 
@@ -50,15 +50,13 @@ export class RefreshAuthSessionUseCase {
   }
 
   private async issueTokenPair(session: AuthSession): Promise<AuthTokens> {
-    const jwtPayload: JwtPayload = {
-      user: {
-        id: session.userId,
-      },
-      sessionId: session.sessionId,
+    const authContext: AuthContextPayload = {
+      sid: session.sessionId,
+      sub: session.userId,
     }
 
     const accessToken =
-      await this.accessTokenService.generateAccessToken(jwtPayload)
+      await this.accessTokenService.generateAccessToken(authContext)
 
     return {
       accessToken,

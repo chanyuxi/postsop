@@ -15,8 +15,21 @@ const JwtRegisteredClaimsSchema = z.strictObject({
 })
 
 export const ClaimsSchema = AuthContextPayloadSchema.extend(
-  JwtRegisteredClaimsSchema.shape
+  JwtRegisteredClaimsSchema.shape,
 )
 
-export type AuthContextPayload = z.infer<typeof AuthContextPayloadSchema>
 export type Claims = z.infer<typeof ClaimsSchema>
+export type AuthContextPayload = z.infer<typeof AuthContextPayloadSchema>
+
+export function toAuthContextPayload(payload: Claims): AuthContextPayload {
+  return {
+    sid: payload.sid,
+    sub: payload.sub,
+  }
+}
+
+declare module 'express' {
+  interface Request {
+    authContext?: AuthContextPayload
+  }
+}

@@ -18,12 +18,10 @@ describe('PermissionGuard', () => {
       getHandler: jest.fn(),
       switchToHttp: () => ({
         getRequest: () => ({
-          jwtPayload: userId
+          authContext: userId
             ? {
-                user: {
-                  id: userId,
-                },
-                sessionId: 'session-1',
+                sid: 'session-1',
+                sub: userId,
               }
             : undefined,
         }),

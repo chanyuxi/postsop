@@ -4,7 +4,10 @@ import { TokenExpiredError } from '@nestjs/jwt'
 import { Request } from 'express'
 
 import { AppException } from '@/common/exceptions/app.exception'
-import { JwtPayloadSchema } from '@/modules/auth/interfaces/jwt-payload.interface'
+import {
+  ClaimsSchema,
+  toAuthContextPayload,
+} from '@/modules/auth/interfaces/claims.interface'
 import { AccessTokenService } from '@/modules/auth/services/access-token.service'
 
 import { PUBLIC_KEY } from '../decorators/public.decorator'
@@ -35,13 +38,13 @@ export class AuthGuard implements CanActivate {
 
     try {
       const payload = await this.accessTokenService.verifyAccessToken(token)
-      const parsedPayload = JwtPayloadSchema.safeParse(payload)
+      const parsedPayload = ClaimsSchema.safeParse(payload)
 
       if (!parsedPayload.success) {
         throw AppException.tokenInvalid('Invalid authorization token')
       }
 
-      request.jwtPayload = parsedPayload.data
+      request.authContext = toAuthContextPayload(parsedPayload.data)
     } catch (error) {
       if (error instanceof TokenExpiredError) {
         throw AppException.tokenExpired('Token expired')

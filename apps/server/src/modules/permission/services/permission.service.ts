@@ -2,6 +2,9 @@ import type { Cache } from '@nestjs/cache-manager'
 import { CACHE_MANAGER } from '@nestjs/cache-manager'
 import { Inject, Injectable } from '@nestjs/common'
 
+import type { AvailablePermissionNames } from '@postsop/contracts/permission'
+import { AvailablePermissionNamesSchema } from '@postsop/contracts/permission'
+
 import { PrismaService } from '@/database/prisma.service'
 
 @Injectable()
@@ -15,10 +18,11 @@ export class PermissionService {
     @Inject(CACHE_MANAGER) private readonly cacheManager: Cache,
   ) {}
 
-  async findAllPermissionNames(): Promise<string[]> {
-    const cachedPermissions = await this.cacheManager.get<string[]>(
-      PermissionService.AVAILABLE_PERMISSIONS_CACHE_KEY,
-    )
+  async findAllPermissionNames(): Promise<AvailablePermissionNames> {
+    const cachedPermissions =
+      await this.cacheManager.get<AvailablePermissionNames>(
+        PermissionService.AVAILABLE_PERMISSIONS_CACHE_KEY,
+      )
 
     if (cachedPermissions) {
       return cachedPermissions
@@ -30,7 +34,9 @@ export class PermissionService {
       },
     })
 
-    const permissionNames = permissions.map((permission) => permission.name)
+    const permissionNames = AvailablePermissionNamesSchema.parse(
+      permissions.map((permission) => permission.name),
+    )
 
     await this.cacheManager.set(
       PermissionService.AVAILABLE_PERMISSIONS_CACHE_KEY,
@@ -41,9 +47,12 @@ export class PermissionService {
     return permissionNames
   }
 
-  async getUserPermissionNames(userId: number): Promise<string[]> {
+  async getUserPermissionNames(
+    userId: number,
+  ): Promise<AvailablePermissionNames> {
     const cacheKey = this.getUserPermissionsCacheKey(userId)
-    const cachedPermissions = await this.cacheManager.get<string[]>(cacheKey)
+    const cachedPermissions =
+      await this.cacheManager.get<AvailablePermissionNames>(cacheKey)
 
     if (cachedPermissions) {
       return cachedPermissions
@@ -66,13 +75,13 @@ export class PermissionService {
       },
     })
 
-    const permissionNames = [
+    const permissionNames = AvailablePermissionNamesSchema.parse([
       ...new Set(
         (user?.roles ?? []).flatMap((role) =>
           role.permissions.map((permission) => permission.name),
         ),
       ),
-    ]
+    ])
 
     await this.cacheManager.set(
       cacheKey,

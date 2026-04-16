@@ -3,7 +3,7 @@ import { ConfigModule, ConfigService } from '@nestjs/config'
 import { APP_GUARD } from '@nestjs/core'
 import { JwtModule as NestJwtModule } from '@nestjs/jwt'
 
-import { ENV_CONSTANTS } from '@/common/constants/env'
+import { envs } from '@/common/constants/env'
 import { AuthGuard } from '@/common/guards/auth.guard'
 import { PermissionGuard } from '@/common/guards/permission.guard'
 import { PermissionModule } from '@/modules/permission/permission.module'
@@ -11,7 +11,6 @@ import { PermissionModule } from '@/modules/permission/permission.module'
 import { UserModule } from '../user/user.module'
 import { AuthController } from './controllers/auth.controller'
 import { AccessTokenService } from './services/access-token.service'
-import { AuthService } from './services/auth.service'
 import { RefreshSessionService } from './services/refresh-session.service'
 import { RefreshAuthSessionUseCase } from './use-cases/refresh-auth-session.use-case'
 import { SignInUseCase } from './use-cases/sign-in.use-case'
@@ -23,9 +22,9 @@ const JwtModule = NestJwtModule.registerAsync({
   inject: [ConfigService],
 
   useFactory: (configService: ConfigService) => ({
-    secret: configService.getOrThrow(ENV_CONSTANTS.JWT_SECRET),
+    secret: configService.getOrThrow(envs.JWT_SECRET),
     signOptions: {
-      expiresIn: configService.getOrThrow(ENV_CONSTANTS.JWT_EXPIRATION_TIME),
+      expiresIn: configService.getOrThrow(envs.JWT_EXPIRATION_TIME),
     },
   }),
 })
@@ -35,7 +34,6 @@ const JwtModule = NestJwtModule.registerAsync({
   controllers: [AuthController],
   providers: [
     AccessTokenService,
-    AuthService,
     RefreshAuthSessionUseCase,
     RefreshSessionService,
     SignInUseCase,
