@@ -46,7 +46,7 @@ export enum NetworkStatusCodes {
  */
 export enum Codes {
   /** Successful operation */
-  SUCCESS = 6,
+  SUCCESS = 100000,
 
   /** Access token has expired */
   TOKEN_EXPIRED = 100001,

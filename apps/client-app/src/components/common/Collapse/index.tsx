@@ -1,5 +1,5 @@
 import type { PropsWithChildren } from 'react'
-import { useCallback, useEffect, useRef, useState } from 'react'
+import { Children, useCallback, useEffect, useRef, useState } from 'react'
 import type { LayoutChangeEvent } from 'react-native'
 import { Animated, View } from 'react-native'
 
@@ -44,11 +44,12 @@ export function Collapse({
   // Store the current animation instance to allow stopping/interrupting
   const animation = useRef<Animated.CompositeAnimation | null>(null)
   // Animated value that drives the height changes
-  const animatedHeight = useRef(new Animated.Value(0))
+  const [animatedHeight] = useState(() => new Animated.Value(0))
 
   // Track the measured height of content and whether measurement is complete
   const [contentHeight, setContentHeight] = useState(0)
   const [isMeasured, setIsMeasured] = useState(false)
+  const hasChildren = Children.count(children) > 0
 
   // Callback fired when the inner content layout changes
   // Measures the actual height and initializes animation if not collapsed
@@ -56,31 +57,55 @@ export function Collapse({
     (event: LayoutChangeEvent) => {
       const { height } = event.nativeEvent.layout
 
-      if (height > 0 && height !== contentHeight) {
+      if (height <= 0) {
+        return
+      }
+
+      const didHeightChange = height !== contentHeight
+
+      if (didHeightChange) {
         setContentHeight(height)
+      }
+
+      if (!isMeasured) {
         setIsMeasured(true)
+      }
 
-        // If expanded, animate to the full height immediately
-        if (!collapsed) {
-          if (animation.current) {
-            animation.current.stop()
-          }
-
-          Animated.timing(animatedHeight.current, {
-            toValue: height,
-            duration: 150,
-            useNativeDriver: false,
-          }).start(() => {
-            onAnimationEnd?.()
-          })
+      // If expanded, animate to the full height immediately
+      if (!collapsed && (didHeightChange || !isMeasured)) {
+        if (animation.current) {
+          animation.current.stop()
         }
+
+        animation.current = Animated.timing(animatedHeight, {
+          toValue: height,
+          duration: 150,
+          useNativeDriver: false,
+        })
+
+        animation.current.start(({ finished }) => {
+          if (finished) {
+            onAnimationEnd?.()
+          }
+          animation.current = null
+        })
       }
     },
-    [collapsed, contentHeight, onAnimationEnd]
+    [animatedHeight, collapsed, contentHeight, isMeasured, onAnimationEnd]
   )
 
   // Main animation effect: runs when collapsed state or content changes
   useEffect(() => {
+    if (!hasChildren) {
+      if (animation.current) {
+        animation.current.stop()
+        animation.current = null
+      }
+
+      animatedHeight.setValue(0)
+      return
+    }
+
     if (!isMeasured) {
       return
     }
@@ -94,7 +119,7 @@ export function Collapse({
     const toValue = collapsed ? 0 : contentHeight
 
     // Create and start the animation
-    animation.current = Animated.timing(animatedHeight.current, {
+    animation.current = Animated.timing(animatedHeight, {
       toValue,
       duration,
       easing,
@@ -114,28 +139,29 @@ export function Collapse({
         animation.current.stop()
       }
     }
-  }, [collapsed, contentHeight, duration, easing, isMeasured, onAnimationEnd])
-
-  // Reset measurements when children change
-  useEffect(() => {
-    if (!children) {
-      // TODO: fix lint error
-      // eslint-disable-next-line react-hooks/set-state-in-effect
-      setContentHeight(0)
-      setIsMeasured(false)
-    }
-  }, [children])
+  }, [
+    animatedHeight,
+    collapsed,
+    contentHeight,
+    duration,
+    easing,
+    hasChildren,
+    isMeasured,
+    onAnimationEnd,
+  ])
 
   // Control visibility based on collapsed state and renderChildrenWhenCollapsed flag
   const styleOfOpacity = {
     opacity: renderChildrenWhenCollapsed || !collapsed ? 1 : 0,
   }
+  const containerStyle = {
+    height: hasChildren ? animatedHeight : 0,
+  }
 
   return (
     <Animated.View
       className="overflow-hidden"
-      // Fix: Cannot access refs during render
-      // style={{ height: animatedHeight.current }}
+      style={containerStyle}
     >
       <View
         className="absolute w-full"

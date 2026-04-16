@@ -18,4 +18,12 @@ async function bootstrap() {
   await app.listen(Number(configService.getOrThrow(envs.PORT)))
 }
 
-bootstrap()
+function safeBootstrop() {
+  try {
+    bootstrap()
+  } catch (error) {
+    console.error(error)
+  }
+}
+
+safeBootstrop()

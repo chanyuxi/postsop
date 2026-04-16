@@ -10,7 +10,7 @@ import {
   createApiClient,
 } from '@postsop/apis'
 import type { RefreshTokenResponse } from '@postsop/contracts/auth'
-import { refreshTokenEndpoint } from '@postsop/contracts/auth'
+import { refreshEndpoint } from '@postsop/contracts/auth'
 
 import { APP_VERSION } from '@/constants'
 import { applyAuthSession, clearAuthSession } from '@/services/auth/session'
@@ -34,15 +34,15 @@ const apiClient = createApiClient({
         data: {
           refreshToken,
         },
-        method: refreshTokenEndpoint.method,
-        url: refreshTokenEndpoint.path,
+        method: refreshEndpoint.method,
+        url: refreshEndpoint.path,
       })
 
       if (response.data.code !== Codes.SUCCESS) {
         throw ApiError.code(response.data.code, response.data.message)
       }
 
-      const authSession = refreshTokenEndpoint.responseSchema.parse(
+      const authSession = refreshEndpoint.responseSchema.parse(
         response.data.data
       )
 

@@ -7,11 +7,10 @@ import { signInAction } from '@/store/authSlice'
 import {
   getStoredAccessToken,
   getStoredRefreshToken,
-  getStoredUser,
+  getStoredTheme,
   storage,
-  StrorageKeys,
+  SYSTEM_THEME,
 } from '@/utils/storage'
-import type { ThemeName } from '@/utils/theme'
 import { setTheme } from '@/utils/theme'
 
 import { useAppDispatch } from './useStore'
@@ -21,17 +20,16 @@ export function useAppInit() {
 
   useEffect(() => {
     void (async () => {
-      if (storage.contains(StrorageKeys.THEME)) {
-        setTheme(storage.getString(StrorageKeys.THEME) as ThemeName)
+      if (storage.contains(SYSTEM_THEME)) {
+        setTheme(getStoredTheme())
       }
 
       const storedAccessToken = getStoredAccessToken()
       const storedRefreshToken = getStoredRefreshToken()
-      const storedUser = getStoredUser()
 
-      if (storedAccessToken && storedRefreshToken && storedUser) {
-        dispatch(signInAction(storedUser))
-      } else if (storedAccessToken || storedRefreshToken || storedUser) {
+      if (storedAccessToken && storedRefreshToken) {
+        dispatch(signInAction())
+      } else if (storedAccessToken || storedRefreshToken) {
         await clearAuthSession()
       } else {
         await clearPersistedQueryClient()

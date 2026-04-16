@@ -1,18 +1,12 @@
 import { Logger, Module, OnModuleInit } from '@nestjs/common'
 import { ConfigModule } from '@nestjs/config'
 
-function getEnvFilePath() {
-  const defaultEnvFilePath = ['.env.local', '.env']
+const envFilePath = ['.env.local', '.env']
 
-  const env = process.env['NODE_ENV']
-  if (env) {
-    defaultEnvFilePath.unshift(`.env.${env}.local`, `.env.${env}`)
-  }
-
-  return defaultEnvFilePath
+const env = process.env['NODE_ENV']
+if (env) {
+  envFilePath.unshift(`.env.${env}.local`, `.env.${env}`)
 }
-
-const envFilePath = getEnvFilePath()
 
 @Module({
   imports: [

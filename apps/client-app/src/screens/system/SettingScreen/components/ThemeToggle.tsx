@@ -2,7 +2,7 @@ import type { ReactNode } from 'react'
 import { Uniwind, useCSSVariable, useUniwind } from 'uniwind'
 
 import { Icons } from '@/components/common'
-import { storage, StrorageKeys } from '@/utils/storage'
+import { persistTheme } from '@/utils/storage'
 import { setTheme } from '@/utils/theme'
 
 import { ConfigItem } from './ConfigItem'
@@ -17,7 +17,7 @@ export function ThemeToggle() {
   const toggleTheme = () => {
     const newTheme = Uniwind.currentTheme === 'light' ? 'dark' : 'light'
     setTheme(newTheme)
-    storage.set(StrorageKeys.THEME, newTheme)
+    persistTheme(newTheme)
   }
 
   let value: ReactNode

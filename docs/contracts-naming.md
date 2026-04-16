@@ -18,7 +18,7 @@ The rule is semantic first, not suffix first.
 
 - `SignInRequest`
 - `SignUpRequest`
-- `RefreshTokenRequest`
+- `RefreshRequest`
 
 2. Use `Response` only for endpoint-level output payloads.
 

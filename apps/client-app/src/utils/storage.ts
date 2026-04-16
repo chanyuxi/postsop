@@ -1,62 +1,45 @@
 import { createMMKV } from 'react-native-mmkv'
 
-import type {
-  AuthSession,
-  AuthTokens,
-  SessionUser,
-} from '@postsop/contracts/auth'
+import type { AuthSession } from '@postsop/contracts/auth'
 
-import {
-  AUTHORIZATION_USER_PROFILE,
-  AUTHORIZATION_USER_REFRESH_TOKEN,
-  AUTHORIZATION_USER_TOKEN,
-  STRORAGE_KEY_THEME,
-} from '@/constants/keys'
+import type { ThemeName } from './theme'
 
-export const StrorageKeys = {
-  THEME: STRORAGE_KEY_THEME,
-  TOKEN: AUTHORIZATION_USER_TOKEN,
-  REFRESH_TOKEN: AUTHORIZATION_USER_REFRESH_TOKEN,
-  USER: AUTHORIZATION_USER_PROFILE,
-}
+export const SYSTEM_THEME = 'system.theme'
+export const AUTHORIZATION_ACCESS_TOKEN = 'authorization.access_token'
+export const AUTHORIZATION_REFRESH_TOKEN = 'authorization.refresh_token'
 
 export const storage = createMMKV()
 
+export function persistTheme(theme: ThemeName) {
+  storage.set(SYSTEM_THEME, theme)
+}
+
+export function getStoredTheme() {
+  return storage.getString(SYSTEM_THEME) as ThemeName
+}
+
+export function persistAccessToken(accessToken: string) {
+  storage.set(AUTHORIZATION_ACCESS_TOKEN, accessToken)
+}
+
 export function getStoredAccessToken() {
-  return storage.getString(StrorageKeys.TOKEN)
+  return storage.getString(AUTHORIZATION_ACCESS_TOKEN)
+}
+
+export function persistRefreshToken(refreshToken: string) {
+  storage.set(AUTHORIZATION_REFRESH_TOKEN, refreshToken)
 }
 
 export function getStoredRefreshToken() {
-  return storage.getString(StrorageKeys.REFRESH_TOKEN)
+  return storage.getString(AUTHORIZATION_REFRESH_TOKEN)
 }
 
-export function getStoredUser(): SessionUser | null {
-  const rawUser = storage.getString(StrorageKeys.USER)
-
-  if (!rawUser) {
-    return null
-  }
-
-  try {
-    return JSON.parse(rawUser) as SessionUser
-  } catch {
-    clearStoredAuthSession()
-    return null
-  }
-}
-
-export function persistAuthSession(authSession: AuthSession) {
-  persistAuthTokens(authSession.tokens)
-  storage.set(StrorageKeys.USER, JSON.stringify(authSession.user))
-}
-
-export function persistAuthTokens(tokens: AuthTokens) {
-  storage.set(StrorageKeys.TOKEN, tokens.accessToken)
-  storage.set(StrorageKeys.REFRESH_TOKEN, tokens.refreshToken)
+export function persistAuthorization(authSession: AuthSession) {
+  persistAccessToken(authSession.tokens.accessToken)
+  persistRefreshToken(authSession.tokens.refreshToken)
 }
 
 export function clearStoredAuthSession() {
-  storage.remove(StrorageKeys.TOKEN)
-  storage.remove(StrorageKeys.REFRESH_TOKEN)
-  storage.remove(StrorageKeys.USER)
+  storage.remove(AUTHORIZATION_ACCESS_TOKEN)
+  storage.remove(AUTHORIZATION_REFRESH_TOKEN)
 }

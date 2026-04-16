@@ -11,7 +11,7 @@ import { PermissionModule } from '@/modules/permission/permission.module'
 import { UserModule } from '../user/user.module'
 import { AuthController } from './controllers/auth.controller'
 import { AccessTokenService } from './services/access-token.service'
-import { RefreshSessionService } from './services/refresh-session.service'
+import { SessionService } from './services/session.service'
 import { RefreshAuthSessionUseCase } from './use-cases/refresh-auth-session.use-case'
 import { SignInUseCase } from './use-cases/sign-in.use-case'
 import { SignOutUseCase } from './use-cases/sign-out.use-case'
@@ -35,7 +35,7 @@ const JwtModule = NestJwtModule.registerAsync({
   providers: [
     AccessTokenService,
     RefreshAuthSessionUseCase,
-    RefreshSessionService,
+    SessionService,
     SignInUseCase,
     SignOutUseCase,
     SignUpUseCase,

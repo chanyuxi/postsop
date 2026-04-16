@@ -14,25 +14,13 @@ export const SignUpRequestSchema = z.strictObject({
 })
 export type SignUpRequest = z.infer<typeof SignUpRequestSchema>
 
-export const RefreshTokenRequestSchema = z.strictObject({
+export const RefreshRequestSchema = z.strictObject({
   refreshToken: z
     .string()
     .trim()
     .regex(/^[A-Za-z0-9_-]+\.[A-Za-z0-9_-]+$/, 'Invalid refresh token'),
 })
-export type RefreshTokenRequest = z.infer<typeof RefreshTokenRequestSchema>
-
-export const RoleSummarySchema = z.strictObject({
-  name: z.string(),
-})
-export type RoleSummary = z.infer<typeof RoleSummarySchema>
-
-export const SessionUserSchema = z.strictObject({
-  email: z.email(),
-  id: z.number(),
-  roles: z.array(RoleSummarySchema),
-})
-export type SessionUser = z.infer<typeof SessionUserSchema>
+export type RefreshRequest = z.infer<typeof RefreshRequestSchema>
 
 export const AuthTokensSchema = z.strictObject({
   accessToken: z.string(),
@@ -42,12 +30,11 @@ export type AuthTokens = z.infer<typeof AuthTokensSchema>
 
 export const AuthSessionSchema = z.strictObject({
   tokens: AuthTokensSchema,
-  user: SessionUserSchema,
 })
 export type AuthSession = z.infer<typeof AuthSessionSchema>
 
 export const SignInResponseSchema = AuthSessionSchema
 export type SignInResponse = AuthSession
 
-export const RefreshTokenResponseSchema = AuthSessionSchema
+export const RefreshResponseSchema = AuthSessionSchema
 export type RefreshTokenResponse = AuthSession

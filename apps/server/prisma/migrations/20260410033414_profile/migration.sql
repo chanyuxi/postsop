@@ -4,7 +4,6 @@
   - A unique constraint covering the columns `[username]` on the table `users` will be added. If there are existing duplicate values, this will fail.
   - A unique constraint covering the columns `[phone]` on the table `users` will be added. If there are existing duplicate values, this will fail.
   - A unique constraint covering the columns `[profile_id]` on the table `users` will be added. If there are existing duplicate values, this will fail.
-  - Added the required column `profile_id` to the `users` table without a default value. This is not possible if the table is not empty.
 
 */
 -- CreateEnum
@@ -12,14 +11,6 @@ CREATE TYPE "UserStatus" AS ENUM ('ACTIVE', 'DELETED', 'DISABLED', 'LOCKED', 'PE
 
 -- CreateEnum
 CREATE TYPE "Gender" AS ENUM ('MALE', 'FEMALE', 'OTHER', 'UNSPECIFIED');
-
--- AlterTable
-ALTER TABLE "users" ADD COLUMN     "last_sign_in_at" TIMESTAMP(3),
-ADD COLUMN     "last_sign_in_ip" TEXT,
-ADD COLUMN     "phone" TEXT,
-ADD COLUMN     "profile_id" INTEGER NOT NULL,
-ADD COLUMN     "status" "UserStatus" NOT NULL DEFAULT 'ACTIVE',
-ADD COLUMN     "username" TEXT;
 
 -- CreateTable
 CREATE TABLE "user_profile" (
@@ -37,6 +28,53 @@ CREATE TABLE "user_profile" (
 
     CONSTRAINT "user_profile_pkey" PRIMARY KEY ("id")
 );
+
+-- AlterTable
+ALTER TABLE "users" ADD COLUMN     "last_sign_in_at" TIMESTAMP(3),
+ADD COLUMN     "last_sign_in_ip" TEXT,
+ADD COLUMN     "phone" TEXT,
+ADD COLUMN     "profile_id" INTEGER,
+ADD COLUMN     "status" "UserStatus" NOT NULL DEFAULT 'ACTIVE',
+ADD COLUMN     "username" TEXT;
+
+-- BackfillProfile
+ALTER TABLE "user_profile" ADD COLUMN     "legacy_user_id" INTEGER;
+
+INSERT INTO "user_profile" (
+    "nickname",
+    "avatar_url",
+    "birthday",
+    "gender",
+    "bio",
+    "country",
+    "city",
+    "address",
+    "created_at",
+    "updated_at",
+    "legacy_user_id"
+)
+SELECT
+    NULL,
+    NULL,
+    NULL,
+    'UNSPECIFIED'::"Gender",
+    NULL,
+    NULL,
+    NULL,
+    NULL,
+    CURRENT_TIMESTAMP,
+    CURRENT_TIMESTAMP,
+    "id"
+FROM "users";
+
+UPDATE "users"
+SET "profile_id" = "user_profile"."id"
+FROM "user_profile"
+WHERE "user_profile"."legacy_user_id" = "users"."id";
+
+ALTER TABLE "users" ALTER COLUMN "profile_id" SET NOT NULL;
+
+ALTER TABLE "user_profile" DROP COLUMN "legacy_user_id";
 
 -- CreateIndex
 CREATE UNIQUE INDEX "users_username_key" ON "users"("username");

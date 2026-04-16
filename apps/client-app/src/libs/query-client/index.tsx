@@ -4,7 +4,7 @@ import { QueryClient } from '@tanstack/react-query'
 import { PersistQueryClientProvider } from '@tanstack/react-query-persist-client'
 import type { PropsWithChildren } from 'react'
 
-import { ApiError, ApiErrorType } from '@postsop/apis'
+import { ApiError } from '@postsop/apis'
 
 import { toast } from '@/libs/toast'
 
@@ -22,51 +22,37 @@ const queryClient = new QueryClient({
     queries: {
       retry: (failureCount, error) => {
         if (error instanceof ApiError) {
-          if (error.needsRefresh || error.type === ApiErrorType.Internal)
-            return false
-
-          if (error.isNetworkError || error.isTimeout) return failureCount < 2
+          // If there is a network error then we will retry
+          if (error.isNetworkError) return failureCount < 2
         }
+        // Otherwise, we will never retry
         return false
       },
     },
     mutations: {
       onError: (error, _variables, _onMutateResult, context) => {
-        const meta = getMutationMeta(context.meta)
+        const meta = (context.meta ?? {}) as AppMutationMeta
 
         if (meta.skipGlobalErrorHandler) {
           return
         }
 
         if (error instanceof ApiError) {
-          handleError(error)
+          toast(error.displayMessage)
           return
         }
 
-        handleUnknownError(error)
+        if (__DEV__) {
+          if (error instanceof Error) {
+            console.error('Request failed due to', error.message)
+          }
+        }
+
+        toast('Request failed')
       },
     },
   },
 })
-
-function getMutationMeta(
-  meta: Record<string, unknown> | undefined
-): AppMutationMeta {
-  return (meta ?? {}) as AppMutationMeta
-}
-
-const handleError = (error: ApiError) => {
-  toast(error.displayMessage)
-}
-
-const handleUnknownError = (error: unknown) => {
-  if (error instanceof Error) {
-    toast(error.message)
-    return
-  }
-
-  toast('Request failed')
-}
 
 export async function clearPersistedQueryClient() {
   await queryClient.cancelQueries()

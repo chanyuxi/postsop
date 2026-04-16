@@ -1,10 +1,10 @@
 import type {
-  RefreshTokenRequest,
+  RefreshRequest,
   SignInRequest,
   SignUpRequest,
 } from '@postsop/contracts/auth'
 import {
-  refreshTokenEndpoint,
+  refreshEndpoint,
   signInEndpoint,
   signOutEndpoint,
   signUpEndpoint,
@@ -50,13 +50,11 @@ export class AuthController {
   }
 
   @Public()
-  @EndpointHandler(refreshTokenEndpoint)
+  @EndpointHandler(refreshEndpoint)
   refresh(
-    @EndpointBody(refreshTokenEndpoint)
-    refreshTokenRequest: RefreshTokenRequest,
+    @EndpointBody(refreshEndpoint)
+    refreshRequest: RefreshRequest,
   ) {
-    return this.refreshAuthSessionUseCase.execute(
-      refreshTokenRequest.refreshToken,
-    )
+    return this.refreshAuthSessionUseCase.execute(refreshRequest.refreshToken)
   }
 }

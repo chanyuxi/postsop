@@ -1,12 +1,12 @@
 import { Injectable } from '@nestjs/common'
 
-import { RefreshSessionService } from '../services/refresh-session.service'
+import { SessionService } from '../services/session.service'
 
 @Injectable()
 export class SignOutUseCase {
-  constructor(private readonly refreshSessionService: RefreshSessionService) {}
+  constructor(private readonly sessionService: SessionService) {}
 
   async execute(sessionId: string) {
-    await this.refreshSessionService.invalidateSession(sessionId)
+    await this.sessionService.invalidateSession(sessionId)
   }
 }

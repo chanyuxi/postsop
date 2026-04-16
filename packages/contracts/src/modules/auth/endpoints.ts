@@ -2,8 +2,8 @@ import { z } from 'zod'
 
 import { defineApiEndpoint } from '../..'
 import {
-  RefreshTokenRequestSchema,
-  RefreshTokenResponseSchema,
+  RefreshRequestSchema,
+  RefreshResponseSchema,
   SignInRequestSchema,
   SignInResponseSchema,
   SignUpRequestSchema,
@@ -12,11 +12,11 @@ import {
 /**
  * Refreshes an authenticated session using a valid refresh token.
  */
-export const refreshTokenEndpoint = defineApiEndpoint({
+export const refreshEndpoint = defineApiEndpoint({
   method: 'POST',
   path: '/auth/refresh-token',
-  dataSchema: RefreshTokenRequestSchema,
-  responseSchema: RefreshTokenResponseSchema,
+  dataSchema: RefreshRequestSchema,
+  responseSchema: RefreshResponseSchema,
   skipAuthRefresh: true,
 })
 

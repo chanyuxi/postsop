@@ -7,9 +7,9 @@ import { Codes } from '@postsop/contracts/http'
 
 import { envs } from '@/common/constants/env'
 import { AppException } from '@/common/exceptions/app.exception'
-import { RefreshSessionService } from '@/modules/auth/services/refresh-session.service'
+import { SessionService } from '@/modules/auth/services/session.service'
 
-describe('RefreshSessionService', () => {
+describe('SessionService', () => {
   const cacheStore = new Map<string, unknown>()
   const cacheManager = {
     del: jest.fn((key: string) => {
@@ -33,7 +33,7 @@ describe('RefreshSessionService', () => {
     }),
   }
 
-  let service: RefreshSessionService
+  let service: SessionService
 
   beforeEach(async () => {
     cacheStore.clear()
@@ -41,7 +41,7 @@ describe('RefreshSessionService', () => {
 
     const moduleRef = await Test.createTestingModule({
       providers: [
-        RefreshSessionService,
+        SessionService,
         {
           provide: ConfigService,
           useValue: configService,
@@ -53,7 +53,7 @@ describe('RefreshSessionService', () => {
       ],
     }).compile()
 
-    service = moduleRef.get(RefreshSessionService)
+    service = moduleRef.get(SessionService)
   })
 
   it('creates a session with a hashed refresh token record', async () => {
@@ -64,13 +64,13 @@ describe('RefreshSessionService', () => {
     expect(session.userId).toBe(42)
 
     const cacheEntry = cacheStore.get(`session:${session.sessionId}`) as {
-      refreshTokenHash: string
+      secretHash: string
       userId: number
     }
 
     expect(cacheEntry.userId).toBe(42)
-    expect(cacheEntry.refreshTokenHash).toHaveLength(64)
-    expect(cacheEntry.refreshTokenHash).not.toContain(
+    expect(cacheEntry.secretHash).toHaveLength(64)
+    expect(cacheEntry.secretHash).not.toContain(
       session.refreshToken.split('.')[1],
     )
   })

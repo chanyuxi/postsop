@@ -6,26 +6,26 @@ import {
 } from '@postsop/access-control'
 import type {
   AuthTokens,
-  SessionUser,
   SignInRequest,
   SignInResponse,
 } from '@postsop/contracts/auth'
 
 import { AppException } from '@/common/exceptions/app.exception'
 import { verifyPassword } from '@/common/utils/password.util'
+import { UserStatus } from '@/generated/prisma/enums'
 import { PermissionService } from '@/modules/permission/services/permission.service'
 import { UserAuthQueryService } from '@/modules/user/queries/user-auth.query.service'
 
 import type { AuthSession } from '../interfaces/auth-session.interface'
 import type { AuthContextPayload } from '../interfaces/claims.interface'
 import { AccessTokenService } from '../services/access-token.service'
-import { RefreshSessionService } from '../services/refresh-session.service'
+import { SessionService } from '../services/session.service'
 
 @Injectable()
 export class SignInUseCase {
   constructor(
     private readonly userAuthQueryService: UserAuthQueryService,
-    private readonly refreshSessionService: RefreshSessionService,
+    private readonly sessionService: SessionService,
     private readonly accessTokenService: AccessTokenService,
     private readonly permissionService: PermissionService,
   ) {}
@@ -35,26 +35,28 @@ export class SignInUseCase {
       signInRequest.email,
     )
 
-    const isValid =
-      user && (await verifyPassword(signInRequest.password, user.password))
-
-    if (!isValid) {
+    if (
+      !user ||
+      !(await verifyPassword(signInRequest.password, user.password))
+    ) {
       throw AppException.unauthorized('Invalid email or password')
     }
 
-    const session = await this.refreshSessionService.createSession(user.id)
-    return this.createAuthResponse(session, user.sessionUser)
+    if (user.status !== UserStatus.ACTIVE) {
+      throw AppException.unauthorized('User account is not active')
+    }
+
+    const session = await this.sessionService.createSession(user.id)
+    return this.createAuthResponse(session)
   }
 
   private async createAuthResponse(
     session: AuthSession,
-    user: SessionUser,
   ): Promise<SignInResponse> {
     const tokens = await this.issueTokenPair(session)
 
     return {
       tokens,
-      user,
     }
   }
 

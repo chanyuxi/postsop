@@ -1,9 +1,11 @@
-import { Codes, getCodeReasonPhrase } from '@postsop/contracts/http'
-
-import type { Response } from '../interfaces/response.interface'
+import {
+  ApiResponse,
+  Codes,
+  getCodeReasonPhrase,
+} from '@postsop/contracts/http'
 
 export class ResponseBuilder {
-  static success<T = unknown>(data: T): Response<T> {
+  static success<T = unknown>(data: T): ApiResponse<T> {
     return {
       code: Codes.SUCCESS,
       message: getCodeReasonPhrase(Codes.SUCCESS),
@@ -14,7 +16,7 @@ export class ResponseBuilder {
   static failure(
     code: Codes,
     message = getCodeReasonPhrase(code),
-  ): Response<null> {
+  ): ApiResponse<null> {
     return {
       code,
       message,

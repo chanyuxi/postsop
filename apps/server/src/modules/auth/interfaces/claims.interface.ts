@@ -12,33 +12,10 @@ export const AuthContextPayloadSchema = z.strictObject({
   sid: z.string().min(1),
 })
 
-const JwtRegisteredClaimsSchema = z.strictObject({
-  aud: z.union([z.string(), z.array(z.string())]).optional(),
-  exp: z.number().int().optional(),
-  iat: z.number().int().optional(),
-  iss: z.string().optional(),
-  jti: z.string().optional(),
-  nbf: z.number().int().optional(),
-})
-
-export const ClaimsSchema = AuthContextPayloadSchema.extend(
-  JwtRegisteredClaimsSchema.shape,
-)
-
-export type Claims = z.infer<typeof ClaimsSchema>
 export type AuthContextPayload = z.infer<typeof AuthContextPayloadSchema>
 
-export function toAuthContextPayload(payload: Claims): AuthContextPayload {
-  return {
-    pm: payload.pm,
-    pv: payload.pv,
-    sid: payload.sid,
-    sub: payload.sub,
-  }
-}
+const AccessTokenClaimsSchema = z.object(AuthContextPayloadSchema.shape)
 
-declare module 'express' {
-  interface Request {
-    authContext?: AuthContextPayload
-  }
+export function parseAuthContextPayload(payload: unknown): AuthContextPayload {
+  return AccessTokenClaimsSchema.parse(payload)
 }

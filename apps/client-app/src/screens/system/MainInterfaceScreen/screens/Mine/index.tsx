@@ -4,8 +4,8 @@ import { Text, View } from 'react-native'
 import { ScreenWrapper } from '@/components/common/ScreenWrapper'
 import { ThemeText } from '@/components/common/ThemeText'
 import { APP_VERSION } from '@/constants'
-import { useAuth } from '@/hooks/useAuth'
 import type { AllStackParamList } from '@/routes/type'
+import useProfileQuery from '@/services/user/queries/useProfileQuery'
 
 import { Cell } from './components/Cell'
 import { CellGroup } from './components/CellGroup'
@@ -13,10 +13,11 @@ import { CellGroup } from './components/CellGroup'
 export function Mine({
   navigation,
 }: BottomTabScreenProps<AllStackParamList, 'Mine'>) {
-  const { user } = useAuth()
-  const roleLabel = user?.roles.length
-    ? user.roles.map((role) => role.name).join(', ')
-    : 'No roles'
+  const profileQuery = useProfileQuery()
+  const nickname = profileQuery.data?.nickname?.trim() || 'My Account'
+  const profileHint =
+    profileQuery.data?.bio?.trim() ||
+    'Profile loads separately from the auth session now.'
 
   const handleSettingPress = () => {
     navigation.navigate('Setting')
@@ -29,8 +30,8 @@ export function Mine({
     >
       <View className="bg-background-secondary">
         <View className="p-8">
-          <ThemeText className="mb-2 text-4xl">{user?.email}</ThemeText>
-          <Text className="text-foreground-secondary">{roleLabel}</Text>
+          <ThemeText className="mb-2 text-4xl">{nickname}</ThemeText>
+          <Text className="text-foreground-secondary">{profileHint}</Text>
         </View>
       </View>
 

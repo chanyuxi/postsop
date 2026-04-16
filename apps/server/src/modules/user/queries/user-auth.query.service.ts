@@ -1,41 +1,30 @@
 import { Injectable } from '@nestjs/common'
 
-import type { SessionUser } from '@postsop/contracts/auth'
-
 import { PrismaService } from '@/database/prisma.service'
+import type { UserStatus } from '@/generated/prisma/enums'
 
-import { toSessionUser } from '../mappers/session-user.mapper'
 import {
-  authUserSelect,
-  sessionUserSelect,
-} from '../selectors/session-user.select'
+  sessionValidationUserSelect,
+  signInUserSelect,
+} from '../selectors/auth-user.select'
 
 @Injectable()
 export class UserAuthQueryService {
   constructor(private readonly prismaService: PrismaService) {}
 
   async findUserForSignInByEmail(email: string) {
-    const user = await this.prismaService.user.findUnique({
+    return this.prismaService.user.findUnique({
       where: { email },
-      select: authUserSelect,
+      select: signInUserSelect,
     })
-
-    if (!user) {
-      return null
-    }
-
-    return {
-      ...user,
-      sessionUser: toSessionUser(user),
-    }
   }
 
-  async findSessionUserById(id: number): Promise<SessionUser | null> {
+  async findUserStatusForSessionById(id: number): Promise<UserStatus | null> {
     const user = await this.prismaService.user.findUnique({
       where: { id },
-      select: sessionUserSelect,
+      select: sessionValidationUserSelect,
     })
 
-    return user ? toSessionUser(user) : null
+    return user?.status ?? null
   }
 }

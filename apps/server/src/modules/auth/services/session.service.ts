@@ -2,44 +2,50 @@ import type { Cache } from '@nestjs/cache-manager'
 import { CACHE_MANAGER } from '@nestjs/cache-manager'
 import { Inject, Injectable } from '@nestjs/common'
 import { ConfigService } from '@nestjs/config'
-import { createHash, randomBytes, timingSafeEqual } from 'node:crypto'
 
 import { envs } from '@/common/constants/env'
 import { AppException } from '@/common/exceptions/app.exception'
+import { getPositiveNumberConfig } from '@/common/utils/config.util'
+import {
+  createOpaqueToken,
+  hashSha256,
+  timingSafeEqualHex,
+} from '@/common/utils/crypto.util'
 
 import type { AuthSession } from '../interfaces/auth-session.interface'
 
 interface SessionState {
-  refreshTokenHash: string
+  secretHash: string
   userId: number
 }
 
 @Injectable()
-export class RefreshSessionService {
+export class SessionService {
   private static readonly SESSION_PREFIX = 'session:'
-  private readonly refreshTokenTtl: number
+  private readonly ttl: number
 
   constructor(
     private readonly configService: ConfigService,
     @Inject(CACHE_MANAGER) private readonly cacheManager: Cache,
   ) {
-    this.refreshTokenTtl = this.getPositiveNumberConfig(
+    this.ttl = getPositiveNumberConfig(
+      this.configService,
       envs.REFRESH_TOKEN_EXPIRATION_TIME,
     )
   }
 
   async createSession(userId: number): Promise<AuthSession> {
-    const sessionId = this.createOpaqueTokenPart(18)
-    const secret = this.createOpaqueTokenPart()
+    const sessionId = createOpaqueToken(18)
+    const secret = createOpaqueToken()
     const refreshToken = this.composeRefreshToken(sessionId, secret)
 
     await this.cacheManager.set(
       this.getSessionKey(sessionId),
       {
-        refreshTokenHash: this.hashValue(secret),
+        secretHash: hashSha256(secret),
         userId,
       } satisfies SessionState,
-      this.refreshTokenTtl,
+      this.ttl,
     )
 
     return {
@@ -57,21 +63,21 @@ export class RefreshSessionService {
 
     if (
       !session ||
-      !this.compareHashes(session.refreshTokenHash, this.hashValue(secret))
+      !timingSafeEqualHex(session.secretHash, hashSha256(secret))
     ) {
       throw AppException.tokenInvalid('Invalid refresh token')
     }
 
-    const nextSecret = this.createOpaqueTokenPart()
+    const nextSecret = createOpaqueToken()
     const nextRefreshToken = this.composeRefreshToken(sessionId, nextSecret)
 
     await this.cacheManager.set(
       this.getSessionKey(sessionId),
       {
-        refreshTokenHash: this.hashValue(nextSecret),
+        secretHash: hashSha256(nextSecret),
         userId: session.userId,
       } satisfies SessionState,
-      this.refreshTokenTtl,
+      this.ttl,
     )
 
     return {
@@ -85,23 +91,8 @@ export class RefreshSessionService {
     await this.cacheManager.del(this.getSessionKey(sessionId))
   }
 
-  private getPositiveNumberConfig(key: string): number {
-    const rawValue = this.configService.getOrThrow<string>(key)
-    const parsedValue = Number(rawValue)
-
-    if (!Number.isFinite(parsedValue) || parsedValue <= 0) {
-      throw new Error(`${key} must be a positive integer in milliseconds`)
-    }
-
-    return parsedValue
-  }
-
   private getSessionKey(sessionId: string): string {
-    return `${RefreshSessionService.SESSION_PREFIX}${sessionId}`
-  }
-
-  private createOpaqueTokenPart(byteLength = 32): string {
-    return randomBytes(byteLength).toString('base64url')
+    return `${SessionService.SESSION_PREFIX}${sessionId}`
   }
 
   private composeRefreshToken(sessionId: string, secret: string): string {
@@ -119,20 +110,5 @@ export class RefreshSessionService {
       secret,
       sessionId,
     }
-  }
-
-  private hashValue(value: string): string {
-    return createHash('sha256').update(value).digest('hex')
-  }
-
-  private compareHashes(left: string, right: string): boolean {
-    const leftBuffer = Buffer.from(left, 'hex')
-    const rightBuffer = Buffer.from(right, 'hex')
-
-    if (leftBuffer.length !== rightBuffer.length) {
-      return false
-    }
-
-    return timingSafeEqual(leftBuffer, rightBuffer)
   }
 }

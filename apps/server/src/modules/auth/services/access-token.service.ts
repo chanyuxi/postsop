@@ -1,7 +1,10 @@
 import { Injectable } from '@nestjs/common'
 import { JwtService } from '@nestjs/jwt'
 
-import type { AuthContextPayload, Claims } from '../interfaces/claims.interface'
+import { AppException } from '@/common/exceptions/app.exception'
+
+import type { AuthContextPayload } from '../interfaces/claims.interface'
+import { parseAuthContextPayload } from '../interfaces/claims.interface'
 
 @Injectable()
 export class AccessTokenService {
@@ -11,7 +14,13 @@ export class AccessTokenService {
     return this.jwtService.signAsync(payload)
   }
 
-  verifyAccessToken(token: string) {
-    return this.jwtService.verifyAsync<Claims>(token)
+  async verifyAccessToken(token: string): Promise<AuthContextPayload> {
+    const payload = await this.jwtService.verifyAsync(token)
+
+    try {
+      return parseAuthContextPayload(payload)
+    } catch {
+      throw AppException.tokenInvalid('Invalid authorization token')
+    }
   }
 }
