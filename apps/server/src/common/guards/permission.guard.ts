@@ -2,19 +2,16 @@ import { CanActivate, ExecutionContext, Injectable } from '@nestjs/common'
 import { Reflector } from '@nestjs/core'
 import { Request } from 'express'
 
-import type { PermissionName } from '@postsop/contracts/permissions'
+import { hasAllPermissions } from '@postsop/access-control/bitmap'
+import type { PermissionName } from '@postsop/access-control/permissions'
 
 import { AppException } from '@/common/exceptions/app.exception'
-import { PermissionService } from '@/modules/permission/services/permission.service'
 
 import { PERMISSIONS_KEY } from '../decorators/permissions.decorator'
 
 @Injectable()
 export class PermissionGuard implements CanActivate {
-  constructor(
-    private readonly reflector: Reflector,
-    private readonly permissionService: PermissionService,
-  ) {}
+  constructor(private readonly reflector: Reflector) {}
 
   async canActivate(context: ExecutionContext): Promise<boolean> {
     const requiredPermissions = this.reflector.getAllAndOverride<
@@ -26,20 +23,13 @@ export class PermissionGuard implements CanActivate {
     }
 
     const request = context.switchToHttp().getRequest<Request>()
-    const userId = request.authContext?.sub
+    const authContext = request.authContext
 
-    if (!userId) {
+    if (!authContext) {
       throw AppException.unauthorized('Missing authenticated user context')
     }
 
-    const grantedPermissions =
-      await this.permissionService.getUserPermissionNames(userId)
-    const grantedPermissionSet = new Set(grantedPermissions)
-    const hasAllPermissions = requiredPermissions.every((permission) =>
-      grantedPermissionSet.has(permission),
-    )
-
-    if (!hasAllPermissions) {
+    if (!hasAllPermissions(authContext.pm, requiredPermissions)) {
       throw AppException.permissionDenied('Insufficient permissions')
     }
 

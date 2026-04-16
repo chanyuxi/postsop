@@ -1,3 +1,7 @@
+import {
+  encodePermissionMask,
+  permissionRegistryVersion,
+} from '@postsop/access-control'
 import { InternalStatusCodes } from '@postsop/contracts/http'
 
 import { AppException } from '@/common/exceptions/app.exception'
@@ -5,10 +9,15 @@ import { hashPassword } from '@/common/utils/password.util'
 import type { AccessTokenService } from '@/modules/auth/services/access-token.service'
 import type { RefreshSessionService } from '@/modules/auth/services/refresh-session.service'
 import { SignInUseCase } from '@/modules/auth/use-cases/sign-in.use-case'
+import type { PermissionService } from '@/modules/permission/services/permission.service'
 import type { UserAuthQueryService } from '@/modules/user/queries/user-auth.query.service'
 
 jest.mock('@/modules/user/queries/user-auth.query.service', () => ({
   UserAuthQueryService: class UserAuthQueryService {},
+}))
+
+jest.mock('@/modules/permission/services/permission.service', () => ({
+  PermissionService: class PermissionService {},
 }))
 
 describe('SignInUseCase', () => {
@@ -24,6 +33,10 @@ describe('SignInUseCase', () => {
     generateAccessToken: jest.fn(),
   } as unknown as AccessTokenService
 
+  const permissionService = {
+    getUserPermissionNames: jest.fn(),
+  } as unknown as PermissionService
+
   let useCase: SignInUseCase
 
   beforeEach(() => {
@@ -32,6 +45,7 @@ describe('SignInUseCase', () => {
       userAuthQueryService,
       refreshSessionService,
       accessTokenService,
+      permissionService,
     )
   })
 
@@ -57,6 +71,9 @@ describe('SignInUseCase', () => {
       sessionId: 'session-1',
       userId: 1,
     })
+    permissionService.getUserPermissionNames = jest
+      .fn()
+      .mockResolvedValue(['create:user', 'read:user'])
     accessTokenService.generateAccessToken = jest
       .fn()
       .mockResolvedValue('access-token')
@@ -67,6 +84,8 @@ describe('SignInUseCase', () => {
     })
 
     expect(accessTokenService.generateAccessToken).toHaveBeenCalledWith({
+      pm: encodePermissionMask(['create:user', 'read:user']),
+      pv: permissionRegistryVersion,
       sid: 'session-1',
       sub: 1,
     })

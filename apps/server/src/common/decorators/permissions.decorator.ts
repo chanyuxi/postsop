@@ -1,6 +1,6 @@
 import { SetMetadata } from '@nestjs/common'
 
-import type { PermissionName } from '@postsop/contracts/permissions'
+import type { PermissionName } from '@postsop/access-control/permissions'
 
 export const PERMISSIONS_KEY = 'permissions'
 

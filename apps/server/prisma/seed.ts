@@ -2,7 +2,7 @@ import 'dotenv/config'
 
 import { PrismaPg } from '@prisma/adapter-pg'
 
-import { permissionNames } from '@postsop/contracts/permissions'
+import { permissionNames } from '@postsop/access-control/permissions'
 
 import { hashPassword } from '../src/common/utils/password.util'
 import { PrismaClient } from '../src/generated/prisma/client'

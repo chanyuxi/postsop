@@ -1,0 +1,37 @@
+{
+  "name": "@postsop/access-control",
+  "version": "0.1.0",
+  "private": true,
+  "packageManager": "pnpm@10.31.0",
+  "description": "Shared permission registry and authorization helpers for postsop",
+  "author": "chanyuxi",
+  "license": "ISC",
+  "exports": {
+    ".": {
+      "types": "./dist/index.d.ts",
+      "import": "./dist/index.js",
+      "require": "./dist/index.js",
+      "default": "./dist/index.js"
+    },
+    "./bitmap": {
+      "types": "./dist/bitmap.d.ts",
+      "import": "./dist/bitmap.js",
+      "require": "./dist/bitmap.js",
+      "default": "./dist/bitmap.js"
+    },
+    "./permissions": {
+      "types": "./dist/permissions.d.ts",
+      "import": "./dist/permissions.js",
+      "require": "./dist/permissions.js",
+      "default": "./dist/permissions.js"
+    }
+  },
+  "scripts": {
+    "build": "node ../../scripts/package-build.mjs",
+    "dev": "node ../../scripts/package-build.mjs --watch",
+    "type-check": "tsc --noEmit"
+  },
+  "dependencies": {
+    "zod": "^4.3.6"
+  }
+}

@@ -1,13 +1,22 @@
+import {
+  encodePermissionMask,
+  permissionRegistryVersion,
+} from '@postsop/access-control'
 import { InternalStatusCodes } from '@postsop/contracts/http'
 
 import { AppException } from '@/common/exceptions/app.exception'
 import type { AccessTokenService } from '@/modules/auth/services/access-token.service'
 import type { RefreshSessionService } from '@/modules/auth/services/refresh-session.service'
 import { RefreshAuthSessionUseCase } from '@/modules/auth/use-cases/refresh-auth-session.use-case'
+import type { PermissionService } from '@/modules/permission/services/permission.service'
 import type { UserAuthQueryService } from '@/modules/user/queries/user-auth.query.service'
 
 jest.mock('@/modules/user/queries/user-auth.query.service', () => ({
   UserAuthQueryService: class UserAuthQueryService {},
+}))
+
+jest.mock('@/modules/permission/services/permission.service', () => ({
+  PermissionService: class PermissionService {},
 }))
 
 describe('RefreshAuthSessionUseCase', () => {
@@ -24,6 +33,10 @@ describe('RefreshAuthSessionUseCase', () => {
     generateAccessToken: jest.fn(),
   } as unknown as AccessTokenService
 
+  const permissionService = {
+    getUserPermissionNames: jest.fn(),
+  } as unknown as PermissionService
+
   let useCase: RefreshAuthSessionUseCase
 
   beforeEach(() => {
@@ -32,6 +45,7 @@ describe('RefreshAuthSessionUseCase', () => {
       userAuthQueryService,
       refreshSessionService,
       accessTokenService,
+      permissionService,
     )
   })
 
@@ -68,6 +82,9 @@ describe('RefreshAuthSessionUseCase', () => {
       id: 1,
       roles: [{ name: 'admin' }],
     })
+    permissionService.getUserPermissionNames = jest
+      .fn()
+      .mockResolvedValue(['read:user', 'update:user'])
     accessTokenService.generateAccessToken = jest
       .fn()
       .mockResolvedValue('access-token-2')
@@ -75,6 +92,8 @@ describe('RefreshAuthSessionUseCase', () => {
     const result = await useCase.execute('refresh-token-1')
 
     expect(accessTokenService.generateAccessToken).toHaveBeenCalledWith({
+      pm: encodePermissionMask(['read:user', 'update:user']),
+      pv: permissionRegistryVersion,
       sid: 'session-1',
       sub: 1,
     })

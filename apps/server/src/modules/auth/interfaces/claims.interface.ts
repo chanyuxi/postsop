@@ -1,6 +1,13 @@
 import { z } from 'zod'
 
+import {
+  PermissionMaskSchema,
+  PermissionRegistryVersionSchema,
+} from '@postsop/access-control'
+
 export const AuthContextPayloadSchema = z.strictObject({
+  pm: PermissionMaskSchema,
+  pv: PermissionRegistryVersionSchema,
   sub: z.coerce.number().int().positive(),
   sid: z.string().min(1),
 })
@@ -23,6 +30,8 @@ export type AuthContextPayload = z.infer<typeof AuthContextPayloadSchema>
 
 export function toAuthContextPayload(payload: Claims): AuthContextPayload {
   return {
+    pm: payload.pm,
+    pv: payload.pv,
     sid: payload.sid,
     sub: payload.sub,
   }

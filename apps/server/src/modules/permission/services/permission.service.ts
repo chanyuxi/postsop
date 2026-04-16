@@ -11,7 +11,6 @@ import { PrismaService } from '@/database/prisma.service'
 export class PermissionService {
   private static readonly AVAILABLE_PERMISSIONS_CACHE_KEY = 'perm:all'
   private static readonly AVAILABLE_PERMISSIONS_TTL = 60 * 60 * 1000
-  private static readonly USER_PERMISSIONS_TTL = 5 * 60 * 1000
 
   constructor(
     private readonly prismaService: PrismaService,
@@ -50,14 +49,6 @@ export class PermissionService {
   async getUserPermissionNames(
     userId: number,
   ): Promise<AvailablePermissionNames> {
-    const cacheKey = this.getUserPermissionsCacheKey(userId)
-    const cachedPermissions =
-      await this.cacheManager.get<AvailablePermissionNames>(cacheKey)
-
-    if (cachedPermissions) {
-      return cachedPermissions
-    }
-
     const user = await this.prismaService.user.findUnique({
       where: {
         id: userId,
@@ -83,16 +74,6 @@ export class PermissionService {
       ),
     ])
 
-    await this.cacheManager.set(
-      cacheKey,
-      permissionNames,
-      PermissionService.USER_PERMISSIONS_TTL,
-    )
-
     return permissionNames
-  }
-
-  private getUserPermissionsCacheKey(userId: number): string {
-    return `perm:u:${userId}`
   }
 }

@@ -1,18 +1,25 @@
 import type { ExecutionContext } from '@nestjs/common'
 import type { Reflector } from '@nestjs/core'
 
+import {
+  encodePermissionMask,
+  permissionRegistryVersion,
+} from '@postsop/access-control'
 import { InternalStatusCodes } from '@postsop/contracts/http'
 
 import { AppException } from '@/common/exceptions/app.exception'
 import { PermissionGuard } from '@/common/guards/permission.guard'
-import type { PermissionService } from '@/modules/permission/services/permission.service'
-
-jest.mock('@/modules/permission/services/permission.service', () => ({
-  PermissionService: class PermissionService {},
-}))
 
 describe('PermissionGuard', () => {
-  const createContext = (userId?: number): ExecutionContext =>
+  const createContext = (
+    userId?: number,
+    permissions: readonly (
+      | 'create:user'
+      | 'read:user'
+      | 'update:user'
+      | 'delete:user'
+    )[] = [],
+  ): ExecutionContext =>
     ({
       getClass: jest.fn(),
       getHandler: jest.fn(),
@@ -20,6 +27,8 @@ describe('PermissionGuard', () => {
         getRequest: () => ({
           authContext: userId
             ? {
+                pm: encodePermissionMask(permissions),
+                pv: permissionRegistryVersion,
                 sid: 'session-1',
                 sub: userId,
               }
@@ -29,47 +38,34 @@ describe('PermissionGuard', () => {
     }) as unknown as ExecutionContext
 
   it('allows access when no permissions are required', async () => {
-    const getUserPermissionNames = jest.fn()
     const reflector = {
       getAllAndOverride: jest.fn().mockReturnValue(undefined),
     } as unknown as Reflector
-    const permissionService = {
-      getUserPermissionNames,
-    } as unknown as PermissionService
-    const guard = new PermissionGuard(reflector, permissionService)
+    const guard = new PermissionGuard(reflector)
 
     await expect(guard.canActivate(createContext(1))).resolves.toBe(true)
-    expect(getUserPermissionNames).not.toHaveBeenCalled()
   })
 
   it('allows access when the user has all required permissions', async () => {
-    const getUserPermissionNames = jest
-      .fn()
-      .mockResolvedValue(['read:user', 'update:user', 'delete:user'])
     const reflector = {
       getAllAndOverride: jest
         .fn()
         .mockReturnValue(['read:user', 'update:user']),
     } as unknown as Reflector
-    const permissionService = {
-      getUserPermissionNames,
-    } as unknown as PermissionService
-    const guard = new PermissionGuard(reflector, permissionService)
+    const guard = new PermissionGuard(reflector)
 
-    await expect(guard.canActivate(createContext(1))).resolves.toBe(true)
+    await expect(
+      guard.canActivate(createContext(1, ['read:user', 'update:user'])),
+    ).resolves.toBe(true)
   })
 
   it('rejects access when the user misses a required permission', async () => {
-    const getUserPermissionNames = jest.fn().mockResolvedValue(['read:user'])
     const reflector = {
       getAllAndOverride: jest.fn().mockReturnValue(['delete:user']),
     } as unknown as Reflector
-    const permissionService = {
-      getUserPermissionNames,
-    } as unknown as PermissionService
-    const guard = new PermissionGuard(reflector, permissionService)
+    const guard = new PermissionGuard(reflector)
 
-    const permissionCheck = guard.canActivate(createContext(1))
+    const permissionCheck = guard.canActivate(createContext(1, ['read:user']))
 
     await expect(permissionCheck).rejects.toBeInstanceOf(AppException)
     await expect(permissionCheck).rejects.toMatchObject({
@@ -78,14 +74,10 @@ describe('PermissionGuard', () => {
   })
 
   it('rejects access when the request is missing user context', async () => {
-    const getUserPermissionNames = jest.fn()
     const reflector = {
       getAllAndOverride: jest.fn().mockReturnValue(['read:user']),
     } as unknown as Reflector
-    const permissionService = {
-      getUserPermissionNames,
-    } as unknown as PermissionService
-    const guard = new PermissionGuard(reflector, permissionService)
+    const guard = new PermissionGuard(reflector)
 
     const permissionCheck = guard.canActivate(createContext())
 
