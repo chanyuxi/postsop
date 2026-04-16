@@ -22,7 +22,6 @@
   "dependencies": {
     "@postsop/contracts": "workspace:*",
     "@postsop/types": "workspace:*",
-    "axios": "^1.13.6",
-    "http-status-codes": "^2.3.0"
+    "axios": "^1.13.6"
   }
 }

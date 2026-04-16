@@ -1,10 +1,10 @@
-import { getReasonPhrase, StatusCodes } from 'http-status-codes'
-
 import {
   ApiErrorType,
   Codes,
   getCodeReasonPhrase,
+  getReasonPhrase,
   NetworkStatusCodes,
+  StatusCodes,
 } from './definition'
 
 export type HttpStatus = NetworkStatusCodes | StatusCodes

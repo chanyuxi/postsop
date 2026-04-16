@@ -1,4 +1,6 @@
 overrides:
+  '@prisma/studio-core>react': 19.2.3
+  '@prisma/studio-core>react-dom': 19.2.3
   'eslint-plugin-ft-flow>eslint': ^9.18.0
 
 packages:

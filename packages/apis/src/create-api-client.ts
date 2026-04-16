@@ -6,7 +6,6 @@ import {
   default as axios,
   InternalAxiosRequestConfig,
 } from 'axios'
-import { StatusCodes } from 'http-status-codes'
 
 import type {
   AnyApiEndpoint,
@@ -14,7 +13,12 @@ import type {
   ApiEndpointRequest,
   ApiEndpointResponse,
 } from '@postsop/contracts'
-import { ApiError, ApiResponse, Codes } from '@postsop/contracts/http'
+import {
+  ApiError,
+  ApiResponse,
+  Codes,
+  StatusCodes,
+} from '@postsop/contracts/http'
 import { MaybePromise } from '@postsop/types'
 
 /**
