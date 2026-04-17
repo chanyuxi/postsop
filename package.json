@@ -22,6 +22,8 @@
     "server:build": "pnpm --filter @postsop/server build",
     "server:db:generate": "pnpm --filter @postsop/server db:generate",
     "server:db:migrate": "pnpm --filter @postsop/server db:migrate",
+    "server:db:permissions:check": "pnpm --filter @postsop/server db:permissions:check",
+    "server:db:permissions:sync": "pnpm --filter @postsop/server db:permissions:sync",
     "server:db:seed": "pnpm --filter @postsop/server db:seed",
     "server:db:studio": "pnpm --filter @postsop/server db:studio",
     "server:dev": "turbo run dev --filter=@postsop/server",

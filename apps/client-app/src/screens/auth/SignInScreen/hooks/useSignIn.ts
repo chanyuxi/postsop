@@ -30,7 +30,10 @@ export function useSignIn() {
     signInMutation.mutate(data, {
       onSuccess: (authSession) => {
         signIn(authSession)
-        toast('Sign in successful')
+
+        if (__DEV__) {
+          toast('Sign in successful')
+        }
       },
     })
   })

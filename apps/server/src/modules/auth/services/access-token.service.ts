@@ -1,5 +1,5 @@
 import { Injectable } from '@nestjs/common'
-import { JwtService } from '@nestjs/jwt'
+import { JwtService, TokenExpiredError } from '@nestjs/jwt'
 
 import { AppException } from '@/common/exceptions/app.exception'
 
@@ -14,12 +14,18 @@ export class AccessTokenService {
     return this.jwtService.signAsync(payload)
   }
 
-  async verifyAccessToken(token: string): Promise<AuthContextPayload> {
-    const payload = await this.jwtService.verifyAsync(token)
-
+  async verifyAccessTokenSafelyThrownOut(
+    token: string,
+  ): Promise<AuthContextPayload> {
     try {
+      const payload = await this.jwtService.verifyAsync(token)
+
       return parseAuthContextPayload(payload)
-    } catch {
+    } catch (error) {
+      if (error instanceof TokenExpiredError) {
+        throw AppException.tokenExpired('Invalid authorization token')
+      }
+
       throw AppException.tokenInvalid('Invalid authorization token')
     }
   }

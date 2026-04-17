@@ -1,6 +1,5 @@
 import type { ExecutionContext } from '@nestjs/common'
 import type { Reflector } from '@nestjs/core'
-import { TokenExpiredError } from '@nestjs/jwt'
 
 import { Codes } from '@postsop/contracts/http'
 
@@ -31,7 +30,7 @@ describe('AuthGuard', () => {
   }
 
   const accessTokenService = {
-    verifyAccessToken: jest.fn(),
+    verifyAccessTokenSafelyThrownOut: jest.fn(),
   } as unknown as AccessTokenService
 
   const reflector = {
@@ -51,7 +50,9 @@ describe('AuthGuard', () => {
     const { context } = createContext()
 
     await expect(guard.canActivate(context)).resolves.toBe(true)
-    expect(accessTokenService.verifyAccessToken).not.toHaveBeenCalled()
+    expect(
+      accessTokenService.verifyAccessTokenSafelyThrownOut,
+    ).not.toHaveBeenCalled()
   })
 
   it('rejects requests without a bearer token', async () => {
@@ -68,7 +69,9 @@ describe('AuthGuard', () => {
 
   it('attaches the verified auth context to the request', async () => {
     ;(reflector.getAllAndOverride as jest.Mock).mockReturnValue(false)
-    ;(accessTokenService.verifyAccessToken as jest.Mock).mockResolvedValue({
+    ;(
+      accessTokenService.verifyAccessTokenSafelyThrownOut as jest.Mock
+    ).mockResolvedValue({
       pm: '11',
       pv: 1,
       sid: 'session-1',
@@ -78,9 +81,9 @@ describe('AuthGuard', () => {
     const { context, request } = createContext('Bearer access-token')
 
     await expect(guard.canActivate(context)).resolves.toBe(true)
-    expect(accessTokenService.verifyAccessToken).toHaveBeenCalledWith(
-      'access-token',
-    )
+    expect(
+      accessTokenService.verifyAccessTokenSafelyThrownOut,
+    ).toHaveBeenCalledWith('access-token')
     expect(request.authContext).toEqual({
       pm: '11',
       pv: 1,
@@ -89,26 +92,12 @@ describe('AuthGuard', () => {
     })
   })
 
-  it('maps expired access tokens to TOKEN_EXPIRED with a generic message', async () => {
+  it('rethrows token validation failures from AccessTokenService', async () => {
     ;(reflector.getAllAndOverride as jest.Mock).mockReturnValue(false)
-    ;(accessTokenService.verifyAccessToken as jest.Mock).mockRejectedValue(
-      new TokenExpiredError('jwt expired', new Date()),
-    )
-
-    const { context } = createContext('Bearer access-token')
-    const authorizationCheck = guard.canActivate(context)
-
-    await expect(authorizationCheck).rejects.toBeInstanceOf(AppException)
-    await expect(authorizationCheck).rejects.toMatchObject({
-      code: Codes.TOKEN_EXPIRED,
-      message: 'Invalid authorization token',
-    })
-  })
-
-  it('maps unexpected token failures to TOKEN_INVALID', async () => {
-    ;(reflector.getAllAndOverride as jest.Mock).mockReturnValue(false)
-    ;(accessTokenService.verifyAccessToken as jest.Mock).mockRejectedValue(
-      new Error('broken token'),
+    ;(
+      accessTokenService.verifyAccessTokenSafelyThrownOut as jest.Mock
+    ).mockRejectedValue(
+      AppException.tokenInvalid('Invalid authorization token'),
     )
 
     const { context } = createContext('Bearer access-token')

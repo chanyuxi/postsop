@@ -8,7 +8,12 @@
     "^.+\\.(t|j)s$": "ts-jest"
   },
   "moduleNameMapper": {
-    "^@/(.*)$": "<rootDir>/src/$1"
+    "^@/(.*)$": "<rootDir>/src/$1",
+    "^@postsop/access-control$": "<rootDir>/../../packages/access-control/src/index.ts",
+    "^@postsop/access-control/(.*)$": "<rootDir>/../../packages/access-control/src/$1.ts",
+    "^@postsop/contracts$": "<rootDir>/../../packages/contracts/src/index.ts",
+    "^@postsop/contracts/http$": "<rootDir>/../../packages/contracts/src/http/index.ts",
+    "^@postsop/contracts/(auth|permission|user)$": "<rootDir>/../../packages/contracts/src/modules/$1/index.ts"
   },
   "collectCoverageFrom": ["src/**/*.(t|j)s", "!src/generated/prisma/**"],
   "coverageDirectory": "./coverage"

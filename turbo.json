@@ -1,6 +1,7 @@
 {
   "$schema": "./node_modules/turbo/schema.json",
   "ui": "tui",
+  "noUpdateNotifier": true,
   "tasks": {
     "build": {
       "dependsOn": ["^build"],

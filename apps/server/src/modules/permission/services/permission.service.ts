@@ -1,7 +1,6 @@
-import type { Cache } from '@nestjs/cache-manager'
-import { CACHE_MANAGER } from '@nestjs/cache-manager'
-import { Inject, Injectable } from '@nestjs/common'
+import { Injectable } from '@nestjs/common'
 
+import { permissionNames } from '@postsop/access-control/permissions'
 import type { AvailablePermissionNames } from '@postsop/contracts/permission'
 import { AvailablePermissionNamesSchema } from '@postsop/contracts/permission'
 
@@ -9,41 +8,10 @@ import { PrismaService } from '@/database/prisma.service'
 
 @Injectable()
 export class PermissionService {
-  private static readonly AVAILABLE_PERMISSIONS_CACHE_KEY = 'perm:all'
-  private static readonly AVAILABLE_PERMISSIONS_TTL = 60 * 60 * 1000
-
-  constructor(
-    private readonly prismaService: PrismaService,
-    @Inject(CACHE_MANAGER) private readonly cacheManager: Cache,
-  ) {}
+  constructor(private readonly prismaService: PrismaService) {}
 
   async findAllPermissionNames(): Promise<AvailablePermissionNames> {
-    const cachedPermissions =
-      await this.cacheManager.get<AvailablePermissionNames>(
-        PermissionService.AVAILABLE_PERMISSIONS_CACHE_KEY,
-      )
-
-    if (cachedPermissions) {
-      return cachedPermissions
-    }
-
-    const permissions = await this.prismaService.permission.findMany({
-      select: {
-        name: true,
-      },
-    })
-
-    const permissionNames = AvailablePermissionNamesSchema.parse(
-      permissions.map((permission) => permission.name),
-    )
-
-    await this.cacheManager.set(
-      PermissionService.AVAILABLE_PERMISSIONS_CACHE_KEY,
-      permissionNames,
-      PermissionService.AVAILABLE_PERMISSIONS_TTL,
-    )
-
-    return permissionNames
+    return AvailablePermissionNamesSchema.parse(permissionNames)
   }
 
   async getUserPermissionNames(

@@ -7,8 +7,8 @@ import { ThemeText } from '../ThemeText'
 
 const buttonVariants = tv({
   slots: {
-    wrapper: '',
-    text: 'text-center text-white',
+    wrapper: 'items-center justify-center',
+    text: 'text-white',
   },
   variants: {
     variant: {
@@ -30,7 +30,7 @@ const buttonVariants = tv({
     },
     size: {
       medium: {
-        wrapper: 'px-6 py-3',
+        wrapper: 'h-13',
       },
     },
     rounded: {

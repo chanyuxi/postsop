@@ -14,8 +14,6 @@ export const AuthContextPayloadSchema = z.strictObject({
 
 export type AuthContextPayload = z.infer<typeof AuthContextPayloadSchema>
 
-const AccessTokenClaimsSchema = z.object(AuthContextPayloadSchema.shape)
-
 export function parseAuthContextPayload(payload: unknown): AuthContextPayload {
-  return AccessTokenClaimsSchema.parse(payload)
+  return AuthContextPayloadSchema.parse(payload)
 }

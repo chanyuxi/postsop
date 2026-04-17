@@ -3,7 +3,7 @@ import { Text, View } from 'react-native'
 
 import { ScreenWrapper } from '@/components/common/ScreenWrapper'
 import { ThemeText } from '@/components/common/ThemeText'
-import { APP_VERSION } from '@/constants'
+import { VersionIndication } from '@/components/widget/VersionIndication'
 import type { AllStackParamList } from '@/routes/type'
 import useProfileQuery from '@/services/user/queries/useProfileQuery'
 
@@ -48,11 +48,7 @@ export function Mine({
         />
       </CellGroup>
 
-      <View className="flex-1 justify-end p-8">
-        <Text className="text-black.10 text-center text-black/10 italic dark:text-white/10">
-          Version {APP_VERSION}
-        </Text>
-      </View>
+      <VersionIndication className="flex-1 justify-end p-8" />
     </ScreenWrapper>
   )
 }

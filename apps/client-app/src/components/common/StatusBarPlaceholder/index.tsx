@@ -8,13 +8,19 @@ export interface StatusBarPlaceholderProps {
   className?: string
 }
 
-export function StatusBarPlaceholder({ className }: StatusBarPlaceholderProps) {
+export function useStatusBarHeight() {
   const insets = useSafeAreaInsets()
+
+  return statusBarHeight ?? insets.top
+}
+
+export function StatusBarPlaceholder({ className }: StatusBarPlaceholderProps) {
+  const height = useStatusBarHeight()
 
   return (
     <View
       className={twMerge('w-full', className)}
-      style={{ height: statusBarHeight ?? insets.top }}
+      style={{ height }}
     />
   )
 }

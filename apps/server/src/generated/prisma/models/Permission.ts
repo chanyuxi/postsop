@@ -37,6 +37,9 @@ export type PermissionSumAggregateOutputType = {
 export type PermissionMinAggregateOutputType = {
   id: number | null
   name: string | null
+  group: string | null
+  label: string | null
+  deprecated: boolean | null
   description: string | null
   createdAt: Date | null
   updatedAt: Date | null
@@ -45,6 +48,9 @@ export type PermissionMinAggregateOutputType = {
 export type PermissionMaxAggregateOutputType = {
   id: number | null
   name: string | null
+  group: string | null
+  label: string | null
+  deprecated: boolean | null
   description: string | null
   createdAt: Date | null
   updatedAt: Date | null
@@ -53,6 +59,9 @@ export type PermissionMaxAggregateOutputType = {
 export type PermissionCountAggregateOutputType = {
   id: number
   name: number
+  group: number
+  label: number
+  deprecated: number
   description: number
   createdAt: number
   updatedAt: number
@@ -71,6 +80,9 @@ export type PermissionSumAggregateInputType = {
 export type PermissionMinAggregateInputType = {
   id?: true
   name?: true
+  group?: true
+  label?: true
+  deprecated?: true
   description?: true
   createdAt?: true
   updatedAt?: true
@@ -79,6 +91,9 @@ export type PermissionMinAggregateInputType = {
 export type PermissionMaxAggregateInputType = {
   id?: true
   name?: true
+  group?: true
+  label?: true
+  deprecated?: true
   description?: true
   createdAt?: true
   updatedAt?: true
@@ -87,6 +102,9 @@ export type PermissionMaxAggregateInputType = {
 export type PermissionCountAggregateInputType = {
   id?: true
   name?: true
+  group?: true
+  label?: true
+  deprecated?: true
   description?: true
   createdAt?: true
   updatedAt?: true
@@ -182,6 +200,9 @@ export type PermissionGroupByArgs<ExtArgs extends runtime.Types.Extensions.Inter
 export type PermissionGroupByOutputType = {
   id: number
   name: string
+  group: string
+  label: string
+  deprecated: boolean
   description: string | null
   createdAt: Date
   updatedAt: Date
@@ -213,6 +234,9 @@ export type PermissionWhereInput = {
   NOT?: Prisma.PermissionWhereInput | Prisma.PermissionWhereInput[]
   id?: Prisma.IntFilter<"Permission"> | number
   name?: Prisma.StringFilter<"Permission"> | string
+  group?: Prisma.StringFilter<"Permission"> | string
+  label?: Prisma.StringFilter<"Permission"> | string
+  deprecated?: Prisma.BoolFilter<"Permission"> | boolean
   description?: Prisma.StringNullableFilter<"Permission"> | string | null
   createdAt?: Prisma.DateTimeFilter<"Permission"> | Date | string
   updatedAt?: Prisma.DateTimeFilter<"Permission"> | Date | string
@@ -222,6 +246,9 @@ export type PermissionWhereInput = {
 export type PermissionOrderByWithRelationInput = {
   id?: Prisma.SortOrder
   name?: Prisma.SortOrder
+  group?: Prisma.SortOrder
+  label?: Prisma.SortOrder
+  deprecated?: Prisma.SortOrder
   description?: Prisma.SortOrderInput | Prisma.SortOrder
   createdAt?: Prisma.SortOrder
   updatedAt?: Prisma.SortOrder
@@ -234,6 +261,9 @@ export type PermissionWhereUniqueInput = Prisma.AtLeast<{
   AND?: Prisma.PermissionWhereInput | Prisma.PermissionWhereInput[]
   OR?: Prisma.PermissionWhereInput[]
   NOT?: Prisma.PermissionWhereInput | Prisma.PermissionWhereInput[]
+  group?: Prisma.StringFilter<"Permission"> | string
+  label?: Prisma.StringFilter<"Permission"> | string
+  deprecated?: Prisma.BoolFilter<"Permission"> | boolean
   description?: Prisma.StringNullableFilter<"Permission"> | string | null
   createdAt?: Prisma.DateTimeFilter<"Permission"> | Date | string
   updatedAt?: Prisma.DateTimeFilter<"Permission"> | Date | string
@@ -243,6 +273,9 @@ export type PermissionWhereUniqueInput = Prisma.AtLeast<{
 export type PermissionOrderByWithAggregationInput = {
   id?: Prisma.SortOrder
   name?: Prisma.SortOrder
+  group?: Prisma.SortOrder
+  label?: Prisma.SortOrder
+  deprecated?: Prisma.SortOrder
   description?: Prisma.SortOrderInput | Prisma.SortOrder
   createdAt?: Prisma.SortOrder
   updatedAt?: Prisma.SortOrder
@@ -259,6 +292,9 @@ export type PermissionScalarWhereWithAggregatesInput = {
   NOT?: Prisma.PermissionScalarWhereWithAggregatesInput | Prisma.PermissionScalarWhereWithAggregatesInput[]
   id?: Prisma.IntWithAggregatesFilter<"Permission"> | number
   name?: Prisma.StringWithAggregatesFilter<"Permission"> | string
+  group?: Prisma.StringWithAggregatesFilter<"Permission"> | string
+  label?: Prisma.StringWithAggregatesFilter<"Permission"> | string
+  deprecated?: Prisma.BoolWithAggregatesFilter<"Permission"> | boolean
   description?: Prisma.StringNullableWithAggregatesFilter<"Permission"> | string | null
   createdAt?: Prisma.DateTimeWithAggregatesFilter<"Permission"> | Date | string
   updatedAt?: Prisma.DateTimeWithAggregatesFilter<"Permission"> | Date | string
@@ -266,6 +302,9 @@ export type PermissionScalarWhereWithAggregatesInput = {
 
 export type PermissionCreateInput = {
   name: string
+  group: string
+  label: string
+  deprecated?: boolean
   description?: string | null
   createdAt?: Date | string
   updatedAt?: Date | string
@@ -275,6 +314,9 @@ export type PermissionCreateInput = {
 export type PermissionUncheckedCreateInput = {
   id?: number
   name: string
+  group: string
+  label: string
+  deprecated?: boolean
   description?: string | null
   createdAt?: Date | string
   updatedAt?: Date | string
@@ -283,6 +325,9 @@ export type PermissionUncheckedCreateInput = {
 
 export type PermissionUpdateInput = {
   name?: Prisma.StringFieldUpdateOperationsInput | string
+  group?: Prisma.StringFieldUpdateOperationsInput | string
+  label?: Prisma.StringFieldUpdateOperationsInput | string
+  deprecated?: Prisma.BoolFieldUpdateOperationsInput | boolean
   description?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
   createdAt?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
   updatedAt?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
@@ -292,6 +337,9 @@ export type PermissionUpdateInput = {
 export type PermissionUncheckedUpdateInput = {
   id?: Prisma.IntFieldUpdateOperationsInput | number
   name?: Prisma.StringFieldUpdateOperationsInput | string
+  group?: Prisma.StringFieldUpdateOperationsInput | string
+  label?: Prisma.StringFieldUpdateOperationsInput | string
+  deprecated?: Prisma.BoolFieldUpdateOperationsInput | boolean
   description?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
   createdAt?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
   updatedAt?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
@@ -301,6 +349,9 @@ export type PermissionUncheckedUpdateInput = {
 export type PermissionCreateManyInput = {
   id?: number
   name: string
+  group: string
+  label: string
+  deprecated?: boolean
   description?: string | null
   createdAt?: Date | string
   updatedAt?: Date | string
@@ -308,6 +359,9 @@ export type PermissionCreateManyInput = {
 
 export type PermissionUpdateManyMutationInput = {
   name?: Prisma.StringFieldUpdateOperationsInput | string
+  group?: Prisma.StringFieldUpdateOperationsInput | string
+  label?: Prisma.StringFieldUpdateOperationsInput | string
+  deprecated?: Prisma.BoolFieldUpdateOperationsInput | boolean
   description?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
   createdAt?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
   updatedAt?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
@@ -316,6 +370,9 @@ export type PermissionUpdateManyMutationInput = {
 export type PermissionUncheckedUpdateManyInput = {
   id?: Prisma.IntFieldUpdateOperationsInput | number
   name?: Prisma.StringFieldUpdateOperationsInput | string
+  group?: Prisma.StringFieldUpdateOperationsInput | string
+  label?: Prisma.StringFieldUpdateOperationsInput | string
+  deprecated?: Prisma.BoolFieldUpdateOperationsInput | boolean
   description?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
   createdAt?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
   updatedAt?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
@@ -334,6 +391,9 @@ export type PermissionOrderByRelationAggregateInput = {
 export type PermissionCountOrderByAggregateInput = {
   id?: Prisma.SortOrder
   name?: Prisma.SortOrder
+  group?: Prisma.SortOrder
+  label?: Prisma.SortOrder
+  deprecated?: Prisma.SortOrder
   description?: Prisma.SortOrder
   createdAt?: Prisma.SortOrder
   updatedAt?: Prisma.SortOrder
@@ -346,6 +406,9 @@ export type PermissionAvgOrderByAggregateInput = {
 export type PermissionMaxOrderByAggregateInput = {
   id?: Prisma.SortOrder
   name?: Prisma.SortOrder
+  group?: Prisma.SortOrder
+  label?: Prisma.SortOrder
+  deprecated?: Prisma.SortOrder
   description?: Prisma.SortOrder
   createdAt?: Prisma.SortOrder
   updatedAt?: Prisma.SortOrder
@@ -354,6 +417,9 @@ export type PermissionMaxOrderByAggregateInput = {
 export type PermissionMinOrderByAggregateInput = {
   id?: Prisma.SortOrder
   name?: Prisma.SortOrder
+  group?: Prisma.SortOrder
+  label?: Prisma.SortOrder
+  deprecated?: Prisma.SortOrder
   description?: Prisma.SortOrder
   createdAt?: Prisma.SortOrder
   updatedAt?: Prisma.SortOrder
@@ -401,8 +467,15 @@ export type PermissionUncheckedUpdateManyWithoutRolesNestedInput = {
   deleteMany?: Prisma.PermissionScalarWhereInput | Prisma.PermissionScalarWhereInput[]
 }
 
+export type BoolFieldUpdateOperationsInput = {
+  set?: boolean
+}
+
 export type PermissionCreateWithoutRolesInput = {
   name: string
+  group: string
+  label: string
+  deprecated?: boolean
   description?: string | null
   createdAt?: Date | string
   updatedAt?: Date | string
@@ -411,6 +484,9 @@ export type PermissionCreateWithoutRolesInput = {
 export type PermissionUncheckedCreateWithoutRolesInput = {
   id?: number
   name: string
+  group: string
+  label: string
+  deprecated?: boolean
   description?: string | null
   createdAt?: Date | string
   updatedAt?: Date | string
@@ -443,6 +519,9 @@ export type PermissionScalarWhereInput = {
   NOT?: Prisma.PermissionScalarWhereInput | Prisma.PermissionScalarWhereInput[]
   id?: Prisma.IntFilter<"Permission"> | number
   name?: Prisma.StringFilter<"Permission"> | string
+  group?: Prisma.StringFilter<"Permission"> | string
+  label?: Prisma.StringFilter<"Permission"> | string
+  deprecated?: Prisma.BoolFilter<"Permission"> | boolean
   description?: Prisma.StringNullableFilter<"Permission"> | string | null
   createdAt?: Prisma.DateTimeFilter<"Permission"> | Date | string
   updatedAt?: Prisma.DateTimeFilter<"Permission"> | Date | string
@@ -450,6 +529,9 @@ export type PermissionScalarWhereInput = {
 
 export type PermissionUpdateWithoutRolesInput = {
   name?: Prisma.StringFieldUpdateOperationsInput | string
+  group?: Prisma.StringFieldUpdateOperationsInput | string
+  label?: Prisma.StringFieldUpdateOperationsInput | string
+  deprecated?: Prisma.BoolFieldUpdateOperationsInput | boolean
   description?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
   createdAt?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
   updatedAt?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
@@ -458,6 +540,9 @@ export type PermissionUpdateWithoutRolesInput = {
 export type PermissionUncheckedUpdateWithoutRolesInput = {
   id?: Prisma.IntFieldUpdateOperationsInput | number
   name?: Prisma.StringFieldUpdateOperationsInput | string
+  group?: Prisma.StringFieldUpdateOperationsInput | string
+  label?: Prisma.StringFieldUpdateOperationsInput | string
+  deprecated?: Prisma.BoolFieldUpdateOperationsInput | boolean
   description?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
   createdAt?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
   updatedAt?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
@@ -466,6 +551,9 @@ export type PermissionUncheckedUpdateWithoutRolesInput = {
 export type PermissionUncheckedUpdateManyWithoutRolesInput = {
   id?: Prisma.IntFieldUpdateOperationsInput | number
   name?: Prisma.StringFieldUpdateOperationsInput | string
+  group?: Prisma.StringFieldUpdateOperationsInput | string
+  label?: Prisma.StringFieldUpdateOperationsInput | string
+  deprecated?: Prisma.BoolFieldUpdateOperationsInput | boolean
   description?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
   createdAt?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
   updatedAt?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
@@ -505,6 +593,9 @@ export type PermissionCountOutputTypeCountRolesArgs<ExtArgs extends runtime.Type
 export type PermissionSelect<ExtArgs extends runtime.Types.Extensions.InternalArgs = runtime.Types.Extensions.DefaultArgs> = runtime.Types.Extensions.GetSelect<{
   id?: boolean
   name?: boolean
+  group?: boolean
+  label?: boolean
+  deprecated?: boolean
   description?: boolean
   createdAt?: boolean
   updatedAt?: boolean
@@ -515,6 +606,9 @@ export type PermissionSelect<ExtArgs extends runtime.Types.Extensions.InternalAr
 export type PermissionSelectCreateManyAndReturn<ExtArgs extends runtime.Types.Extensions.InternalArgs = runtime.Types.Extensions.DefaultArgs> = runtime.Types.Extensions.GetSelect<{
   id?: boolean
   name?: boolean
+  group?: boolean
+  label?: boolean
+  deprecated?: boolean
   description?: boolean
   createdAt?: boolean
   updatedAt?: boolean
@@ -523,6 +617,9 @@ export type PermissionSelectCreateManyAndReturn<ExtArgs extends runtime.Types.Ex
 export type PermissionSelectUpdateManyAndReturn<ExtArgs extends runtime.Types.Extensions.InternalArgs = runtime.Types.Extensions.DefaultArgs> = runtime.Types.Extensions.GetSelect<{
   id?: boolean
   name?: boolean
+  group?: boolean
+  label?: boolean
+  deprecated?: boolean
   description?: boolean
   createdAt?: boolean
   updatedAt?: boolean
@@ -531,12 +628,15 @@ export type PermissionSelectUpdateManyAndReturn<ExtArgs extends runtime.Types.Ex
 export type PermissionSelectScalar = {
   id?: boolean
   name?: boolean
+  group?: boolean
+  label?: boolean
+  deprecated?: boolean
   description?: boolean
   createdAt?: boolean
   updatedAt?: boolean
 }
 
-export type PermissionOmit<ExtArgs extends runtime.Types.Extensions.InternalArgs = runtime.Types.Extensions.DefaultArgs> = runtime.Types.Extensions.GetOmit<"id" | "name" | "description" | "createdAt" | "updatedAt", ExtArgs["result"]["permission"]>
+export type PermissionOmit<ExtArgs extends runtime.Types.Extensions.InternalArgs = runtime.Types.Extensions.DefaultArgs> = runtime.Types.Extensions.GetOmit<"id" | "name" | "group" | "label" | "deprecated" | "description" | "createdAt" | "updatedAt", ExtArgs["result"]["permission"]>
 export type PermissionInclude<ExtArgs extends runtime.Types.Extensions.InternalArgs = runtime.Types.Extensions.DefaultArgs> = {
   roles?: boolean | Prisma.Permission$rolesArgs<ExtArgs>
   _count?: boolean | Prisma.PermissionCountOutputTypeDefaultArgs<ExtArgs>
@@ -552,6 +652,9 @@ export type $PermissionPayload<ExtArgs extends runtime.Types.Extensions.Internal
   scalars: runtime.Types.Extensions.GetPayloadResult<{
     id: number
     name: string
+    group: string
+    label: string
+    deprecated: boolean
     description: string | null
     createdAt: Date
     updatedAt: Date
@@ -981,6 +1084,9 @@ export interface Prisma__PermissionClient<T, Null = never, ExtArgs extends runti
 export interface PermissionFieldRefs {
   readonly id: Prisma.FieldRef<"Permission", 'Int'>
   readonly name: Prisma.FieldRef<"Permission", 'String'>
+  readonly group: Prisma.FieldRef<"Permission", 'String'>
+  readonly label: Prisma.FieldRef<"Permission", 'String'>
+  readonly deprecated: Prisma.FieldRef<"Permission", 'Boolean'>
   readonly description: Prisma.FieldRef<"Permission", 'String'>
   readonly createdAt: Prisma.FieldRef<"Permission", 'DateTime'>
   readonly updatedAt: Prisma.FieldRef<"Permission", 'DateTime'>

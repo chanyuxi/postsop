@@ -31,22 +31,19 @@ export class SignInUseCase {
   ) {}
 
   async execute(signInRequest: SignInRequest): Promise<SignInResponse> {
-    const user = await this.userAuthQueryService.findUserForSignInByEmail(
-      signInRequest.email,
-    )
+    const { email, password } = signInRequest
 
-    if (
-      !user ||
-      !(await verifyPassword(signInRequest.password, user.password))
-    ) {
+    const user = await this.userAuthQueryService.findUserForSignInByEmail(email)
+
+    if (!user || !(await verifyPassword(password, user.password))) {
       throw AppException.unauthorized('Invalid email or password')
     }
-
     if (user.status !== UserStatus.ACTIVE) {
       throw AppException.unauthorized('User account is not active')
     }
 
     const session = await this.sessionService.createSession(user.id)
+
     return this.createAuthResponse(session)
   }
 

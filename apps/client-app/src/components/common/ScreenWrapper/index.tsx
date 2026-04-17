@@ -7,16 +7,20 @@ import { StatusBarPlaceholder } from '../StatusBarPlaceholder'
 interface ScreenWrapperProps {
   contentClassName?: string
   statusBarClassName?: string
+  preventRenderingstatusBar?: boolean
 }
 
 export function ScreenWrapper({
   contentClassName,
   statusBarClassName,
+  preventRenderingstatusBar = false,
   children,
 }: PropsWithChildren<ScreenWrapperProps>) {
   return (
     <View className="bg-background flex-1">
-      <StatusBarPlaceholder className={statusBarClassName} />
+      {!preventRenderingstatusBar && (
+        <StatusBarPlaceholder className={statusBarClassName} />
+      )}
 
       <View className={twMerge('flex-1', contentClassName)}>{children}</View>
     </View>

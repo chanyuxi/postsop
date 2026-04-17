@@ -1,4 +1,5 @@
 import type { ReactNode } from 'react'
+import { useState } from 'react'
 import type { TextInputProps } from 'react-native'
 import { TextInput, View } from 'react-native'
 import type { VariantProps } from 'tailwind-variants'
@@ -7,7 +8,7 @@ import { tv } from 'tailwind-variants'
 import type { Controllability } from './core'
 import { withAutoControl } from './core'
 
-interface InputProps
+export interface InputProps
   extends
     Controllability<string>,
     Omit<TextInputProps, 'value' | 'onChange'>,
@@ -25,30 +26,66 @@ const inputVariants = tv({
   },
   variants: {
     size: {
-      sm: { input: 'text-sm' },
-      md: { input: 'h-12 text-base' },
-      lg: { input: 'text-lg' },
+      sm: { input: 'h-12 text-base' },
+      md: { input: 'h-13 text-lg' },
+      lg: { input: 'h-14 text-xl' },
     },
+    variant: {
+      'hollowed-out': {
+        wrapper: 'border-input-border border bg-transparent',
+      },
+    },
+    focused: {
+      true: {
+        wrapper: 'border-brand-blue',
+      },
+    },
+  },
+  defaultVariants: {
+    size: 'md',
   },
 })
 
 export const Input = withAutoControl(function (props: InputProps) {
-  const { className, inputClassName, size, ...restProps } = props
+  const [focused, setFocused] = useState(false)
+  const {
+    className,
+    inputClassName,
+    size,
+    variant,
+    prefix,
+    suffix,
+    onBlur,
+    onFocus,
+    ...restProps
+  } = props
 
-  const { wrapper, input } = inputVariants({ size })
+  const { wrapper, input } = inputVariants({ size, variant, focused })
+
+  const handleFocus: NonNullable<TextInputProps['onFocus']> = (event) => {
+    setFocused(true)
+    onFocus?.(event)
+  }
+
+  const handleBlur: NonNullable<TextInputProps['onBlur']> = (event) => {
+    setFocused(false)
+    onBlur?.(event)
+  }
 
   return (
     <View className={wrapper({ className })}>
-      {props.prefix && <View className="mr-2">{props.prefix}</View>}
+      {prefix && <View className="mr-2">{prefix}</View>}
 
       <TextInput
         className={input({ className: inputClassName })}
         {...restProps}
+        onBlur={handleBlur}
         value={props.value}
         onChange={(e) => props.onChange?.(e.nativeEvent.text)}
+        onFocus={handleFocus}
       />
 
-      {props.suffix && <View className="mr-2">{props.prefix}</View>}
+      {suffix && <View className="ml-2">{suffix}</View>}
     </View>
   )
 })

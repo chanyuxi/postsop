@@ -6,6 +6,7 @@ import { permissionNames } from '@postsop/access-control/permissions'
 
 import { hashPassword } from '../src/common/utils/password.util'
 import { PrismaClient } from '../src/generated/prisma/client'
+import { syncPermissionMirror } from '../src/modules/permission/permission-mirror'
 
 const adapter = new PrismaPg({ connectionString: process.env['DATABASE_URL'] })
 const prisma = new PrismaClient({ adapter })
@@ -13,25 +14,24 @@ const prisma = new PrismaClient({ adapter })
 async function main() {
   const adminPasswordHash = await hashPassword('password')
 
-  await prisma.permission.createMany({
-    data: permissionNames.map((name) => ({ name })),
-  })
+  await syncPermissionMirror(prisma)
 
   await prisma.role.createMany({
     data: [{ name: 'admin' }, { name: 'user' }],
+    skipDuplicates: true,
   })
 
   await prisma.role.update({
     where: { name: 'admin' },
     data: {
       permissions: {
-        connect: permissionNames.map((name) => ({ name })),
+        set: permissionNames.map((name) => ({ name })),
       },
     },
   })
 
-  await prisma.user.create({
-    data: {
+  await prisma.user.upsert({
+    create: {
       email: 'admin@example.com',
       password: adminPasswordHash,
       profile: {
@@ -42,6 +42,14 @@ async function main() {
       roles: {
         connect: [{ name: 'admin' }],
       },
+    },
+    update: {
+      roles: {
+        connect: [{ name: 'admin' }],
+      },
+    },
+    where: {
+      email: 'admin@example.com',
     },
   })
 }

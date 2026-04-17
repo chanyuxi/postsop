@@ -11,6 +11,8 @@
     "dev": "cross-env NODE_ENV=development nest start --watch",
     "db:generate": "prisma generate",
     "db:migrate": "prisma migrate dev",
+    "db:permissions:check": "tsx prisma/permissions.ts check",
+    "db:permissions:sync": "tsx prisma/permissions.ts sync",
     "db:seed": "prisma db seed",
     "db:studio": "prisma studio",
     "lint": "pnpm --dir ../.. exec eslint apps/server --cache",

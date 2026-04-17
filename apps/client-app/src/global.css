@@ -15,7 +15,7 @@
   --color-brand-white: var(--color-brand-gray-900);
   --color-brand-black: var(--color-brand-gray-100);
 
-  --color-brand-blue: #2b5bc3;
+  --color-brand-blue: #336be4;
   --color-brand-green: #239c50;
   --color-brand-red: #c1301c;
   --color-brand-yellow: #d9a114;
@@ -39,17 +39,19 @@
       /* Components */
       --color-background-bottom-bar: var(--color-brand-gray-900);
       --color-input: var(--color-brand-gray-900);
+      --color-input-border: var(--color-black);
     }
 
     @variant dark {
       /* Base */
       --color-background: var(--color-brand-gray-100);
-      --color-background-secondary: var(--color-brand-gray-200);
+      --color-background-secondary: var(--color-brand-gray-300);
       --color-foreground: var(--color-brand-gray-800);
       --color-foreground-secondary: var(--color-brand-gray-600);
       /* Components */
       --color-background-bottom-bar: var(--color-brand-gray-200);
       --color-input: var(--color-brand-gray-300);
+      --color-input-border: var(--color-white);
     }
   }
 }

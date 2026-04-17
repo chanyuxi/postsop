@@ -44,7 +44,7 @@ describe('ApiExceptionFilter', () => {
 
     filter.catch(AppException.tokenExpired('Token expired'), host)
 
-    expect(status).toHaveBeenCalledWith(HttpStatus.FORBIDDEN)
+    expect(status).toHaveBeenCalledWith(HttpStatus.UNAUTHORIZED)
     expect(json).toHaveBeenCalledWith({
       code: Codes.TOKEN_EXPIRED,
       data: null,
