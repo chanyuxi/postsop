@@ -8,8 +8,10 @@ import {
   Input,
   PasswordInput,
   ThemeText,
+  // TODO: Maybe src/hooks is it's final destination
   useStatusBarHeight,
 } from '@/components/common'
+// TODO: Wrap these components which imported from widget as a bucket file
 import { ThemeToggle } from '@/components/widget/ThemeToggle'
 import { VersionIndication } from '@/components/widget/VersionIndication'
 import type { AuthStackParamList } from '@/routes/type'

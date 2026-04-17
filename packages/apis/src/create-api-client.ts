@@ -142,6 +142,8 @@ export function configureJsonHeaders(config: InternalAxiosRequestConfig) {
   setHeader(config, 'Content-Type', 'application/json')
 }
 
+// TODO: Delete, do not provide default functions, let users decide
+// We seem to be able to avoid touching the AccessToken at all
 /**
  * Attaches a bearer token when one is available.
  */
@@ -183,13 +185,14 @@ export function createApiClient(options: CreateApiClientOptions): ApiClient {
       return config
     }
 
-    const attacher = getAuthAttacher(auth)
+    // TODO: This is Bug. Before we proceed further, we haven't had skipAuthRefresh
+    // take effect in a timely manner
 
     if (refreshPromise && !isAuthRefreshSkipped(auth, config)) {
       return new Promise((resolve, reject) => {
         requestQueue.push({
           resolve: (token) => {
-            attacher(config, token)
+            getAuthAttacher(auth)(config, token)
             resolve(config)
           },
           reject,
@@ -204,11 +207,11 @@ export function createApiClient(options: CreateApiClientOptions): ApiClient {
       !isAuthRefreshSkipped(auth, config)
     ) {
       const nextAccessToken = await refreshAccessToken()
-      attacher(config, nextAccessToken)
+      getAuthAttacher(auth)(config, nextAccessToken)
       return config
     }
 
-    attacher(config, accessToken)
+    getAuthAttacher(auth)(config, accessToken)
     return config
   })
 
@@ -321,6 +324,22 @@ export function createApiClient(options: CreateApiClientOptions): ApiClient {
     return response.data.data
   }
 
+  /**
+   * Usage:
+   * - If the endpoint does not define request `data` or `params`, the second
+   *   argument is the request config.
+   *   `requestEndpoint(profileEndpoint, { timeout: 5_000 })`
+   * - If the endpoint defines request `data` or `params`, the second argument
+   *   is the endpoint request payload and the optional third argument is the
+   *   request config.
+   *   `requestEndpoint(signInEndpoint, { data: credentials }, { timeout: 5_000 })`
+   * - Keep endpoint `params` inside the request payload object, not in the
+   *   config object.
+   *   `requestEndpoint(listPostsEndpoint, { params: { page: 1 } }, { signal })`
+   */
+  // TODO: This function is not robust enough, zod parse errors should be encapsulated as ApiError
+  // Remember, any internal errors that occur through actions initiated by apiClient
+  // will be packaged as ApiError
   const requestEndpoint: ApiEndpointRequester = async <
     TEndpoint extends AnyApiEndpoint,
   >(
@@ -481,6 +500,7 @@ function parseEndpointRequest<TEndpoint extends AnyApiEndpoint>(
 }
 
 function normalizeEndpointUrl(path: string) {
+  // In the future, we can implement this feature, depending on whether we need to enforce Restful style
   if (path.includes(':')) {
     throw new TypeError(
       `Endpoint path "${path}" cannot use path params. Use "params" for query strings or "data" for request bodies instead.`

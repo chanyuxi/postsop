@@ -35,7 +35,7 @@ export class SignInUseCase {
 
     const user = await this.userAuthQueryService.findUserForSignInByEmail(email)
 
-    if (!user || !(await verifyPassword(password, user.password))) {
+    if (user === null || !(await verifyPassword(password, user.password))) {
       throw AppException.unauthorized('Invalid email or password')
     }
     if (user.status !== UserStatus.ACTIVE) {

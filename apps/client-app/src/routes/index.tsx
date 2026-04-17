@@ -7,7 +7,7 @@ import {
 } from '@react-navigation/native'
 import { createNativeStackNavigator } from '@react-navigation/native-stack'
 import { useEffect, useState } from 'react'
-import { ActivityIndicator, Linking } from 'react-native'
+import { ActivityIndicator, Linking, View } from 'react-native'
 import { useUniwind } from 'uniwind'
 
 import { PERSISTENCE_KEY } from '@/constants/keys'
@@ -57,7 +57,11 @@ export function RootStack() {
   }, [isReady])
 
   if (!isReady) {
-    return <ActivityIndicator />
+    return (
+      <View className="flex-1 items-center justify-center">
+        <ActivityIndicator />
+      </View>
+    )
   }
 
   return (

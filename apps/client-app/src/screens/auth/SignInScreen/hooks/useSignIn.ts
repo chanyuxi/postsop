@@ -1,13 +1,13 @@
 import { zodResolver } from '@hookform/resolvers/zod'
 import { useForm } from 'react-hook-form'
 
+import type { SignUpRequest } from '@postsop/contracts/auth'
 import { SignInRequestSchema } from '@postsop/contracts/auth'
 
 import { useAuth } from '@/hooks'
-import { toast } from '@/libs/toast'
 import { useSignInMutation } from '@/services/auth/mutations/useSignInMutation'
 
-const defaultValues = {
+const defaultValues: SignUpRequest = {
   email: 'admin@example.com',
   password: 'password',
 }
@@ -30,10 +30,6 @@ export function useSignIn() {
     signInMutation.mutate(data, {
       onSuccess: (authSession) => {
         signIn(authSession)
-
-        if (__DEV__) {
-          toast('Sign in successful')
-        }
       },
     })
   })
