@@ -3,12 +3,12 @@ import { View } from 'react-native'
 import { Button, Icons } from '@/components/common'
 import { ScreenWrapper } from '@/components/common/ScreenWrapper'
 import { TopBar } from '@/components/common/TopBar'
+import { ThemeToggle } from '@/components/widget/ThemeToggle'
 import { APP_VERSION } from '@/constants'
 import { useAuth } from '@/hooks'
 import { toast } from '@/libs/toast'
 
 import { ConfigItem } from './components/ConfigItem'
-import { ThemeToggle } from './components/ThemeToggle'
 
 export function SettingScreen() {
   const { signOut } = useAuth()
@@ -18,7 +18,11 @@ export function SettingScreen() {
       <TopBar title="SETTING" />
 
       <View className="flex-1 gap-4 p-4">
-        <ThemeToggle />
+        <ConfigItem
+          description="set your favorite theme"
+          label="Theme"
+          value={<ThemeToggle />}
+        />
 
         <ConfigItem
           description="switching regional languages"

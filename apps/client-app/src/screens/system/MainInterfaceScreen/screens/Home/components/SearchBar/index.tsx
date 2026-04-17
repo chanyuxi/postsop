@@ -1,12 +1,14 @@
 import { useState } from 'react'
-import { StyleSheet, TextInput, View } from 'react-native'
+import { StyleSheet, View } from 'react-native'
+
+import { ThemeTextInput } from '@/components/common'
 
 export function SearchBar() {
   const [searchText, setSearchText] = useState('')
 
   return (
     <View style={styles.container}>
-      <TextInput
+      <ThemeTextInput
         cursorColor="#8800f8ff"
         placeholder="Type a movie name..."
         placeholderTextColor="#fff6"

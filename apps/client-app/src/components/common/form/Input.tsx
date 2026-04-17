@@ -1,10 +1,11 @@
 import type { ReactNode } from 'react'
 import { useState } from 'react'
 import type { TextInputProps } from 'react-native'
-import { TextInput, View } from 'react-native'
+import { View } from 'react-native'
 import type { VariantProps } from 'tailwind-variants'
 import { tv } from 'tailwind-variants'
 
+import { ThemeTextInput } from '../ThemeTextInput'
 import type { Controllability } from './core'
 import { withAutoControl } from './core'
 
@@ -22,7 +23,7 @@ export interface InputProps
 const inputVariants = tv({
   slots: {
     wrapper: 'bg-input flex-row items-center rounded-lg px-4',
-    input: 'text-foreground flex-1 text-base',
+    input: 'text-foreground flex-1 text-base font-semibold',
   },
   variants: {
     size: {
@@ -76,7 +77,7 @@ export const Input = withAutoControl(function (props: InputProps) {
     <View className={wrapper({ className })}>
       {prefix && <View className="mr-2">{prefix}</View>}
 
-      <TextInput
+      <ThemeTextInput
         className={input({ className: inputClassName })}
         {...restProps}
         onBlur={handleBlur}

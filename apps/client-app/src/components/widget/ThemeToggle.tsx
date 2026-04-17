@@ -1,18 +1,20 @@
 import type { ReactNode } from 'react'
+import { Pressable } from 'react-native'
 import { Uniwind, useCSSVariable, useUniwind } from 'uniwind'
 
 import { Icons } from '@/components/common'
 import { persistTheme } from '@/utils/storage'
 import { setTheme } from '@/utils/theme'
 
-import { ConfigItem } from './ConfigItem'
-
 export function ThemeToggle() {
   const { theme, hasAdaptiveThemes } = useUniwind()
 
   const activeTheme = hasAdaptiveThemes ? 'system' : theme
 
-  const orange = useCSSVariable('--color-orange-500') as string
+  const [orange, yellow300] = useCSSVariable([
+    '--color-orange-500',
+    '--color-yellow-200',
+  ]) as [string, string]
 
   const toggleTheme = () => {
     const newTheme = Uniwind.currentTheme === 'light' ? 'dark' : 'light'
@@ -31,19 +33,17 @@ export function ThemeToggle() {
       )
       break
     case 'dark':
-      value = <Icons name="weather-night" />
+      value = (
+        <Icons
+          color={yellow300}
+          name="weather-night"
+        />
+      )
       break
     case 'system':
-      value = 'System'
+      value = <Icons name="palette-outline" />
       break
   }
 
-  return (
-    <ConfigItem
-      description="set your favorite theme"
-      label="Theme"
-      value={value}
-      onPress={toggleTheme}
-    />
-  )
+  return <Pressable onPress={toggleTheme}>{value}</Pressable>
 }

@@ -1,5 +1,5 @@
 import { useEffect } from 'react'
-import { Text, View } from 'react-native'
+import { View } from 'react-native'
 import Animated, {
   Easing,
   interpolate,
@@ -10,6 +10,7 @@ import Animated, {
 } from 'react-native-reanimated'
 import { scheduleOnRN } from 'react-native-worklets'
 
+import { ThemeText } from '@/components/common'
 import { useIsSingletonComponent } from '@/hooks/useIsSingletonComponent'
 import { useAppDispatch, useAppSelector } from '@/hooks/useStore'
 import { nextToast } from '@/store/systemSlice'
@@ -66,7 +67,7 @@ function Toast({ toast }: ToastProps) {
       className="dark:bg-brand-gray-700 mx-auto h-10 min-w-25 items-center justify-center rounded-full bg-white px-4 shadow-lg"
       style={animatedStyle}
     >
-      <Text className="text-sm">{message}</Text>
+      <ThemeText className="text-sm">{message}</ThemeText>
     </Animated.View>
   )
 }

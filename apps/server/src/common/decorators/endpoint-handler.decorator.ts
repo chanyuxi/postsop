@@ -14,7 +14,6 @@ import type { AnyApiEndpoint, ApiEndpointMethod } from '@postsop/contracts'
 import { EndpointResponseValidationInterceptor } from '@/common/interceptors/endpoint-response-validation.interceptor'
 
 export const API_ENDPOINT_METADATA = Symbol('api-endpoint')
-export const ENDPOINT_HANDLER_METADATA = Symbol('endpoint-handler')
 
 const METHOD_DECORATOR_MAP = {
   DELETE: Delete,
@@ -31,7 +30,6 @@ export function EndpointHandler<TEndpoint extends AnyApiEndpoint>(
   endpoint: TEndpoint,
 ): MethodDecorator {
   return applyDecorators(
-    SetMetadata(ENDPOINT_HANDLER_METADATA, true),
     SetMetadata(API_ENDPOINT_METADATA, endpoint),
     METHOD_DECORATOR_MAP[endpoint.method](
       normalizeEndpointRoutePath(endpoint.path),

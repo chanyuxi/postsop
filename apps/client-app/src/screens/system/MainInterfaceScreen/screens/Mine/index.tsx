@@ -1,5 +1,5 @@
 import type { BottomTabScreenProps } from '@react-navigation/bottom-tabs'
-import { Text, View } from 'react-native'
+import { View } from 'react-native'
 
 import { ScreenWrapper } from '@/components/common/ScreenWrapper'
 import { ThemeText } from '@/components/common/ThemeText'
@@ -31,7 +31,9 @@ export function Mine({
       <View className="bg-background-secondary">
         <View className="p-8">
           <ThemeText className="mb-2 text-4xl">{nickname}</ThemeText>
-          <Text className="text-foreground-secondary">{profileHint}</Text>
+          <ThemeText className="text-foreground-secondary">
+            {profileHint}
+          </ThemeText>
         </View>
       </View>
 

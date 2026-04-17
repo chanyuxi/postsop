@@ -1,14 +1,13 @@
+import { Controller } from '@nestjs/common'
+
 import { availablePermissionsEndpoint } from '@postsop/contracts/permission'
 
-import {
-  EndpointController,
-  EndpointHandler,
-  Public,
-} from '@/common/decorators'
+import { EndpointHandler } from '@/common/decorators/endpoint-handler.decorator'
+import { Public } from '@/common/decorators/public.decorator'
 
 import { PermissionService } from '../services/permission.service'
 
-@EndpointController('permission')
+@Controller()
 export class PermissionController {
   constructor(private readonly permissionService: PermissionService) {}
 

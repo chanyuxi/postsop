@@ -1,14 +1,13 @@
+import { Controller } from '@nestjs/common'
+
 import { userProfileEndpoint } from '@postsop/contracts/user'
 
-import {
-  AuthContext,
-  EndpointController,
-  EndpointHandler,
-} from '@/common/decorators'
+import { AuthContext } from '@/common/decorators/auth-context.decorator'
+import { EndpointHandler } from '@/common/decorators/endpoint-handler.decorator'
 
 import { UserProfileQueryService } from '../queries/user-profile.query.service'
 
-@EndpointController('user')
+@Controller()
 export class UserController {
   constructor(
     private readonly userProfileQueryService: UserProfileQueryService,

@@ -76,7 +76,7 @@ export class ApiError extends Error {
   }
 
   get needsRefresh() {
-    return this.isForbidden && this.isTokenExpired
+    return (this.isUnauthorized || this.isForbidden) && this.isTokenExpired
   }
 
   get displayMessage() {

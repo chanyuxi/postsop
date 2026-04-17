@@ -86,7 +86,7 @@ export function SignUpScreen({
             disabled={isRegistering}
             onPress={() => navigation.goBack()}
           >
-            <ThemeText className="text-brand-primary font-semibold italic underline">
+            <ThemeText className="text-brand-primary underline">
               Sign in
             </ThemeText>
           </Pressable>

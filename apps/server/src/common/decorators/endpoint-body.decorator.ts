@@ -1,6 +1,20 @@
+import type { PipeTransform } from '@nestjs/common'
+import { Body } from '@nestjs/common'
+import type { ZodType } from 'zod'
+
 import type { AnyApiEndpoint } from '@postsop/contracts'
 
-import { ZodBody } from './zod-body.decorator'
+import { ZodValidationPipe } from '@/common/pipes/zod.validation.pipe'
+
+const pipeCache = new WeakMap<ZodType, ZodValidationPipe>()
+
+function getCachedZodValidationPipe(schema: ZodType): PipeTransform {
+  if (!pipeCache.has(schema)) {
+    pipeCache.set(schema, new ZodValidationPipe(schema))
+  }
+
+  return pipeCache.get(schema)!
+}
 
 export function EndpointBody<TEndpoint extends AnyApiEndpoint>(
   endpoint: TEndpoint,
@@ -11,5 +25,5 @@ export function EndpointBody<TEndpoint extends AnyApiEndpoint>(
     )
   }
 
-  return ZodBody(endpoint.dataSchema)
+  return Body(getCachedZodValidationPipe(endpoint.dataSchema))
 }

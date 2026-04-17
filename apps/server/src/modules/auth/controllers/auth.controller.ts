@@ -1,3 +1,5 @@
+import { Controller } from '@nestjs/common'
+
 import type {
   RefreshRequest,
   SignInRequest,
@@ -10,20 +12,17 @@ import {
   signUpEndpoint,
 } from '@postsop/contracts/auth'
 
-import {
-  AuthContext,
-  EndpointBody,
-  EndpointController,
-  EndpointHandler,
-  Public,
-} from '@/common/decorators'
+import { AuthContext } from '@/common/decorators/auth-context.decorator'
+import { EndpointBody } from '@/common/decorators/endpoint-body.decorator'
+import { EndpointHandler } from '@/common/decorators/endpoint-handler.decorator'
+import { Public } from '@/common/decorators/public.decorator'
 
 import { RefreshAuthSessionUseCase } from '../use-cases/refresh-auth-session.use-case'
 import { SignInUseCase } from '../use-cases/sign-in.use-case'
 import { SignOutUseCase } from '../use-cases/sign-out.use-case'
 import { SignUpUseCase } from '../use-cases/sign-up.use-case'
 
-@EndpointController('auth')
+@Controller()
 export class AuthController {
   constructor(
     private readonly signUpUseCase: SignUpUseCase,

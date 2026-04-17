@@ -1,9 +1,10 @@
 import { useRef } from 'react'
 import type { GestureResponderEvent } from 'react-native'
-import { ScrollView, StyleSheet, Text, View } from 'react-native'
+import { ScrollView, StyleSheet, View } from 'react-native'
 
 import type { ContextMenuImperativeHandle } from '@/components/common/ContextMenu'
 import { ContextMenu } from '@/components/common/ContextMenu'
+import { ThemeText } from '@/components/common/ThemeText'
 import type { Todo } from '@/types/todo'
 
 import { TodoCard } from '../TodoCard'
@@ -33,9 +34,9 @@ export function TodoList({ todos }: TodoListProps) {
 
       <ContextMenu ref={contextMenuRef}>
         <View style={styles.contextMenuContent}>
-          <Text>Context Menu Item 1</Text>
-          <Text>Context Menu Item 2</Text>
-          <Text>Context Menu Item 3</Text>
+          <ThemeText>Context Menu Item 1</ThemeText>
+          <ThemeText>Context Menu Item 2</ThemeText>
+          <ThemeText>Context Menu Item 3</ThemeText>
         </View>
       </ContextMenu>
     </View>

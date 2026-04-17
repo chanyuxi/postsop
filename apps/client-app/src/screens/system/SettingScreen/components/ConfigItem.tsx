@@ -15,10 +15,7 @@ export function ConfigItem(props: ConfigItemProps) {
   const { label, value, description, onPress } = props
 
   return (
-    <Pressable
-      className="bg-background-secondary flex-row items-center justify-between rounded-lg p-4"
-      onPress={onPress}
-    >
+    <View className="bg-background-secondary flex-row items-center justify-between rounded-lg p-4">
       <View>
         <ThemeText>{label}</ThemeText>
         <ThemeText className="text-foreground-secondary text-sm">
@@ -26,9 +23,9 @@ export function ConfigItem(props: ConfigItemProps) {
         </ThemeText>
       </View>
 
-      <View>
+      <Pressable onPress={onPress}>
         <ThemeText>{value}</ThemeText>
-      </View>
-    </Pressable>
+      </Pressable>
+    </View>
   )
 }

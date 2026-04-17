@@ -1,6 +1,7 @@
 import { useCallback, useState } from 'react'
-import { Modal, Text, TouchableOpacity, View } from 'react-native'
+import { Modal, TouchableOpacity, View } from 'react-native'
 
+import { ThemeText } from '@/components/common'
 import { Icons } from '@/components/common/MaterialDesignIcons'
 
 export function Calendar() {
@@ -19,7 +20,7 @@ export function Calendar() {
     <>
       <View className="flex-row items-center justify-between bg-gray-800 p-4">
         <View className="flex-1 items-center justify-center">
-          <Text className="text-white">CALENDAR</Text>
+          <ThemeText className="text-white">CALENDAR</ThemeText>
         </View>
 
         <TouchableOpacity onPress={toggleFullViewMode}>
@@ -44,7 +45,9 @@ export function Calendar() {
         >
           <View className="max-h-4/5 w-4/5 rounded-xl bg-white p-5">
             <View className="mb-4 flex-row items-center justify-between">
-              <Text className="text-lg font-bold">Calendar Details</Text>
+              <ThemeText className="text-lg font-bold">
+                Calendar Details
+              </ThemeText>
               <TouchableOpacity onPress={closeModal}>
                 <Icons
                   color="#000"
@@ -52,9 +55,9 @@ export function Calendar() {
                 />
               </TouchableOpacity>
             </View>
-            <Text>Calendar Content 1</Text>
-            <Text>Calendar Content 2</Text>
-            <Text>Calendar Content 3</Text>
+            <ThemeText>Calendar Content 1</ThemeText>
+            <ThemeText>Calendar Content 2</ThemeText>
+            <ThemeText>Calendar Content 3</ThemeText>
           </View>
         </TouchableOpacity>
       </Modal>
