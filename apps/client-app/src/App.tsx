@@ -1,6 +1,6 @@
 import './global.css'
 
-import { StatusBar, View } from 'react-native'
+import { View } from 'react-native'
 import { GestureHandlerRootView } from 'react-native-gesture-handler'
 import { SafeAreaProvider } from 'react-native-safe-area-context'
 import { Provider as StoreProvider } from 'react-redux'
@@ -28,10 +28,6 @@ function AppContent() {
       className="bg-background flex-1"
       style={safeAreaStyles}
     >
-      <StatusBar
-        translucent
-        backgroundColor="transparent"
-      />
       <RootStack />
     </View>
   )
