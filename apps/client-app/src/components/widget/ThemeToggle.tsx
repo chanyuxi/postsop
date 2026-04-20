@@ -11,7 +11,7 @@ export function ThemeToggle() {
 
   const activeTheme = hasAdaptiveThemes ? 'system' : theme
 
-  const [orange, yellow300] = useCSSVariable([
+  const [orange500, yellow300] = useCSSVariable([
     '--color-orange-500',
     '--color-yellow-200',
   ]) as [string, string]
@@ -27,7 +27,7 @@ export function ThemeToggle() {
     case 'light':
       value = (
         <Icons
-          color={orange}
+          color={orange500}
           name="white-balance-sunny"
         />
       )

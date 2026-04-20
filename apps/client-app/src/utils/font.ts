@@ -85,6 +85,7 @@ const FONT_WEIGHT_STYLE_MAP: Record<
   },
 }
 
+// TODO: Optimize this function
 function normalizeFontWeight(
   fontWeight?: TextStyle['fontWeight']
 ): NormalizedFontWeight {

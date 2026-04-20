@@ -8,5 +8,6 @@
   "endOfLine": "auto",
   "singleAttributePerLine": true,
   "plugins": ["prettier-plugin-tailwindcss"],
+  "tailwindAttributes": ["/^[a-zA-Z]+ClassName$/"],
   "tailwindFunctions": ["tv", "twMerge"]
 }

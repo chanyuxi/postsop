@@ -1,7 +1,8 @@
 import { useNavigation } from '@react-navigation/native'
 import { Pressable, View } from 'react-native'
-import { twMerge } from 'tailwind-merge'
 import { useCSSVariable } from 'uniwind'
+
+import { tw } from '@/utils/style'
 
 import { Icons } from '../MaterialDesignIcons'
 import { ThemeText } from '../ThemeText'
@@ -22,7 +23,7 @@ export function TopBar(props: TopBarProps) {
   const foregroundColor = useCSSVariable('--color-foreground') as string
 
   return (
-    <View className={twMerge('bg-background-secondary pt-4 pb-6', className)}>
+    <View className={tw('bg-background-secondary pt-4 pb-6', className)}>
       <View className="flex-row items-center px-4">
         <View className="w-20">
           {!hideBackButton && (

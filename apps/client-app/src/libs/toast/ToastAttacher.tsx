@@ -64,10 +64,10 @@ function Toast({ toast }: ToastProps) {
 
   return (
     <Animated.View
-      className="dark:bg-brand-gray-700 mx-auto h-10 min-w-25 items-center justify-center rounded-full bg-white px-4 shadow-lg"
+      className="mx-auto h-10 min-w-25 items-center justify-center rounded-full bg-white px-4 shadow-lg"
       style={animatedStyle}
     >
-      <ThemeText className="text-sm">{message}</ThemeText>
+      <ThemeText className="text-brand-black text-sm">{message}</ThemeText>
     </Animated.View>
   )
 }

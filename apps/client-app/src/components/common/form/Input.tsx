@@ -5,6 +5,8 @@ import { View } from 'react-native'
 import type { VariantProps } from 'tailwind-variants'
 import { tv } from 'tailwind-variants'
 
+import { tw } from '@/utils/style'
+
 import { ThemeTextInput } from '../ThemeTextInput'
 import type { Controllability } from './core'
 import { withAutoControl } from './core'
@@ -15,7 +17,7 @@ export interface InputProps
     Omit<TextInputProps, 'value' | 'onChange'>,
     VariantProps<typeof inputVariants> {
   inputClassName?: string
-
+  isError?: boolean
   prefix?: ReactNode
   suffix?: ReactNode
 }
@@ -52,6 +54,7 @@ export const Input = withAutoControl(function (props: InputProps) {
   const {
     className,
     inputClassName,
+    isError,
     size,
     variant,
     prefix,
@@ -63,18 +66,22 @@ export const Input = withAutoControl(function (props: InputProps) {
 
   const { wrapper, input } = inputVariants({ size, variant, focused })
 
-  const handleFocus: NonNullable<TextInputProps['onFocus']> = (event) => {
+  const handleFocus: TextInputProps['onFocus'] = (event) => {
     setFocused(true)
     onFocus?.(event)
   }
 
-  const handleBlur: NonNullable<TextInputProps['onBlur']> = (event) => {
+  const handleBlur: TextInputProps['onBlur'] = (event) => {
     setFocused(false)
     onBlur?.(event)
   }
 
   return (
-    <View className={wrapper({ className })}>
+    <View
+      className={wrapper({
+        className: tw(isError && 'border-brand-danger', className),
+      })}
+    >
       {prefix && <View className="mr-2">{prefix}</View>}
 
       <ThemeTextInput

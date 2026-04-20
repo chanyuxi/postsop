@@ -25,7 +25,9 @@ export function useAuth() {
         return
       }
 
-      toast('Signed out locally, but we could not notify the server')
+      if (__DEV__) {
+        toast('Signed out locally, but we could not notify the server')
+      }
 
       if (__DEV__) {
         console.error('Failed to sign out cleanly', error)

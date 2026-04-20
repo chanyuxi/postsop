@@ -1,7 +1,9 @@
 import { z } from 'zod'
 
 export const email = z.email()
-export const password = z.string().min(6)
+export const password = z
+  .string()
+  .min(6, { error: 'Password cannot be less than 6 characters' })
 
 export const dateOnlyString = z
   .string()

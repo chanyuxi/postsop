@@ -9,7 +9,8 @@ import Animated, {
   withRepeat,
   withTiming,
 } from 'react-native-reanimated'
-import { twMerge } from 'tailwind-merge'
+
+import { tw } from '@/utils/style'
 
 interface AmbientOrbProps extends Pick<ViewProps, 'pointerEvents'> {
   duration: number
@@ -63,11 +64,11 @@ export function AmbientOrb({
 
   return (
     <View
-      className={twMerge('absolute', wrapperClassName)}
+      className={tw('absolute', wrapperClassName)}
       pointerEvents={pointerEvents}
     >
       <Animated.View style={animatedStyle}>
-        <View className={twMerge('rounded-full', orbClassName)} />
+        <View className={tw('rounded-full', orbClassName)} />
       </Animated.View>
     </View>
   )

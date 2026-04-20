@@ -1,7 +1,7 @@
 import { zodResolver } from '@hookform/resolvers/zod'
 import { useForm } from 'react-hook-form'
-import { z } from 'zod'
 
+import { password } from '@postsop/contracts'
 import type { SignUpRequest } from '@postsop/contracts/auth'
 import { SignUpRequestSchema } from '@postsop/contracts/auth'
 
@@ -9,7 +9,7 @@ import { toast } from '@/libs/toast'
 import { useSignUpMutation } from '@/services/auth/mutations/useSignUpMutation'
 
 const signUpFormSchema = SignUpRequestSchema.extend({
-  confirmPassword: z.string().min(6),
+  confirmPassword: password,
 }).superRefine(({ confirmPassword, password }, ctx) => {
   if (password !== confirmPassword) {
     ctx.addIssue({

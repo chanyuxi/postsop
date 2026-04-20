@@ -6,6 +6,7 @@ import type { FieldError } from 'react-hook-form'
 const PLAIN_ONCHANGE = () => {}
 
 export interface Controllability<T = unknown> {
+  isError?: boolean
   value?: T | undefined
   onChange?: (value: T) => void
 }
@@ -13,6 +14,7 @@ export interface Controllability<T = unknown> {
 export const FormItemContext = createContext<
   Required<Controllability<unknown>>
 >({
+  isError: false,
   value: undefined,
   onChange: PLAIN_ONCHANGE,
 })
@@ -34,6 +36,7 @@ export function withAutoControl<P extends Controllability<any>>(
       return {
         ...props,
 
+        isError: props.isError ?? ctx.isError,
         value: props.value ?? ctx.value,
         onChange: (value) => {
           ctx.onChange(value)

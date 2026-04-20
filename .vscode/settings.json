@@ -14,6 +14,13 @@
 
   // Enable autocompletion for Tailwind Variants
   "tailwindCSS.classFunctions": ["tv"],
+  "tailwindCSS.classAttributes": [
+    "class",
+    "className",
+    // TODO: Check if the regular expression is valid
+    "/^[a-zA-Z]+ClassName$/"
+  ],
+
   "[javascript]": {
     "editor.defaultFormatter": "esbenp.prettier-vscode"
   },

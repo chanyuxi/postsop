@@ -23,9 +23,13 @@ export function ConfigItem(props: ConfigItemProps) {
         </ThemeText>
       </View>
 
-      <Pressable onPress={onPress}>
+      {onPress ? (
+        <Pressable onPress={onPress}>
+          <ThemeText>{value}</ThemeText>
+        </Pressable>
+      ) : (
         <ThemeText>{value}</ThemeText>
-      </Pressable>
+      )}
     </View>
   )
 }

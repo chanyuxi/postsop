@@ -1,4 +1,5 @@
 import { Injectable } from '@nestjs/common'
+import assert from 'node:assert/strict'
 
 import {
   encodePermissionMask,
@@ -15,6 +16,7 @@ import { verifyPassword } from '@/common/utils/password.util'
 import { UserStatus } from '@/generated/prisma/enums'
 import { PermissionService } from '@/modules/permission/services/permission.service'
 import { UserAuthQueryService } from '@/modules/user/queries/user-auth.query.service'
+import { SignInUserRecord } from '@/modules/user/selectors/auth-user.select'
 
 import type { AuthSession } from '../interfaces/auth-session.interface'
 import type { AuthContextPayload } from '../interfaces/claims.interface'
@@ -31,22 +33,45 @@ export class SignInUseCase {
   ) {}
 
   async execute(signInRequest: SignInRequest): Promise<SignInResponse> {
-    const { email, password } = signInRequest
-
-    const user = await this.userAuthQueryService.findUserForSignInByEmail(email)
-
-    if (user === null || !(await verifyPassword(password, user.password))) {
-      throw AppException.unauthorized('Invalid email or password')
-    }
-    if (user.status !== UserStatus.ACTIVE) {
-      throw AppException.unauthorized('User account is not active')
-    }
+    const user = await this.userAuthQueryService.findUserForSignInByEmail(
+      signInRequest.email,
+    )
+    this.checkIsUserExist(user)
+    assert.ok(user)
+    this.checkIsUserAccessible(user, signInRequest.password)
 
     const session = await this.sessionService.createSession(user.id)
-
     return this.createAuthResponse(session)
   }
 
+  /**
+   * TODO: add comment
+   */
+  private checkIsUserExist(user: SignInUserRecord | null) {
+    if (!user) {
+      throw AppException.unauthorized('User does not exist')
+    }
+  }
+
+  /**
+   * TODO: add comment
+   */
+  private async checkIsUserAccessible(
+    user: SignInUserRecord,
+    password: string,
+  ) {
+    if (!(await verifyPassword(password, user.password))) {
+      throw AppException.unauthorized('Invalid email or password')
+    }
+
+    if (user.status !== UserStatus.ACTIVE) {
+      throw AppException.unauthorized('User account is not active')
+    }
+  }
+
+  /**
+   * TODO: add comment
+   */
   private async createAuthResponse(
     session: AuthSession,
   ): Promise<SignInResponse> {
@@ -57,6 +82,9 @@ export class SignInUseCase {
     }
   }
 
+  /**
+   * TODO: add comment
+   */
   private async issueTokenPair(session: AuthSession): Promise<AuthTokens> {
     const permissions = await this.permissionService.getUserPermissionNames(
       session.userId,

@@ -5,7 +5,6 @@ import { GestureHandlerRootView } from 'react-native-gesture-handler'
 import { SafeAreaProvider } from 'react-native-safe-area-context'
 import { Provider as StoreProvider } from 'react-redux'
 
-import { IS_ANDROID_AND_VERSION_LARGER_THAN_OR_EQUAL_TO_35 } from '@/constants'
 import {
   useAppInit,
   useFocusManager,
@@ -24,22 +23,15 @@ function AppContent() {
   useOnlineStateManager()
   useAppInit()
 
-  // Given the introduction of Android edge-to-edge mode, we will uniformly
-  // use custom <StatusBarPlaceholder /> to manage the status bar
-  const ConfigureStatusBar =
-    !IS_ANDROID_AND_VERSION_LARGER_THAN_OR_EQUAL_TO_35 && (
-      <StatusBar
-        translucent
-        backgroundColor="transparent"
-      />
-    )
-
   return (
     <View
       className="bg-background flex-1"
       style={safeAreaStyles}
     >
-      {ConfigureStatusBar}
+      <StatusBar
+        translucent
+        backgroundColor="transparent"
+      />
       <RootStack />
     </View>
   )

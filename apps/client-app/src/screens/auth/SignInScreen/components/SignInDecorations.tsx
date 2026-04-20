@@ -15,7 +15,7 @@ export function SignInDecorations() {
         scale={[0.94, 1.06, 0.97]}
         travelX={[-10, 14, -8]}
         travelY={[-8, 16, -12]}
-        wrapperClassName="top-16 left-20 right-0 items-center"
+        wrapperClassName="top-16 right-0 left-20 items-center"
       />
 
       <AmbientOrb

@@ -3,7 +3,8 @@ import type { FieldValues } from 'react-hook-form'
 import { Controller, FormProvider, useForm } from 'react-hook-form'
 import { View } from 'react-native'
 import Animated, { FadeIn, FadeOut } from 'react-native-reanimated'
-import { twMerge } from 'tailwind-merge'
+
+import { tw } from '@/utils/style'
 
 import { ThemeText } from '../ThemeText'
 import { FormItemContext, transformErrorMessage } from './core'
@@ -40,7 +41,7 @@ function Form<
   const { className, form, children } = props
 
   return (
-    <View className={twMerge('w-full', className)}>
+    <View className={tw('w-full', className)}>
       <FormProvider {...form}>{children}</FormProvider>
     </View>
   )
@@ -54,22 +55,25 @@ Form.Item = function FormItem(props: PropsWithChildren<FormItemProps>) {
       name={name}
       render={({ field, fieldState }) => {
         const { value, onChange } = field
+        const { error } = fieldState
 
         return (
-          <View className={className}>
+          <View className={tw('relative', className)}>
             {label && (
               <View className="mb-2">
                 <ThemeText className="text-lg">{label}</ThemeText>
               </View>
             )}
 
-            <FormItemContext.Provider value={{ value, onChange }}>
+            <FormItemContext.Provider
+              value={{ value, onChange, isError: !!error }}
+            >
               <View>{children}</View>
             </FormItemContext.Provider>
 
             {fieldState.error && (
               <Animated.View
-                className="mt-2"
+                className="absolute top-full"
                 entering={FadeIn}
                 exiting={FadeOut}
               >
