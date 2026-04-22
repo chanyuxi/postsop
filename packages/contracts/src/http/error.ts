@@ -43,6 +43,10 @@ export class ApiError extends Error {
     return this.httpStatus === NetworkStatusCodes.TIMEOUT
   }
 
+  get isConfigError() {
+    return this.httpStatus === NetworkStatusCodes.CONFIG_ERROR
+  }
+
   get isUnauthorized() {
     return this.httpStatus === StatusCodes.UNAUTHORIZED
   }
@@ -93,6 +97,10 @@ export class ApiError extends Error {
 
   static timeout(message = 'Request timeout') {
     return new ApiError(message, NetworkStatusCodes.TIMEOUT)
+  }
+
+  static configError(message = 'Failed to initiate request') {
+    return new ApiError(message, NetworkStatusCodes.CONFIG_ERROR)
   }
 
   static http(httpStatus: HttpStatus, message?: string) {

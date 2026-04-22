@@ -5,7 +5,7 @@ import {
   PermissionRegistryVersionSchema,
 } from '@postsop/access-control'
 
-export const AuthContextPayloadSchema = z.strictObject({
+export const AuthContextPayloadSchema = z.object({
   pm: PermissionMaskSchema,
   pv: PermissionRegistryVersionSchema,
   sub: z.coerce.number().int().positive(),

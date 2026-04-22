@@ -139,6 +139,9 @@ importers:
       atob:
         specifier: ^2.1.2
         version: 2.1.2
+      axios:
+        specifier: ^1.15.0
+        version: 1.15.0
       dayjs:
         specifier: ^1.11.20
         version: 1.11.20

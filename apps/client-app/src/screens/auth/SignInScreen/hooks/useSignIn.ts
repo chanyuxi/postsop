@@ -1,13 +1,13 @@
 import { zodResolver } from '@hookform/resolvers/zod'
 import { useForm } from 'react-hook-form'
 
-import type { SignUpRequest } from '@postsop/contracts/auth'
+import type { SignInRequest } from '@postsop/contracts/auth'
 import { SignInRequestSchema } from '@postsop/contracts/auth'
 
 import { useAuth } from '@/hooks'
-import { useSignInMutation } from '@/services/auth/mutations/useSignInMutation'
+import { useSignInMutation } from '@/services/auth/mutations'
 
-const defaultValues: SignUpRequest = {
+const defaultValues: SignInRequest = {
   email: __DEV__ ? 'admin@example.com' : '',
   password: __DEV__ ? 'password' : '',
 }

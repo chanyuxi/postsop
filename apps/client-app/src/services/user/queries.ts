@@ -1,9 +1,9 @@
 import { useQuery } from '@tanstack/react-query'
 
-import { userKey } from '../../queryKeys'
-import { requestProfile } from '../request'
+import { userKey } from './keys'
+import { requestProfile } from './request'
 
-export default function useProfileQuery() {
+export function useProfileQuery() {
   return useQuery({
     queryFn: requestProfile,
     queryKey: userKey.profile(),

@@ -11,7 +11,7 @@ import { toast } from '@/libs/toast'
 import { ConfigItem } from './components/ConfigItem'
 
 export function SettingScreen() {
-  const { signOut } = useAuth()
+  const { isSignOuting, signOut } = useAuth()
 
   return (
     <ScreenWrapper statusBarClassName="bg-background-secondary">
@@ -50,8 +50,9 @@ export function SettingScreen() {
         />
 
         <Button
+          disabled={isSignOuting}
           variant="danger"
-          onPress={signOut}
+          onPress={() => void signOut()}
         >
           Sign out
         </Button>

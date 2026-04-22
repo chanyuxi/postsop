@@ -6,7 +6,7 @@ import type { SignUpRequest } from '@postsop/contracts/auth'
 import { SignUpRequestSchema } from '@postsop/contracts/auth'
 
 import { toast } from '@/libs/toast'
-import { useSignUpMutation } from '@/services/auth/mutations/useSignUpMutation'
+import { useSignUpMutation } from '@/services/auth/mutations'
 
 const signUpFormSchema = SignUpRequestSchema.extend({
   confirmPassword: password,

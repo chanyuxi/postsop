@@ -30,6 +30,8 @@ export enum NetworkStatusCodes {
   NETWORK_ERROR = -1,
   /** Request timeout */
   TIMEOUT = -2,
+  /** Failed to initiate request */
+  CONFIG_ERROR = -3,
 }
 
 /**

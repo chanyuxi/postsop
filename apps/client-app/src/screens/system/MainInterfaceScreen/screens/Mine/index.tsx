@@ -5,7 +5,7 @@ import { ScreenWrapper } from '@/components/common/ScreenWrapper'
 import { ThemeText } from '@/components/common/ThemeText'
 import { VersionIndication } from '@/components/widget/VersionIndication'
 import type { AllStackParamList } from '@/routes/type'
-import useProfileQuery from '@/services/user/queries/useProfileQuery'
+import { useProfileQuery } from '@/services/user/queries'
 
 import { Cell } from './components/Cell'
 import { CellGroup } from './components/CellGroup'

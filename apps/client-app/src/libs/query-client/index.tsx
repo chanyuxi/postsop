@@ -1,10 +1,10 @@
 import AsyncStorage from '@react-native-async-storage/async-storage'
 import { createAsyncStoragePersister } from '@tanstack/query-async-storage-persister'
-import { QueryClient } from '@tanstack/react-query'
+import { QueryCache, QueryClient } from '@tanstack/react-query'
 import { PersistQueryClientProvider } from '@tanstack/react-query-persist-client'
 import type { PropsWithChildren } from 'react'
 
-import { ApiError } from '@postsop/apis'
+import { ApiError } from '@postsop/contracts/http'
 
 import { toast } from '@/libs/toast'
 
@@ -18,12 +18,19 @@ const persister = createAsyncStoragePersister({
 })
 
 const queryClient = new QueryClient({
+  queryCache: new QueryCache({
+    onError: (error) => {
+      if (error instanceof ApiError) {
+        toast(error.displayMessage)
+      }
+    },
+  }),
   defaultOptions: {
     queries: {
       retry: (failureCount, error) => {
         if (error instanceof ApiError) {
           // If there is a network error then we will retry
-          if (error.isNetworkError) return failureCount < 2
+          if (error.isNetworkError || error.isTimeout) return failureCount < 2
         }
         // Otherwise, we will never retry
         return false

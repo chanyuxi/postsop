@@ -13,13 +13,7 @@ import type {
   ApiEndpointRequest,
   ApiEndpointResponse,
 } from '@postsop/contracts'
-import {
-  ApiError,
-  ApiResponse,
-  Codes,
-  StatusCodes,
-} from '@postsop/contracts/http'
-import { MaybePromise } from '@postsop/types'
+import { ApiError, ApiResponse } from '@postsop/contracts/http'
 
 /**
  * Axios request config used by the shared API client.
@@ -40,20 +34,13 @@ interface RetryableRequestConfig<
 
 interface RequestQueueEntry {
   reject: (error: unknown) => void
-  resolve: (token: string) => void
-}
-
-interface ResolvedEndpointRequest {
-  data: unknown
-  config?: ApiClientRequestConfig
-  params: unknown
-  url: string
+  resolve: () => void
 }
 
 /**
  * Sends a request defined by a shared endpoint contract.
  */
-export interface ApiEndpointRequester {
+interface ApiEndpointRequester {
   <TEndpoint extends ApiEndpoint<undefined, undefined, unknown>>(
     endpoint: TEndpoint,
     config?: ApiClientRequestConfig
@@ -66,69 +53,31 @@ export interface ApiEndpointRequester {
 }
 
 /**
- * Tokens returned after a successful refresh.
- */
-export interface ApiClientAuthRefreshResult {
-  accessToken: string
-  refreshToken?: string
-}
-
-/**
  * Factory options for the shared API client.
  * All axios creation options are forwarded to both the bare and authenticated clients.
  */
 export interface CreateApiClientOptions extends CreateAxiosDefaults {
-  configureHeaders?: (config: InternalAxiosRequestConfig) => void
-  authentication?: ApiClientAuthenticationOptions
-}
-
-/**
- * Strategy hooks used to attach credentials and refresh access tokens.
- */
-export interface ApiClientAuthenticationOptions {
-  shouldSkipAuthRefresh?: (
-    config: ApiClientRequestConfig | RetryableRequestConfig
-  ) => boolean
-  authAttacher?: (
-    config: InternalAxiosRequestConfig,
-    accessToken: string | undefined
-  ) => void
-  getAccessToken: () => MaybePromise<string | undefined>
-  getRefreshToken: () => MaybePromise<string | undefined>
-  isTokenExpiringSoon?: (accessToken: string | undefined) => boolean
-  onRefreshFailure?: (error: ApiError) => MaybePromise<void>
-  refreshAccessToken: (
-    axios: AxiosInstance,
-    oldRefreshToken: string
-  ) => MaybePromise<ApiClientAuthRefreshResult>
-  onRefreshSuccess?: (
-    refreshedAuth: ApiClientAuthRefreshResult
-  ) => MaybePromise<void>
+  customizer: {
+    /** Configure your config */
+    configure?: (config: ApiClientRequestConfig) => void
+    /** Return true to perform a refresh action in advance */
+    isAccessTokenExpiringSoon?: () => boolean
+    /**
+     * This function is used for attaching accessToken. Note that this function ensures
+     * that it runs after refreshAccessToken is successful, assuming that you can
+     * already access the latest accessToken.
+     */
+    attachAccessToken: (config: ApiClientRequestConfig) => void
+    /** Refresh your token here */
+    onFetchTokens: (instance: AxiosInstance) => Promise<void>
+  }
 }
 
 /**
  * Public API surface returned by `createApiClient`.
  */
 export interface ApiClient {
-  bareClient: AxiosInstance
   client: AxiosInstance
-  del: <T = null>(url: string, config?: ApiClientRequestConfig) => Promise<T>
-  get: <T = null>(url: string, config?: ApiClientRequestConfig) => Promise<T>
-  patch: <T = null>(
-    url: string,
-    data?: unknown,
-    config?: ApiClientRequestConfig
-  ) => Promise<T>
-  post: <T = null>(
-    url: string,
-    data?: unknown,
-    config?: ApiClientRequestConfig
-  ) => Promise<T>
-  put: <T = null>(
-    url: string,
-    data?: unknown,
-    config?: ApiClientRequestConfig
-  ) => Promise<T>
   request: <T = null, D = unknown>(
     config: ApiClientRequestConfig<D>
   ) => Promise<T>
@@ -136,102 +85,61 @@ export interface ApiClient {
 }
 
 /**
- * Adds JSON request headers to an axios config.
- */
-export function configureJsonHeaders(config: InternalAxiosRequestConfig) {
-  setHeader(config, 'Content-Type', 'application/json')
-}
-
-// TODO: Delete, do not provide default functions, let users decide
-// We seem to be able to avoid touching the AccessToken at all
-/**
- * Attaches a bearer token when one is available.
- */
-export function attachBearerToken(
-  config: InternalAxiosRequestConfig,
-  accessToken: string | undefined
-) {
-  if (!accessToken) {
-    return
-  }
-
-  setHeader(config, 'Authorization', `Bearer ${accessToken}`)
-}
-
-/**
- * Creates a reusable API client with optional auth refresh support.
+ * Creates a reusable API client with auth refresh support.
  */
 export function createApiClient(options: CreateApiClientOptions): ApiClient {
-  const [createOptions, settings] = normalizeCreateApiClientOptions(options)
-
-  const bareClient = axios.create(createOptions)
-  const client = axios.create(createOptions)
-
-  let refreshPromise: Promise<string> | null = null
+  let refreshPromise: Promise<void> | null = null
   let requestQueue: RequestQueueEntry[] = []
 
-  const auth = settings.authentication
+  const { customizer, ...config } = options
 
-  bareClient.interceptors.request.use((config) => {
-    settings.configureHeaders?.(config)
+  const client = axios.create(config)
+  client.interceptors.request.use(
+    async (config: RetryableRequestConfig) => {
+      customizer.configure?.(config)
 
-    return config
-  })
-
-  client.interceptors.request.use(async (config: RetryableRequestConfig) => {
-    settings.configureHeaders?.(config)
-
-    if (!auth) {
-      return config
-    }
-
-    // TODO: This is Bug. Before we proceed further, we haven't had skipAuthRefresh
-    // take effect in a timely manner
-
-    if (refreshPromise && !isAuthRefreshSkipped(auth, config)) {
-      return new Promise((resolve, reject) => {
-        requestQueue.push({
-          resolve: (token) => {
-            getAuthAttacher(auth)(config, token)
-            resolve(config)
-          },
-          reject,
-        })
-      })
-    }
-
-    const accessToken = await auth.getAccessToken()
-
-    if (
-      auth.isTokenExpiringSoon?.(accessToken) &&
-      !isAuthRefreshSkipped(auth, config)
-    ) {
-      const nextAccessToken = await refreshAccessToken()
-      getAuthAttacher(auth)(config, nextAccessToken)
-      return config
-    }
-
-    getAuthAttacher(auth)(config, accessToken)
-    return config
-  })
-
-  client.interceptors.response.use(
-    (response) => {
-      if (response.data.code !== Codes.SUCCESS) {
-        throw ApiError.code(response.data.code, response.data.message)
+      if (config.skipAuthRefresh) {
+        return config
       }
 
-      return response
-    },
-    async (error: AxiosError<{ code?: number; message?: string }>) => {
-      const apiError = normalizeAxiosError(error)
+      if (refreshPromise) {
+        return new Promise((resolve, reject) => {
+          requestQueue.push({
+            resolve: () => {
+              customizer.attachAccessToken(config)
+              resolve(config)
+            },
+            reject,
+          })
+        })
+      }
 
-      return processApiError(
-        apiError,
-        error.config as RetryableRequestConfig | undefined
-      )
+      if (customizer.isAccessTokenExpiringSoon?.()) {
+        await refreshAccessToken()
+        customizer.attachAccessToken(config)
+        return config
+      }
+
+      customizer.attachAccessToken(config)
+      return config
+    },
+    (error) => {
+      const normalizedError = normalizeUnknownError(error)
+
+      throw normalizedError
     }
   )
+  client.interceptors.response.use(undefined, async (error: unknown) => {
+    const apiError = normalizeUnknownError(error)
+
+    return processApiError(apiError, (error as AxiosError).config)
+  })
+
+  const bareClient = axios.create(config)
+  bareClient.interceptors.request.use((config) => {
+    customizer.configure?.(config)
+    return config
+  })
 
   const refreshAccessToken = async () => {
     if (refreshPromise) {
@@ -239,35 +147,14 @@ export function createApiClient(options: CreateApiClientOptions): ApiClient {
     }
 
     refreshPromise = (async () => {
-      const refreshToken = await auth!.getRefreshToken()
-
-      if (!refreshToken) {
-        const error = ApiError.http(
-          StatusCodes.UNAUTHORIZED,
-          'Missing refresh token'
-        )
-
-        await auth?.onRefreshFailure?.(error)
-        flushRequestQueue(error)
-        throw error
-      }
-
       try {
-        const refreshedAuth = await auth!.refreshAccessToken(
-          bareClient,
-          refreshToken
-        )
-        await auth?.onRefreshSuccess?.(refreshedAuth)
-        flushRequestQueue(null, refreshedAuth.accessToken)
+        await customizer.onFetchTokens(bareClient)
 
-        return refreshedAuth.accessToken
+        flushRequestQueue(null)
       } catch (error) {
-        // Refresh hooks may throw raw errors, so normalize them before handing
-        // them back to the caller's refresh failure handler.
         const normalizedError = normalizeUnknownError(error)
-
-        await auth?.onRefreshFailure?.(normalizedError)
         flushRequestQueue(normalizedError)
+
         throw normalizedError
       } finally {
         refreshPromise = null
@@ -277,14 +164,14 @@ export function createApiClient(options: CreateApiClientOptions): ApiClient {
     return refreshPromise
   }
 
-  const flushRequestQueue = (error: unknown, token?: string) => {
+  const flushRequestQueue = (error: unknown) => {
     requestQueue.forEach(({ reject, resolve }) => {
       if (error) {
         reject(error)
         return
       }
 
-      resolve(token!)
+      resolve()
     })
 
     requestQueue = []
@@ -294,22 +181,15 @@ export function createApiClient(options: CreateApiClientOptions): ApiClient {
     error: ApiError,
     config?: RetryableRequestConfig
   ) => {
-    if (
-      auth &&
-      config &&
-      error.needsRefresh &&
-      !isAuthRefreshSkipped(auth, config)
-    ) {
+    if (config && !config.skipAuthRefresh && error.needsRefresh) {
       config._retryCount = (config._retryCount ?? 0) + 1
 
       if (config._retryCount > 1) {
-        await auth.onRefreshFailure?.(error)
         throw error
       }
 
-      const nextAccessToken = await refreshAccessToken()
-
-      getAuthAttacher(auth)(config, nextAccessToken)
+      await refreshAccessToken()
+      customizer.attachAccessToken(config)
 
       return client.request(config)
     }
@@ -324,22 +204,6 @@ export function createApiClient(options: CreateApiClientOptions): ApiClient {
     return response.data.data
   }
 
-  /**
-   * Usage:
-   * - If the endpoint does not define request `data` or `params`, the second
-   *   argument is the request config.
-   *   `requestEndpoint(profileEndpoint, { timeout: 5_000 })`
-   * - If the endpoint defines request `data` or `params`, the second argument
-   *   is the endpoint request payload and the optional third argument is the
-   *   request config.
-   *   `requestEndpoint(signInEndpoint, { data: credentials }, { timeout: 5_000 })`
-   * - Keep endpoint `params` inside the request payload object, not in the
-   *   config object.
-   *   `requestEndpoint(listPostsEndpoint, { params: { page: 1 } }, { signal })`
-   */
-  // TODO: This function is not robust enough, zod parse errors should be encapsulated as ApiError
-  // Remember, any internal errors that occur through actions initiated by apiClient
-  // will be packaged as ApiError
   const requestEndpoint: ApiEndpointRequester = async <
     TEndpoint extends AnyApiEndpoint,
   >(
@@ -367,54 +231,10 @@ export function createApiClient(options: CreateApiClientOptions): ApiClient {
   }
 
   return {
-    bareClient,
     client,
-    del: (url, config) => request({ ...config, method: 'DELETE', url }),
-    get: (url, config) => request({ ...config, method: 'GET', url }),
-    patch: (url, data, config) =>
-      request({ ...config, data, method: 'PATCH', url }),
-    post: (url, data, config) =>
-      request({ ...config, data, method: 'POST', url }),
-    put: (url, data, config) =>
-      request({ ...config, data, method: 'PUT', url }),
     request,
     requestEndpoint,
   }
-}
-
-function normalizeCreateApiClientOptions(options: CreateApiClientOptions) {
-  const { authentication, configureHeaders, ...createOptions } = options
-
-  const settings = {
-    authentication,
-    configureHeaders,
-  }
-
-  return [createOptions, settings] as const
-}
-
-function isAuthRefreshSkipped(
-  auth: ApiClientAuthenticationOptions,
-  config: ApiClientRequestConfig | RetryableRequestConfig
-) {
-  return auth.shouldSkipAuthRefresh?.(config) ?? false
-}
-
-function getAuthAttacher(auth: ApiClientAuthenticationOptions) {
-  return auth.authAttacher ?? attachBearerToken
-}
-
-function setHeader(
-  config: InternalAxiosRequestConfig,
-  key: string,
-  value: string
-) {
-  if (typeof config.headers.set === 'function') {
-    config.headers.set(key, value)
-    return
-  }
-
-  config.headers[key] = value
 }
 
 function normalizeUnknownError(error: unknown): ApiError {
@@ -423,26 +243,19 @@ function normalizeUnknownError(error: unknown): ApiError {
   }
 
   if (axios.isAxiosError(error)) {
-    return normalizeAxiosError(error)
+    if (error.code === 'ECONNABORTED' || error.message?.includes('timeout')) {
+      return ApiError.timeout()
+    }
+
+    if (!error.response) {
+      return ApiError.network()
+    }
+
+    const { data, status } = error.response
+    return new ApiError(data.message || error.message, status, data.code)
   }
 
-  throw error
-}
-
-function normalizeAxiosError(
-  error: AxiosError<{ code?: number; message?: string }>
-): ApiError {
-  if (error.code === 'ECONNABORTED' || error.message?.includes('timeout')) {
-    return ApiError.timeout()
-  }
-
-  if (!error.response) {
-    return ApiError.network()
-  }
-
-  const { data, status } = error.response
-
-  return new ApiError(data?.message || error.message, status, data?.code)
+  throw ApiError.configError((error as Error)?.message)
 }
 
 function parseEndpointResponse<TEndpoint extends AnyApiEndpoint>(
@@ -458,7 +271,7 @@ function resolveEndpointRequestArguments<TEndpoint extends AnyApiEndpoint>(
   endpoint: TEndpoint,
   requestDataOrConfig?: ApiClientRequestConfig | ApiEndpointRequest<TEndpoint>,
   maybeConfig?: ApiClientRequestConfig
-): ResolvedEndpointRequest {
+) {
   if (!hasEndpointRequest(endpoint)) {
     return {
       data: undefined,
