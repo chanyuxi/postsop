@@ -9,21 +9,27 @@ import { ResponseEncapsulationInterceptor } from '@/common/interceptors/response
 async function bootstrap() {
   const app = await NestFactory.create(AppModule)
 
-  const configService = app.get(ConfigService)
-
-  app.enableShutdownHooks()
-  app.useGlobalFilters(new ApiExceptionFilter())
-  app.useGlobalInterceptors(new ResponseEncapsulationInterceptor())
-
-  await app.listen(Number(configService.getOrThrow(envs.PORT)))
-}
-
-function safeBootstrop() {
   try {
-    bootstrap()
+    const configService = app.get(ConfigService)
+
+    app.enableShutdownHooks()
+    app.useGlobalFilters(new ApiExceptionFilter())
+    app.useGlobalInterceptors(new ResponseEncapsulationInterceptor())
+
+    await app.listen(Number(configService.getOrThrow(envs.PORT)))
   } catch (error) {
-    console.error(error)
+    await app.close()
+    throw error
   }
 }
 
-safeBootstrop()
+async function safeBootstrap() {
+  try {
+    await bootstrap()
+  } catch (error) {
+    console.error(error)
+    process.exit(1)
+  }
+}
+
+void safeBootstrap()

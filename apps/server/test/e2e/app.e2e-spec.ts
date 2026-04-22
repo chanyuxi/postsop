@@ -6,6 +6,7 @@ import request from 'supertest'
 import type { App } from 'supertest/types'
 
 import { AppModule } from '@/app.module'
+import { RedisConnectionService } from '@/cache/redis-connection.service'
 import { PrismaService } from '@/database/prisma.service'
 
 jest.mock('@/database/prisma.service', () => ({
@@ -46,6 +47,10 @@ describe('App (e2e)', () => {
     const moduleFixture: TestingModule = await Test.createTestingModule({
       imports: [AppModule],
     })
+      .overrideProvider(RedisConnectionService)
+      .useValue({
+        onModuleInit: jest.fn(),
+      })
       .overrideProvider(CACHE_MANAGER)
       .useValue(cacheManager)
       .overrideProvider(PrismaService)

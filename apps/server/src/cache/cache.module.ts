@@ -5,6 +5,10 @@ import { ConfigModule, ConfigService } from '@nestjs/config'
 
 import { envs } from '@/common/constants/env'
 
+import { RedisConnectionService } from './redis-connection.service'
+
+const REDIS_CONNECTION_TIMEOUT_MS = 5_000
+
 @Module({
   imports: [
     NestCacheModule.registerAsync({
@@ -13,10 +17,16 @@ import { envs } from '@/common/constants/env'
       inject: [ConfigService],
       useFactory: (configService: ConfigService) => {
         return {
-          stores: [new KeyvRedis(configService.getOrThrow(envs.REDIS_URL))],
+          stores: [
+            new KeyvRedis(configService.getOrThrow(envs.REDIS_URL), {
+              connectionTimeout: REDIS_CONNECTION_TIMEOUT_MS,
+              throwOnErrors: true,
+            }),
+          ],
         }
       },
     }),
   ],
+  providers: [RedisConnectionService],
 })
 export class CacheModule {}
