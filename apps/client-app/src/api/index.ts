@@ -1,6 +1,6 @@
 import { REACT_APP_API_TIMEOUT, REACT_APP_API_URL } from '@env'
 
-import { createApiClient } from '@postsop/apis'
+import { createApiClient } from '@postsop/api'
 
 import { customizer } from './customizer'
 

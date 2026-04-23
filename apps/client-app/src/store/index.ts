@@ -1,7 +1,7 @@
 import { configureStore } from '@reduxjs/toolkit'
 
-import authSlice from './authSlice'
-import systemSlice from './systemSlice'
+import authSlice from './auth-slice'
+import systemSlice from './system-slice'
 
 export const store = configureStore({
   reducer: {

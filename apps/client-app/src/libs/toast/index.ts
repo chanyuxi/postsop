@@ -1,5 +1,5 @@
 import { store } from '@/store'
-import { scheduleToast } from '@/store/systemSlice'
+import { scheduleToast } from '@/store/system-slice'
 
 interface ToastOptions {
   message: string

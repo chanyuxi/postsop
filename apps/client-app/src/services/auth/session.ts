@@ -2,7 +2,7 @@ import type { AuthSession } from '@postsop/contracts/auth'
 
 import { clearPersistedQueryClient } from '@/libs/query-client'
 import { store } from '@/store'
-import { signInAction, signOutAction } from '@/store/authSlice'
+import { signInAction, signOutAction } from '@/store/auth-slice'
 import { clearStoredAuthSession, persistAuthorization } from '@/utils/storage'
 
 let clearAuthSessionPromise: Promise<void> | null = null

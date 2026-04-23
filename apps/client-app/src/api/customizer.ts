@@ -4,7 +4,7 @@ import type { AxiosInstance } from 'axios'
 import type {
   ApiClientRequestConfig,
   CreateApiClientOptions,
-} from '@postsop/apis'
+} from '@postsop/api'
 import type { RefreshTokenResponse } from '@postsop/contracts/auth'
 import { refreshEndpoint } from '@postsop/contracts/auth'
 import type { ApiResponse } from '@postsop/contracts/http'

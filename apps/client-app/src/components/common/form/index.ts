@@ -1,3 +1,3 @@
-export * from './Form'
-export * from './Input'
-export * from './PasswordInput'
+export * from './form'
+export * from './input'
+export * from './password-input'

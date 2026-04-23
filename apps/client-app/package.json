@@ -19,7 +19,7 @@
   },
   "dependencies": {
     "@hookform/resolvers": "^5.2.2",
-    "@postsop/apis": "workspace:*",
+    "@postsop/api": "workspace:*",
     "@postsop/contracts": "workspace:*",
     "@postsop/types": "workspace:*",
     "@react-native-async-storage/async-storage": "^3.0.1",

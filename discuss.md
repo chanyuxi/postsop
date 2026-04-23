@@ -1,10 +1,10 @@
 - 确保 server 返回的响应中非 100000 code 的 httpStatus 绝不为 200
 - 完善用户信息
 - 清理冗余 todo 逻辑，应用转向 post 类 App 推进
-- 更名 packages/apis -> packages/api
+- 更名 packages/apis -> packages/api √
 - 增加 AGENTS.md 文件
 - 修复 TODO 问题
 - 尝试拆分 create-api-client.ts 文件
-- 优化 apps\client-app\src\libs\query-client\index.tsx 文件，寻找一些可复用逻辑封装为函数
+- 优化 apps\client-app\src\libs\query-client\index.tsx 文件，寻找一些可复用逻辑封装为函数 √
 - 图标重构
 - 更新文件命名方式 (Kebab Case)

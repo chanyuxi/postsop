@@ -11,10 +11,10 @@ import { ActivityIndicator, Linking, View } from 'react-native'
 import { useUniwind } from 'uniwind'
 
 import { PERSISTENCE_KEY } from '@/constants/keys'
-import { useAuth } from '@/hooks/useAuth'
+import { useAuth } from '@/hooks/use-auth'
 
-import { AuthStack } from './AuthStack'
-import { MainStack } from './MainStack'
+import { AuthStack } from './auth-stack'
+import { MainStack } from './main-stack'
 import type { RootStackParamList } from './type'
 
 const Stack = createNativeStackNavigator<RootStackParamList>()

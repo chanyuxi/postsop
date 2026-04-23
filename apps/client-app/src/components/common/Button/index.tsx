@@ -3,7 +3,7 @@ import { Pressable } from 'react-native'
 import type { VariantProps } from 'tailwind-variants'
 import { tv } from 'tailwind-variants'
 
-import { ThemeText } from '../ThemeText'
+import { ThemeText } from '../theme-text'
 
 const buttonVariants = tv({
   slots: {
