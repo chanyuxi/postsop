@@ -28,7 +28,9 @@ export class ApiExceptionFilter implements ExceptionFilter {
     const http = host.switchToHttp()
     const request = http.getRequest<Request>()
     const response = http.getResponse<Response>()
-    const resolvedException = this.resolveException(exception)
+    const resolvedException = this.normalizeResolvedException(
+      this.resolveException(exception),
+    )
 
     if (resolvedException.httpStatus >= HttpStatus.INTERNAL_SERVER_ERROR) {
       this.logger.error(
@@ -78,6 +80,20 @@ export class ApiExceptionFilter implements ExceptionFilter {
     }
   }
 
+  private normalizeResolvedException(
+    resolvedException: ResolvedException,
+  ): ResolvedException {
+    if (!this.isSuccessfulHttpStatus(resolvedException.httpStatus)) {
+      return resolvedException
+    }
+
+    return {
+      httpStatus: HttpStatus.INTERNAL_SERVER_ERROR,
+      code: Codes.INTERNAL_ERROR,
+      message: getCodeReasonPhrase(Codes.INTERNAL_ERROR),
+    }
+  }
+
   private mapHttpStatusToCode(status: number): Codes {
     switch (status) {
       case HttpStatus.BAD_REQUEST:
@@ -98,6 +114,10 @@ export class ApiExceptionFilter implements ExceptionFilter {
       default:
         return Codes.INTERNAL_ERROR
     }
+  }
+
+  private isSuccessfulHttpStatus(status: number) {
+    return status >= HttpStatus.OK && status < 300
   }
 
   private extractMessage(response: string | object): string | null {

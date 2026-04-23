@@ -1,7 +1,8 @@
+import { MaterialDesignIcons } from '@react-native-vector-icons/material-design-icons'
 import { useState } from 'react'
 import { Pressable, View } from 'react-native'
+import { useCSSVariable } from 'uniwind'
 
-import { Icons } from '../material-design-icons'
 import type { InputProps } from './input'
 import { Input } from './input'
 
@@ -19,6 +20,7 @@ export function PasswordInput({
   ...props
 }: PasswordInputProps) {
   const [visible, setVisible] = useState(defaultVisible)
+  const foregroundColor = useCSSVariable('--color-foreground') as string
 
   return (
     <Input
@@ -33,7 +35,8 @@ export function PasswordInput({
             hitSlop={8}
             onPress={() => setVisible((current) => !current)}
           >
-            <Icons
+            <MaterialDesignIcons
+              color={foregroundColor}
               name={visible ? 'eye-off-outline' : 'eye-outline'}
               size={20}
             />

@@ -1,12 +1,11 @@
+import type { MaterialDesignIconsIconName } from '@react-native-vector-icons/material-design-icons'
+import { MaterialDesignIcons } from '@react-native-vector-icons/material-design-icons'
 import { useCSSVariable } from 'uniwind'
-
-import type { IconsName } from '@/components/common/material-design-icons'
-import { Icons } from '@/components/common/material-design-icons'
 
 export interface TabIconProps {
   focused: boolean
   size: number
-  name: IconsName
+  name: MaterialDesignIconsIconName
 }
 
 export function TabIcon({ focused, size, name }: TabIconProps) {
@@ -16,7 +15,7 @@ export function TabIcon({ focused, size, name }: TabIconProps) {
   ]) as [string, string]
 
   return (
-    <Icons
+    <MaterialDesignIcons
       color={focused ? focusedColor : unfocusedColor}
       name={name}
       size={size}

@@ -1,8 +1,8 @@
+import { MaterialDesignIcons } from '@react-native-vector-icons/material-design-icons'
 import type { ReactNode } from 'react'
 import { Pressable } from 'react-native'
 import { Uniwind, useCSSVariable, useUniwind } from 'uniwind'
 
-import { Icons } from '@/components/common'
 import { persistTheme } from '@/utils/storage'
 import { setTheme } from '@/utils/theme'
 
@@ -11,10 +11,11 @@ export function ThemeToggle() {
 
   const activeTheme = hasAdaptiveThemes ? 'system' : theme
 
-  const [orange500, yellow300] = useCSSVariable([
+  const [foregroundColor, orange500, yellow300] = useCSSVariable([
+    '--color-foreground',
     '--color-orange-500',
     '--color-yellow-200',
-  ]) as [string, string]
+  ]) as [string, string, string]
 
   const toggleTheme = () => {
     const newTheme = Uniwind.currentTheme === 'light' ? 'dark' : 'light'
@@ -26,7 +27,7 @@ export function ThemeToggle() {
   switch (activeTheme) {
     case 'light':
       value = (
-        <Icons
+        <MaterialDesignIcons
           color={orange500}
           name="white-balance-sunny"
         />
@@ -34,14 +35,19 @@ export function ThemeToggle() {
       break
     case 'dark':
       value = (
-        <Icons
+        <MaterialDesignIcons
           color={yellow300}
           name="weather-night"
         />
       )
       break
     case 'system':
-      value = <Icons name="palette-outline" />
+      value = (
+        <MaterialDesignIcons
+          color={foregroundColor}
+          name="palette-outline"
+        />
+      )
       break
   }
 

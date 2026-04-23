@@ -1,5 +1,10 @@
 import type { ArgumentsHost } from '@nestjs/common'
-import { BadRequestException, HttpStatus, Logger } from '@nestjs/common'
+import {
+  BadRequestException,
+  HttpException,
+  HttpStatus,
+  Logger,
+} from '@nestjs/common'
 
 import { Codes, getCodeReasonPhrase } from '@postsop/contracts/http'
 
@@ -71,6 +76,20 @@ describe('ApiExceptionFilter', () => {
     const { host, json, status } = createHost()
 
     filter.catch(new Error('database offline'), host)
+
+    expect(status).toHaveBeenCalledWith(HttpStatus.INTERNAL_SERVER_ERROR)
+    expect(json).toHaveBeenCalledWith({
+      code: Codes.INTERNAL_ERROR,
+      data: null,
+      message: getCodeReasonPhrase(Codes.INTERNAL_ERROR),
+    })
+  })
+
+  it('never emits failure responses with a successful http status', () => {
+    const filter = new ApiExceptionFilter()
+    const { host, json, status } = createHost()
+
+    filter.catch(new HttpException('Should not be ok', HttpStatus.OK), host)
 
     expect(status).toHaveBeenCalledWith(HttpStatus.INTERNAL_SERVER_ERROR)
     expect(json).toHaveBeenCalledWith({

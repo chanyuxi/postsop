@@ -21,6 +21,16 @@ export class AppException extends HttpException {
     code,
     message,
   }: AppExceptionOptions) {
+    if (code === Codes.SUCCESS) {
+      throw new Error('AppException cannot use Codes.SUCCESS')
+    }
+
+    if (httpStatus >= HttpStatus.OK && httpStatus < 300) {
+      throw new Error(
+        `AppException cannot use successful HTTP status ${httpStatus} for failure code ${code}`,
+      )
+    }
+
     super(message ?? getCodeReasonPhrase(code), httpStatus, {
       cause,
     })

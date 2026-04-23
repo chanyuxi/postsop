@@ -1,7 +1,9 @@
+import { MaterialDesignIcons } from '@react-native-vector-icons/material-design-icons'
 import { useEffect, useState } from 'react'
 import { View } from 'react-native'
+import { useCSSVariable } from 'uniwind'
 
-import { Icons, TopBar } from '@/components/common'
+import { TopBar } from '@/components/common'
 import { ScreenWrapper } from '@/components/common/screen-wrapper'
 import { getTodos } from '@/services-deperated/todos'
 import type { Todo } from '@/types/todo'
@@ -11,6 +13,7 @@ import { TodoList } from './components/todo-list'
 
 export function Home() {
   const [todos, setTodos] = useState<Todo[]>([])
+  const foregroundColor = useCSSVariable('--color-foreground') as string
 
   useEffect(() => {
     getTodos()
@@ -26,7 +29,12 @@ export function Home() {
     <ScreenWrapper statusBarClassName="bg-background-secondary">
       <TopBar
         hideBackButton
-        rightIcon={<Icons name="bell-outline" />}
+        rightIcon={
+          <MaterialDesignIcons
+            color={foregroundColor}
+            name="bell-outline"
+          />
+        }
         title="Todo"
       />
 

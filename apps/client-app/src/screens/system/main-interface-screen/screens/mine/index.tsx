@@ -7,7 +7,7 @@ import { VersionIndication } from '@/components/widget/version-indication'
 import type { AllStackParamList } from '@/routes/type'
 import { useProfileQuery } from '@/services/user/queries'
 
-import { Cell } from './components/Cell'
+import { Cell } from './components/cell'
 import { CellGroup } from './components/cell-group'
 
 export function Mine({

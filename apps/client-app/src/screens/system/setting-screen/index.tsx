@@ -1,6 +1,8 @@
+import { MaterialDesignIcons } from '@react-native-vector-icons/material-design-icons'
 import { View } from 'react-native'
+import { useCSSVariable } from 'uniwind'
 
-import { Button, Icons } from '@/components/common'
+import { Button } from '@/components/common'
 import { ScreenWrapper } from '@/components/common/screen-wrapper'
 import { TopBar } from '@/components/common/top-bar'
 import { ThemeToggle } from '@/components/widget/theme-toggle'
@@ -12,6 +14,7 @@ import { ConfigItem } from './components/config-item'
 
 export function SettingScreen() {
   const { isSignOuting, signOut } = useAuth()
+  const foregroundColor = useCSSVariable('--color-foreground') as string
 
   return (
     <ScreenWrapper statusBarClassName="bg-background-secondary">
@@ -39,7 +42,12 @@ export function SettingScreen() {
         <ConfigItem
           description="submit your question to us"
           label="Help and Feedback"
-          value={<Icons name="chevron-right" />}
+          value={
+            <MaterialDesignIcons
+              color={foregroundColor}
+              name="chevron-right"
+            />
+          }
         />
 
         <ConfigItem

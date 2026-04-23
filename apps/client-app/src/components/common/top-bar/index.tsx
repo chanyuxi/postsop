@@ -1,10 +1,10 @@
+import { MaterialDesignIcons } from '@react-native-vector-icons/material-design-icons'
 import { useNavigation } from '@react-navigation/native'
 import { Pressable, View } from 'react-native'
 import { useCSSVariable } from 'uniwind'
 
 import { tw } from '@/utils/style'
 
-import { Icons } from '../material-design-icons'
 import { ThemeText } from '../theme-text'
 
 interface TopBarProps {
@@ -28,7 +28,7 @@ export function TopBar(props: TopBarProps) {
         <View className="w-20">
           {!hideBackButton && (
             <Pressable onPress={() => goBack()}>
-              <Icons
+              <MaterialDesignIcons
                 color={foregroundColor}
                 name="chevron-left"
                 size={30}
