@@ -31,6 +31,8 @@ const queryClient = new QueryClient({
   }),
   defaultOptions: {
     queries: {
+      gcTime: 1000 * 60 * 60 * 24,
+
       retry: (failureCount, error) => {
         if (error instanceof ApiError) {
           // If there is a network error then we will retry

@@ -1,4 +1,4 @@
-import { MaterialDesignIcons } from '@react-native-vector-icons/material-design-icons'
+import { Feather } from '@react-native-vector-icons/feather'
 import type { ReactNode } from 'react'
 import { Pressable } from 'react-native'
 import { Uniwind, useCSSVariable, useUniwind } from 'uniwind'
@@ -27,25 +27,28 @@ export function ThemeToggle() {
   switch (activeTheme) {
     case 'light':
       value = (
-        <MaterialDesignIcons
+        <Feather
           color={orange500}
-          name="white-balance-sunny"
+          name="sun"
+          size={24}
         />
       )
       break
     case 'dark':
       value = (
-        <MaterialDesignIcons
+        <Feather
           color={yellow300}
-          name="weather-night"
+          name="moon"
+          size={24}
         />
       )
       break
     case 'system':
       value = (
-        <MaterialDesignIcons
+        <Feather
           color={foregroundColor}
-          name="palette-outline"
+          name="box"
+          size={24}
         />
       )
       break
