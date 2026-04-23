@@ -1,4 +1,7 @@
 {
-  "extends": "../../configs/typescript/tsconfig.package.typecheck.json",
-  "include": ["src/**/*.ts", "../../module-shim.d.ts"]
+  "extends": "../../tsconfig.base.json",
+  "include": ["src/**/*.ts", "../../module-shim.d.ts"],
+  "compilerOptions": {
+    "noEmit": true
+  }
 }

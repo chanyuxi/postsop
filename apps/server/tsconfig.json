@@ -1,18 +1,14 @@
 {
-  "extends": "../../configs/typescript/tsconfig.base.json",
+  "extends": "../../tsconfig.base.json",
   "exclude": ["dist", "node_modules"],
   "compilerOptions": {
     "incremental": true,
-    "target": "ES2023",
     "emitDecoratorMetadata": true,
     "experimentalDecorators": true,
     "baseUrl": ".",
-    "module": "nodenext",
-    "moduleResolution": "nodenext",
     "paths": {
       "@/*": ["./src/*"]
     },
-    "resolvePackageJsonExports": true,
     "declaration": true,
     "outDir": "./dist",
     "removeComments": true,

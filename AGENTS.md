@@ -46,6 +46,7 @@ Core tooling and libraries:
 - In `PascalCase` type names, keep the acronym uppercase when that improves semantics, for example `JWTPayload`.
 - Do not manually edit generated artifacts such as `dist/**`, `.turbo/**`, or `apps/server/src/generated/prisma/**`.
 - Treat `packages/contracts` as the source of truth for endpoint contracts and shared HTTP semantics.
+- Keep shared TypeScript workspace configs in root-level `tsconfig.*.json` files. Package and app configs should extend those root files instead of adding another shared config directory.
 - When adding or changing Turborepo workflows, make package participation explicit. Do not assume a workspace is covered by a root `turbo run <task>` unless that package intentionally exposes the matching script.
 - Keep Turborepo focused on `build`, `dev`, `type-check`, and test orchestration. Prefer the root ESLint entrypoint for repository-wide linting instead of mirroring lint as a per-package Turbo task.
 

@@ -9,7 +9,8 @@
         "$TURBO_DEFAULT$",
         "../../module-shim.d.ts",
         "../../tsconfig.json",
-        "../../configs/typescript/tsconfig*.json",
+        "../../tsconfig.base.json",
+        "../../tsconfig.build.json",
         "!dist/**",
         "!.turbo/**",
         "!coverage/**"
@@ -26,7 +27,8 @@
         "$TURBO_DEFAULT$",
         "../../module-shim.d.ts",
         "../../tsconfig.json",
-        "../../configs/typescript/tsconfig*.json",
+        "../../tsconfig.base.json",
+        "../../tsconfig.build.json",
         "!dist/**",
         "!.turbo/**",
         "!coverage/**"
