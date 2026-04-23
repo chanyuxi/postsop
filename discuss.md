@@ -1,5 +1,4 @@
 - 完善用户信息
 - 清理冗余 todo 逻辑，应用转向 post 类 App 推进
-- 增加 AGENTS.md 文件
 - 修复 TODO 问题
 - 尝试拆分 create-api-client.ts 文件

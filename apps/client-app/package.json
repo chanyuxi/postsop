@@ -9,6 +9,7 @@
   },
   "scripts": {
     "android": "react-native run-android",
+    "dev": "react-native start",
     "lint": "pnpm --dir ../.. exec eslint apps/client-app --cache",
     "lint:fix": "pnpm --dir ../.. exec eslint apps/client-app --fix --cache",
     "ios": "react-native run-ios",

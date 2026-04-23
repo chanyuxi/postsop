@@ -80,13 +80,13 @@ pnpm install
 3. Start the server
 
 ```bash
-pnpm server:dev
+pnpm dev:server
 ```
 
 4. Start Metro for the client app
 
 ```bash
-pnpm client-app:start
+pnpm dev:mobile
 ```
 
 5. Run the client app
@@ -99,43 +99,39 @@ pnpm client-app:android
 pnpm client-app:ios
 ```
 
-6. Optional: watch shared contracts while working across packages
-
-```bash
-pnpm contracts:watch
-```
-
 ## Scripts
 
 ### Workspace Scripts
 
-| Command                            | Description                               |
-| ---------------------------------- | ----------------------------------------- |
-| `pnpm build`                       | Run build tasks across the workspace      |
-| `pnpm dev`                         | Run workspace development tasks           |
-| `pnpm lint`                        | Run lint tasks across the workspace       |
-| `pnpm lint:fix`                    | Auto-fix root-level lint issues           |
-| `pnpm test`                        | Run test tasks across the workspace       |
-| `pnpm type-check`                  | Run type-check tasks across the workspace |
-| `pnpm contracts:watch`             | Watch and rebuild `@postsop/contracts`    |
-| `pnpm client-app:start`            | Start Metro for the client app            |
-| `pnpm client-app:android`          | Run the Android app                       |
-| `pnpm client-app:ios`              | Run the iOS app                           |
-| `pnpm server:dev`                  | Start the server in watch mode            |
-| `pnpm server:build`                | Build the server                          |
-| `pnpm server:test`                 | Run server unit tests                     |
-| `pnpm server:type-check`           | Run the server TypeScript checker         |
-| `pnpm server:db:generate`          | Generate Prisma client                    |
-| `pnpm server:db:migrate`           | Run Prisma migrations                     |
-| `pnpm server:db:seed`              | Seed the database                         |
-| `pnpm server:db:studio`            | Open Prisma Studio                        |
-| `pnpm server:db:permissions:check` | Check permission registry consistency     |
-| `pnpm server:db:permissions:sync`  | Sync permission registry data             |
+| Command                            | Description                                   |
+| ---------------------------------- | --------------------------------------------- |
+| `pnpm build`                       | Run build tasks across the workspace          |
+| `pnpm dev`                         | Start the server development workflow         |
+| `pnpm dev:mobile`                  | Start Metro with shared package watchers      |
+| `pnpm dev:server`                  | Start the server with shared package watchers |
+| `pnpm lint`                        | Run lint tasks across the workspace           |
+| `pnpm lint:fix`                    | Auto-fix root-level lint issues               |
+| `pnpm test`                        | Run test tasks across the workspace           |
+| `pnpm test:cov`                    | Run coverage-producing test tasks             |
+| `pnpm type-check`                  | Run type-check tasks across the workspace     |
+| `pnpm client-app:android`          | Run the Android app                           |
+| `pnpm client-app:ios`              | Run the iOS app                               |
+| `pnpm server:build`                | Build the server                              |
+| `pnpm server:test`                 | Run server unit tests                         |
+| `pnpm server:test:cov`             | Run server unit tests with coverage           |
+| `pnpm server:type-check`           | Run the server TypeScript checker             |
+| `pnpm server:db:generate`          | Generate Prisma client                        |
+| `pnpm server:db:migrate`           | Run Prisma migrations                         |
+| `pnpm server:db:seed`              | Seed the database                             |
+| `pnpm server:db:studio`            | Open Prisma Studio                            |
+| `pnpm server:db:permissions:check` | Check permission registry consistency         |
+| `pnpm server:db:permissions:sync`  | Sync permission registry data                 |
 
 ### Client App Scripts
 
 | Command                                            | Description                         |
 | -------------------------------------------------- | ----------------------------------- |
+| `pnpm --filter @postsop/client-app dev`            | Start Metro                         |
 | `pnpm --filter @postsop/client-app start`          | Start Metro                         |
 | `pnpm --filter @postsop/client-app android`        | Run the Android app                 |
 | `pnpm --filter @postsop/client-app ios`            | Run the iOS app                     |
@@ -147,21 +143,22 @@ pnpm contracts:watch
 
 ### Server Scripts
 
-| Command                                          | Description                     |
-| ------------------------------------------------ | ------------------------------- |
-| `pnpm --filter @postsop/server dev`              | Start the server in watch mode  |
-| `pnpm --filter @postsop/server build`            | Build the server                |
-| `pnpm --filter @postsop/server start`            | Start the built server          |
-| `pnpm --filter @postsop/server lint`             | Run ESLint for the server       |
-| `pnpm --filter @postsop/server lint:fix`         | Auto-fix server lint issues     |
-| `pnpm --filter @postsop/server type-check`       | Run the server TypeScript check |
-| `pnpm --filter @postsop/server test`             | Run server unit tests           |
-| `pnpm --filter @postsop/server test:e2e`         | Run server end-to-end tests     |
-| `pnpm --filter @postsop/server db:generate`      | Generate Prisma client          |
-| `pnpm --filter @postsop/server db:migrate`       | Run Prisma migrations           |
-| `pnpm --filter @postsop/server db:seed`          | Seed the database               |
-| `pnpm --filter @postsop/server db:studio`        | Open Prisma Studio              |
-| `pnpm --filter @postsop/server db:permissions:*` | Check or sync permission data   |
+| Command                                          | Description                         |
+| ------------------------------------------------ | ----------------------------------- |
+| `pnpm --filter @postsop/server dev`              | Start the server in watch mode      |
+| `pnpm --filter @postsop/server build`            | Build the server                    |
+| `pnpm --filter @postsop/server start`            | Start the built server              |
+| `pnpm --filter @postsop/server lint`             | Run ESLint for the server           |
+| `pnpm --filter @postsop/server lint:fix`         | Auto-fix server lint issues         |
+| `pnpm --filter @postsop/server type-check`       | Run the server TypeScript check     |
+| `pnpm --filter @postsop/server test`             | Run server unit tests               |
+| `pnpm --filter @postsop/server test:cov`         | Run server unit tests with coverage |
+| `pnpm --filter @postsop/server test:e2e`         | Run server end-to-end tests         |
+| `pnpm --filter @postsop/server db:generate`      | Generate Prisma client              |
+| `pnpm --filter @postsop/server db:migrate`       | Run Prisma migrations               |
+| `pnpm --filter @postsop/server db:seed`          | Seed the database                   |
+| `pnpm --filter @postsop/server db:studio`        | Open Prisma Studio                  |
+| `pnpm --filter @postsop/server db:permissions:*` | Check or sync permission data       |
 
 ## Project Structure
 

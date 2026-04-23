@@ -2,7 +2,7 @@
   "extends": ["//"],
   "tasks": {
     "dev": {
-      "with": ["@postsop/contracts#dev"]
+      "with": ["@postsop/access-control#dev", "@postsop/contracts#dev"]
     }
   }
 }

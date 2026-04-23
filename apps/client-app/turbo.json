@@ -1,0 +1,38 @@
+{
+  "extends": ["//"],
+  "tasks": {
+    "dev": {
+      "with": [
+        "@postsop/access-control#dev",
+        "@postsop/contracts#dev",
+        "@postsop/api#dev"
+      ]
+    },
+    "type-check": {
+      "inputs": [
+        "$TURBO_DEFAULT$",
+        "../../module-shim.d.ts",
+        "../../tsconfig.json",
+        "../../configs/typescript/tsconfig*.json",
+        "!android/**",
+        "!ios/**",
+        "!src/assets/**",
+        "!coverage/**",
+        "!.turbo/**"
+      ]
+    },
+    "test": {
+      "inputs": [
+        "$TURBO_DEFAULT$",
+        "../../module-shim.d.ts",
+        "../../tsconfig.json",
+        "../../configs/typescript/tsconfig*.json",
+        "!android/**",
+        "!ios/**",
+        "!src/assets/**",
+        "!coverage/**",
+        "!.turbo/**"
+      ]
+    }
+  }
+}

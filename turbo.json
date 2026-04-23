@@ -8,7 +8,6 @@
       "inputs": [
         "$TURBO_DEFAULT$",
         "../../module-shim.d.ts",
-        "../../scripts/**",
         "../../tsconfig.json",
         "../../configs/typescript/tsconfig*.json",
         "!dist/**",
@@ -17,39 +16,12 @@
       ],
       "outputs": ["dist/**"]
     },
-    "build:watch": {
-      "inputs": [
-        "$TURBO_DEFAULT$",
-        "../../module-shim.d.ts",
-        "../../scripts/**",
-        "../../tsconfig.json",
-        "../../configs/typescript/tsconfig*.json",
-        "!dist/**",
-        "!.turbo/**",
-        "!coverage/**"
-      ],
-      "cache": false,
-      "persistent": true
-    },
     "dev": {
-      "inputs": [
-        "$TURBO_DEFAULT$",
-        "../../module-shim.d.ts",
-        "../../scripts/**",
-        "../../tsconfig.json",
-        "../../configs/typescript/tsconfig*.json",
-        "!dist/**",
-        "!.turbo/**",
-        "!coverage/**"
-      ],
       "cache": false,
       "persistent": true
-    },
-    "lint": {
-      "inputs": ["$TURBO_DEFAULT$", "!dist/**", "!.turbo/**", "!coverage/**"],
-      "outputs": []
     },
     "type-check": {
+      "dependsOn": ["^build"],
       "inputs": [
         "$TURBO_DEFAULT$",
         "../../module-shim.d.ts",
@@ -62,14 +34,12 @@
       "outputs": []
     },
     "test": {
-      "inputs": ["$TURBO_DEFAULT$", "!dist/**", "!.turbo/**", "!coverage/**"],
+      "dependsOn": ["^build"],
+      "outputs": []
+    },
+    "test:cov": {
+      "dependsOn": ["^build"],
       "outputs": ["coverage/**"]
-    },
-    "//#lint:root": {
-      "outputs": []
-    },
-    "//#type-check:root": {
-      "outputs": []
     }
   }
 }

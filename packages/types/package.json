@@ -6,8 +6,10 @@
   "description": "Shared types",
   "author": "chanyuxi",
   "license": "ISC",
-  "types": "./src/index.ts",
+  "types": "./dist/index.d.ts",
   "scripts": {
+    "build": "tsc -p tsconfig.build.json",
+    "dev": "tsc -p tsconfig.build.json --watch",
     "type-check": "tsc --noEmit"
   }
 }

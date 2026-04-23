@@ -11,11 +11,7 @@ export function ThemeToggle() {
 
   const activeTheme = hasAdaptiveThemes ? 'system' : theme
 
-  const [foregroundColor, orange500, yellow300] = useCSSVariable([
-    '--color-foreground',
-    '--color-orange-500',
-    '--color-yellow-200',
-  ]) as [string, string, string]
+  const foregroundColor = useCSSVariable('--color-foreground') as string
 
   const toggleTheme = () => {
     const newTheme = Uniwind.currentTheme === 'light' ? 'dark' : 'light'
@@ -28,8 +24,8 @@ export function ThemeToggle() {
     case 'light':
       value = (
         <Feather
-          color={orange500}
-          name="sun"
+          color={foregroundColor}
+          name="moon"
           size={24}
         />
       )
@@ -37,8 +33,8 @@ export function ThemeToggle() {
     case 'dark':
       value = (
         <Feather
-          color={yellow300}
-          name="moon"
+          color={foregroundColor}
+          name="sun"
           size={24}
         />
       )

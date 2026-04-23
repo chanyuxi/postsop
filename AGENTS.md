@@ -46,6 +46,8 @@ Core tooling and libraries:
 - In `PascalCase` type names, keep the acronym uppercase when that improves semantics, for example `JWTPayload`.
 - Do not manually edit generated artifacts such as `dist/**`, `.turbo/**`, or `apps/server/src/generated/prisma/**`.
 - Treat `packages/contracts` as the source of truth for endpoint contracts and shared HTTP semantics.
+- When adding or changing Turborepo workflows, make package participation explicit. Do not assume a workspace is covered by a root `turbo run <task>` unless that package intentionally exposes the matching script.
+- Keep Turborepo focused on `build`, `dev`, `type-check`, and test orchestration. Prefer the root ESLint entrypoint for repository-wide linting instead of mirroring lint as a per-package Turbo task.
 
 ## UI And Screen Implementation
 
@@ -216,14 +218,18 @@ When deprecating a permission:
 
 - Follow Prettier defaults in this repository: no semicolons, single quotes, trailing commas where supported.
 - Let the formatter and ESLint decide import ordering and Tailwind class sorting.
+- Prefer the root ESLint entrypoint for full-repository linting. Add package-level lint tasks only when scoped Turbo filtering or package-local workflows clearly benefit from them.
 - Do not manually reformat unrelated files.
 - Keep changes narrow and task-focused.
 
 Useful commands:
 
 ```sh
+pnpm dev:server
+pnpm dev:mobile
 pnpm lint
 pnpm type-check
+pnpm test:cov
 pnpm --filter @postsop/client-app type-check
 pnpm --filter @postsop/server type-check
 pnpm --filter @postsop/server test
