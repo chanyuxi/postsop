@@ -4,9 +4,9 @@ import { Pressable, View } from 'react-native'
 import { TabIcon } from './tab-icon'
 
 const tabItemIconNameMap = {
-  Home: 'alpha-t-circle-outline',
+  Post: 'alpha-t-circle-outline',
   QuietMode: 'alarm',
-  Mine: 'account-circle-outline',
+  Account: 'account-circle-outline',
 } as const
 
 export function CustomTabBar({ state, navigation }: BottomTabBarProps) {

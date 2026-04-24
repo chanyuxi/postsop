@@ -1,7 +1,7 @@
 import { TopBar } from '@/components/common'
 import { ScreenWrapper } from '@/components/common/screen-wrapper'
 
-export function QuietMode() {
+export function QuietModeScreen() {
   return (
     <ScreenWrapper statusBarClassName="bg-background-secondary">
       <TopBar

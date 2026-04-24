@@ -7,6 +7,7 @@ import Animated, {
   FadeInRight,
 } from 'react-native-reanimated'
 
+import type { AuthStackParamList } from '@/app/navigation/types'
 import {
   Button,
   Form,
@@ -19,7 +20,6 @@ import {
 import { ThemeToggle } from '@/components/widget/theme-toggle'
 import { VersionIndication } from '@/components/widget/version-indication'
 import { notificationStore, notify } from '@/libs/notification'
-import type { AuthStackParamList } from '@/routes/type'
 
 import { SignInDecorations } from './components'
 import { useSignIn } from './hooks/use-sign-in'

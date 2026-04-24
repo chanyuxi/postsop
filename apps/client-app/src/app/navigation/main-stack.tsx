@@ -1,17 +1,18 @@
 import { createNativeStackNavigator } from '@react-navigation/native-stack'
 
-import { MainInterfaceScreen } from '@/screens/system/main-interface-screen'
+import { MainTabsScreen } from '@/screens/system/main-tabs-screen'
 import { SettingScreen } from '@/screens/system/setting-screen'
 
-import type { MainStackParamList } from '../type'
+import type { MainStackParamList } from './types'
 
 const Stack = createNativeStackNavigator<MainStackParamList>()
+
 export function MainStack() {
   return (
     <Stack.Navigator screenOptions={{ headerShown: false }}>
       <Stack.Screen
-        component={MainInterfaceScreen}
-        name="MainInterface"
+        component={MainTabsScreen}
+        name="MainTabs"
       />
       <Stack.Screen
         component={SettingScreen}

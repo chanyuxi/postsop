@@ -1,4 +1,3 @@
-export * from './use-app-init'
 export * from './use-auth'
 export * from './use-focus-manager'
 export * from './use-is-singleton-component'

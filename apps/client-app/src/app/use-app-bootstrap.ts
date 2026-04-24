@@ -13,9 +13,9 @@ import {
 } from '@/utils/storage'
 import { setTheme } from '@/utils/theme'
 
-import { useAppDispatch } from './use-store'
+import { useAppDispatch } from '../hooks/use-store'
 
-export function useAppInit() {
+export function useAppBootstrap() {
   const dispatch = useAppDispatch()
 
   useEffect(() => {

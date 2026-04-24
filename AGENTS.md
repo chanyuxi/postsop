@@ -56,6 +56,7 @@ Core tooling and libraries:
 - Reuse existing base components before creating new ones.
 - Prefer composing screens from existing primitives in `src/components/common` and feature-local components in the relevant screen folder.
 - Keep screen-specific UI inside the relevant feature or screen directory instead of promoting it to `common` too early.
+- Prefer concrete names for screens and navigators that describe either the layout role or the visible feature, for example `main-tabs-screen`, `post-screen`, or `account-screen`, instead of vague names such as `main-interface-screen`, `home`, or `mine`.
 - For new screens, prefer a structure like:
   - `screen-folder/index.tsx`
   - `screen-folder/components/*`
@@ -208,7 +209,13 @@ When deprecating a permission:
 
 - Prefer React Query for server state.
 - Prefer Redux Toolkit only for app-level client state that is not just fetched server data.
+- Keep ephemeral UI feedback runtimes such as toast and notification in `src/libs/**` instead of Redux when they do not represent durable app state.
 - Keep persisted auth or theme state in the existing storage and session utilities instead of introducing a parallel persistence path.
+
+## App Shell
+
+- Keep app-level providers, bootstrap logic, and root navigation under `apps/client-app/src/app/**`.
+- Keep feature and screen code out of `src/app/**` unless it is truly part of the application shell.
 
 ## Imports And Module Boundaries
 

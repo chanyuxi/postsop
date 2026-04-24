@@ -9,14 +9,14 @@ export type AuthStackParamList = {
 }
 
 export type MainStackParamList = {
-  MainInterface: NavigatorScreenParams<MainInterfaceTabParamList>
+  MainTabs: NavigatorScreenParams<MainTabsParamList>
   Setting: undefined
 }
 
-export type MainInterfaceTabParamList = {
-  Home: undefined
+export type MainTabsParamList = {
+  Post: undefined
   QuietMode: undefined
-  Mine: undefined
+  Account: undefined
 }
 
 export type RootStackParamList = {
@@ -27,4 +27,4 @@ export type RootStackParamList = {
 export type AllStackParamList = RootStackParamList &
   AuthStackParamList &
   MainStackParamList &
-  MainInterfaceTabParamList
+  MainTabsParamList

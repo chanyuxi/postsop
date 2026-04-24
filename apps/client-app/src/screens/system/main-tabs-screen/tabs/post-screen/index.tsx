@@ -4,7 +4,7 @@ import { useCSSVariable } from 'uniwind'
 import { TopBar } from '@/components/common'
 import { ScreenWrapper } from '@/components/common/screen-wrapper'
 
-export function Home() {
+export function PostScreen() {
   const foregroundColor = useCSSVariable('--color-foreground') as string
 
   return (
@@ -17,7 +17,7 @@ export function Home() {
             name="bell-outline"
           />
         }
-        title="Todo"
+        title="Post"
       />
     </ScreenWrapper>
   )

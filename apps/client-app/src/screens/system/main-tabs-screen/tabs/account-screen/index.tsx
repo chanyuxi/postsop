@@ -1,18 +1,18 @@
 import type { BottomTabScreenProps } from '@react-navigation/bottom-tabs'
 import { View } from 'react-native'
 
+import type { AllStackParamList } from '@/app/navigation/types'
 import { ScreenWrapper } from '@/components/common/screen-wrapper'
 import { ThemeText } from '@/components/common/theme-text'
 import { VersionIndication } from '@/components/widget/version-indication'
-import type { AllStackParamList } from '@/routes/type'
 import { useProfileQuery } from '@/services/user/queries'
 
 import { Cell } from './components/cell'
 import { CellGroup } from './components/cell-group'
 
-export function Mine({
+export function AccountScreen({
   navigation,
-}: BottomTabScreenProps<AllStackParamList, 'Mine'>) {
+}: BottomTabScreenProps<AllStackParamList, 'Account'>) {
   const profileQuery = useProfileQuery()
   const nickname = profileQuery.data?.nickname?.trim() || 'My Account'
   const profileHint =

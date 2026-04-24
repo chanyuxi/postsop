@@ -1,4 +1,4 @@
-import { useEffect } from 'react'
+import { useEffect, useSyncExternalStore } from 'react'
 import { View } from 'react-native'
 import Animated, {
   Easing,
@@ -12,9 +12,9 @@ import { scheduleOnRN } from 'react-native-worklets'
 
 import { ThemeText } from '@/components/common'
 import { useIsSingletonComponent } from '@/hooks/use-is-singleton-component'
-import { useAppDispatch, useAppSelector } from '@/hooks/use-store'
-import { nextToast } from '@/store/system-slice'
-import type { Toast } from '@/types/system'
+
+import type { Toast } from '.'
+import { toastStore } from '.'
 
 interface ToastProps {
   toast: Toast
@@ -22,8 +22,6 @@ interface ToastProps {
 
 function Toast({ toast }: ToastProps) {
   const { message, duration } = toast
-
-  const dispatch = useAppDispatch()
 
   const enter = useSharedValue(0)
   const exit = useSharedValue(0)
@@ -41,8 +39,6 @@ function Toast({ toast }: ToastProps) {
   }))
 
   useEffect(() => {
-    const dispatchRemove = () => dispatch(nextToast())
-
     enter.value = withTiming(1, {
       duration: 100,
       easing: Easing.inOut(Easing.ease),
@@ -56,11 +52,11 @@ function Toast({ toast }: ToastProps) {
           duration: 300,
         },
         (finished) => {
-          if (finished) scheduleOnRN(dispatchRemove)
+          if (finished) scheduleOnRN(toastStore.dispose)
         }
       )
     )
-  }, [enter, exit, duration, dispatch])
+  }, [enter, exit, duration])
 
   return (
     <Animated.View
@@ -74,8 +70,10 @@ function Toast({ toast }: ToastProps) {
 
 export function ToastAnchor() {
   const isSingleton = useIsSingletonComponent('ToastAnchor')
-
-  const activatedToast = useAppSelector((state) => state.system.activatedToast)
+  const activatedToast = useSyncExternalStore(
+    toastStore.subscribe,
+    toastStore.getSnapshot
+  )
 
   if (!isSingleton) {
     console.warn('ToastAnchor is mounted multiple times')
@@ -83,7 +81,10 @@ export function ToastAnchor() {
   }
 
   return (
-    <View className="absolute right-0 bottom-0 left-0 gap-3 pb-30">
+    <View
+      className="absolute right-0 bottom-0 left-0 gap-3 pb-30"
+      pointerEvents="box-none"
+    >
       {activatedToast && (
         <Toast
           key={activatedToast.id}

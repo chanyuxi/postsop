@@ -2,6 +2,7 @@ import type { NativeStackScreenProps } from '@react-navigation/native-stack'
 import { Pressable, View } from 'react-native'
 import Animated, { FadeInLeft, FadeInRight } from 'react-native-reanimated'
 
+import type { AuthStackParamList } from '@/app/navigation/types'
 import {
   Button,
   Form,
@@ -11,7 +12,6 @@ import {
   ThemeText,
 } from '@/components/common'
 import { ThemeToggle } from '@/components/widget/theme-toggle'
-import type { AuthStackParamList } from '@/routes/type'
 
 import { useSignUp } from './hooks/use-sign-up'
 
