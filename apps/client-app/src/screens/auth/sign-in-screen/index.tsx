@@ -1,4 +1,5 @@
 import type { NativeStackScreenProps } from '@react-navigation/native-stack'
+import { useEffect } from 'react'
 import { Pressable, View } from 'react-native'
 import Animated, {
   FadeInDown,
@@ -17,6 +18,7 @@ import {
 // TODO: Wrap these components which imported from widget as a bucket file
 import { ThemeToggle } from '@/components/widget/theme-toggle'
 import { VersionIndication } from '@/components/widget/version-indication'
+import { notify } from '@/libs/notification'
 import type { AuthStackParamList } from '@/routes/type'
 
 import { SignInDecorations } from './components'
@@ -26,6 +28,13 @@ export function SignInScreen({
   navigation,
 }: NativeStackScreenProps<AuthStackParamList, 'SignIn'>) {
   const { loginForm, handleSignIn, isSignIning } = useSignIn()
+
+  useEffect(() => {
+    notify({
+      message: 'When a boat anchors or when you anchor it',
+      duration: 'static',
+    })
+  }, [])
 
   return (
     <ScreenWrapper

@@ -7,6 +7,8 @@ export interface Notification {
   id: number
   /** Visual variant for the notification. Defaults to `'info'`. */
   type?: 'info' | 'success' | 'warn' | 'danger'
+  /** Notification's title */
+  title?: string
   /** Text content displayed to the user. */
   message: string
   /**
@@ -14,7 +16,7 @@ export interface Notification {
    * Use `'never'` to keep the notification visible until it is replaced.
    * Defaults to `3000`.
    */
-  duration?: number | 'never'
+  duration?: number | 'static'
   /**
    * When `true`, the notification jumps to the front of the queue and replaces
    * the currently displayed notification immediately.
@@ -27,7 +29,7 @@ export interface Notification {
 type NotifyOptionsOrString = Omit<Notification, 'id'> | string
 type Listener = () => void
 
-const notificationQueue: Notification[] = []
+let notificationQueue: Notification[] = []
 const listeners = new Set<Listener>()
 
 let id = 0
@@ -67,6 +69,13 @@ function dispose() {
   scheduleNext(false)
 }
 
+function clear() {
+  // TODO: Fix exiting animation not working issue
+  current = null
+  notificationQueue = []
+  emitChange()
+}
+
 function runOnDispose(fn: Notification['onDispose']) {
   if (fn) {
     try {
@@ -104,6 +113,7 @@ function normalizeNotification(
 ): Notification {
   const {
     type = 'info',
+    title = 'Notification',
     message,
     duration = 3000,
     imperative = false,
@@ -115,6 +125,7 @@ function normalizeNotification(
   return {
     id: ++id,
     type,
+    title,
     message,
     duration,
     imperative,
@@ -136,6 +147,7 @@ export function notify(optionsOrString: NotifyOptionsOrString) {
 
 export const notificationStore = {
   dispose,
+  clear,
   getSnapshot,
   subscribe,
 }

@@ -72,13 +72,13 @@ function Toast({ toast }: ToastProps) {
   )
 }
 
-export function ToastAttacher() {
-  const isSingleton = useIsSingletonComponent('ToastAttacher')
+export function ToastAnchor() {
+  const isSingleton = useIsSingletonComponent('ToastAnchor')
 
   const activatedToast = useAppSelector((state) => state.system.activatedToast)
 
   if (!isSingleton) {
-    console.warn('ToastAttacher is mounted multiple times')
+    console.warn('ToastAnchor is mounted multiple times')
     return null
   }
 

@@ -1,4 +1,3 @@
-import MaterialDesignIcons from '@react-native-vector-icons/material-design-icons'
 import { useEffect, useEffectEvent, useSyncExternalStore } from 'react'
 import { View } from 'react-native'
 import type { PanGestureActiveEvent } from 'react-native-gesture-handler'
@@ -129,27 +128,26 @@ function Notification(props: { notification: Notification }) {
         entering={FadeInUp.duration(300).easing(Easing.inOut(Easing.quad))}
       >
         <Animated.View
-          className="border-brand-blue mx-8 rounded-r border-l-3 bg-white px-4 py-6 shadow"
+          className="border-brand-blue mx-8 rounded-r border-l-3 bg-white p-4 shadow"
           style={animatedStyle}
         >
-          <View className="flex-row items-center justify-between">
-            <ThemeText className="font-semibold">
-              {notification.message}
-            </ThemeText>
-
-            <MaterialDesignIcons
-              name="window-close"
-              size={18}
-              onPress={dismiss}
-            />
-          </View>
+          <ThemeText className="text-lg font-semibold">
+            {notification.title}
+          </ThemeText>
+          <ThemeText
+            className="text-sm"
+            numberOfLines={1}
+            ellipsizeMode="tail"
+          >
+            {notification.message}
+          </ThemeText>
         </Animated.View>
       </Animated.View>
     </GestureDetector>
   )
 }
 
-export function NotificationAttacher() {
+export function NotificationAnchor() {
   const height = useSatusBarHeight()
 
   const current = useSyncExternalStore(
