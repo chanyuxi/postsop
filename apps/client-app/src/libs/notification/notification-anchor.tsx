@@ -15,6 +15,8 @@ import { scheduleOnRN } from 'react-native-worklets'
 
 import { ThemeText } from '@/components/common'
 import { useSatusBarHeight } from '@/hooks'
+import { useIsSingletonComponent } from '@/hooks/use-is-singleton-component'
+import { tw } from '@/utils/style'
 
 import type { Notification } from '.'
 import { notificationStore } from '.'
@@ -28,7 +30,17 @@ const animationConfig = {
   easing: Easing.out(Easing.cubic),
 }
 
-function Notification(props: { notification: Notification }) {
+const notificationAccentClassNames: Record<
+  NonNullable<Notification['type']>,
+  string
+> = {
+  danger: 'border-brand-danger',
+  info: 'border-brand-primary',
+  success: 'border-brand-success',
+  warn: 'border-brand-warning',
+}
+
+function NotificationCard(props: { notification: Notification }) {
   const { notification } = props
 
   const translateY = useSharedValue(0)
@@ -128,14 +140,22 @@ function Notification(props: { notification: Notification }) {
         entering={FadeInUp.duration(300).easing(Easing.inOut(Easing.quad))}
       >
         <Animated.View
-          className="border-brand-blue mx-8 rounded-r border-l-3 bg-white p-4 shadow"
+          className={tw(
+            'bg-brand-white mx-8 rounded-r border-l-3 p-4 shadow',
+            notificationAccentClassNames[notification.type ?? 'info']
+          )}
           style={animatedStyle}
         >
-          <ThemeText className="text-lg font-semibold">
-            {notification.title}
-          </ThemeText>
+          {notification.title ? (
+            <ThemeText className="text-lg font-semibold">
+              {notification.title}
+            </ThemeText>
+          ) : null}
           <ThemeText
-            className="text-sm"
+            className={tw(
+              'text-sm',
+              notification.title && 'text-foreground-secondary'
+            )}
             numberOfLines={1}
             ellipsizeMode="tail"
           >
@@ -149,19 +169,26 @@ function Notification(props: { notification: Notification }) {
 
 export function NotificationAnchor() {
   const height = useSatusBarHeight()
+  const isSingleton = useIsSingletonComponent('NotificationAnchor')
 
   const current = useSyncExternalStore(
     notificationStore.subscribe,
     notificationStore.getSnapshot
   )
 
+  if (!isSingleton) {
+    console.warn('NotificationAnchor is mounted multiple times')
+    return null
+  }
+
   return (
     <View
       className="absolute inset-x-0 top-0 overflow-visible"
+      pointerEvents="box-none"
       style={{ paddingTop: height }}
     >
       {current && (
-        <Notification
+        <NotificationCard
           key={current.id}
           notification={current}
         />

@@ -7,22 +7,23 @@ export interface Notification {
   id: number
   /** Visual variant for the notification. Defaults to `'info'`. */
   type?: 'info' | 'success' | 'warn' | 'danger'
-  /** Notification's title */
+  /** Notification title displayed above the message when provided. */
   title?: string
   /** Text content displayed to the user. */
   message: string
   /**
    * Auto-dismiss delay in milliseconds.
-   * Use `'never'` to keep the notification visible until it is replaced.
+   * Use `'never'` to keep the notification visible until it is dismissed or
+   * replaced.
    * Defaults to `3000`.
    */
-  duration?: number | 'static'
+  duration?: number | 'never'
   /**
    * When `true`, the notification jumps to the front of the queue and replaces
    * the currently displayed notification immediately.
    */
   imperative?: boolean
-  /** callback when disposed */
+  /** Callback invoked when the notification leaves the screen. */
   onDispose?: () => void
 }
 
@@ -34,6 +35,7 @@ const listeners = new Set<Listener>()
 
 let id = 0
 let current: Notification | null = null
+let isDisposingCurrent = false
 
 // `useSyncExternalStore` requires a referentially stable snapshot when data
 // hasn't changed. Returning `current` directly avoids creating a fresh object.
@@ -58,21 +60,35 @@ function dispose() {
     return
   }
 
-  runOnDispose(current.onDispose)
+  const dismissed = current
   current = null
+  isDisposingCurrent = true
+  runOnDispose(dismissed.onDispose)
+  isDisposingCurrent = false
 
   if (notificationQueue.length === 0) {
     emitChange()
     return
   }
 
-  scheduleNext(false)
+  showNext()
+}
+
+function remove(id: Notification['id']) {
+  if (current?.id === id) {
+    dispose()
+    return
+  }
+
+  notificationQueue = notificationQueue.filter(
+    (notification) => notification.id !== id
+  )
 }
 
 function clear() {
-  // TODO: Fix exiting animation not working issue
   current = null
   notificationQueue = []
+  isDisposingCurrent = false
   emitChange()
 }
 
@@ -91,15 +107,7 @@ function runOnDispose(fn: Notification['onDispose']) {
   }
 }
 
-function scheduleNext(imperative: boolean) {
-  if (notificationQueue.length === 0) {
-    return
-  }
-
-  if (!imperative && current !== null) {
-    return
-  }
-
+function showNext() {
   const next = notificationQueue.shift()
 
   if (next) {
@@ -113,7 +121,7 @@ function normalizeNotification(
 ): Notification {
   const {
     type = 'info',
-    title = 'Notification',
+    title,
     message,
     duration = 3000,
     imperative = false,
@@ -137,17 +145,41 @@ export function notify(optionsOrString: NotifyOptionsOrString) {
   const normalized = normalizeNotification(optionsOrString)
 
   if (normalized.imperative) {
-    notificationQueue.unshift(normalized)
-    scheduleNext(true)
+    if (current === null && !isDisposingCurrent) {
+      current = normalized
+      emitChange()
+
+      return normalized.id
+    }
+
+    if (isDisposingCurrent) {
+      notificationQueue.unshift(normalized)
+
+      return normalized.id
+    }
+
+    const replaced = current
+    current = normalized
+    emitChange()
+    runOnDispose(replaced?.onDispose)
+
+    return normalized.id
+  }
+
+  if (current === null && !isDisposingCurrent) {
+    current = normalized
+    emitChange()
   } else {
     notificationQueue.push(normalized)
-    scheduleNext(false)
   }
+
+  return normalized.id
 }
 
 export const notificationStore = {
   dispose,
   clear,
   getSnapshot,
+  remove,
   subscribe,
 }

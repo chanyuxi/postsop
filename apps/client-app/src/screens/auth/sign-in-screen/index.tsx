@@ -18,7 +18,7 @@ import {
 // TODO: Wrap these components which imported from widget as a bucket file
 import { ThemeToggle } from '@/components/widget/theme-toggle'
 import { VersionIndication } from '@/components/widget/version-indication'
-import { notify } from '@/libs/notification'
+import { notificationStore, notify } from '@/libs/notification'
 import type { AuthStackParamList } from '@/routes/type'
 
 import { SignInDecorations } from './components'
@@ -30,10 +30,14 @@ export function SignInScreen({
   const { loginForm, handleSignIn, isSignIning } = useSignIn()
 
   useEffect(() => {
-    notify({
+    const notificationId = notify({
       message: 'When a boat anchors or when you anchor it',
-      duration: 'static',
+      duration: 'never',
     })
+
+    return () => {
+      notificationStore.remove(notificationId)
+    }
   }, [])
 
   return (

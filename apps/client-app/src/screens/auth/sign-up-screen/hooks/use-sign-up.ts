@@ -52,6 +52,7 @@ export function useSignUp(options: UseSignUpOptions) {
       onSuccess: () => {
         notify({
           message: 'Account created, please sign in',
+          type: 'success',
           onDispose: () => {
             successCallback()
           },

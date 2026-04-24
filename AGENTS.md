@@ -61,6 +61,8 @@ Core tooling and libraries:
   - `screen-folder/components/*`
   - `screen-folder/hooks/*` when local hooks are needed
 - Prefer small presentational components and move data loading, mutations, and orchestration into hooks or service modules.
+- Use `toast()` for brief, low-priority, non-blocking feedback such as global request errors or simple confirmations.
+- Use `notify()` for higher-priority banner feedback that may need richer styling, persistence, queue control, or `onDispose` behavior.
 
 ## Styling
 
