@@ -5,7 +5,7 @@ import { password } from '@postsop/contracts'
 import type { SignUpRequest } from '@postsop/contracts/auth'
 import { SignUpRequestSchema } from '@postsop/contracts/auth'
 
-import { toast } from '@/libs/toast'
+import { notify } from '@/libs/notification'
 import { useSignUpMutation } from '@/services/auth/mutations'
 
 const signUpFormSchema = SignUpRequestSchema.extend({
@@ -50,8 +50,12 @@ export function useSignUp(options: UseSignUpOptions) {
 
     signUpMutation.mutate(payload, {
       onSuccess: () => {
-        toast('Account created, please sign in')
-        successCallback()
+        notify({
+          message: 'Account created, please sign in',
+          onDispose: () => {
+            successCallback()
+          },
+        })
       },
     })
   })

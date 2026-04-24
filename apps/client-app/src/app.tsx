@@ -11,6 +11,7 @@ import {
   useOnlineStateManager,
   useSafeAreaStyles,
 } from '@/hooks'
+import { NotificationAttacher } from '@/libs/notification/notification-attacher'
 import { Provider as PersistQueryClientProvider } from '@/libs/query-client'
 import { ToastAttacher } from '@/libs/toast/toast-attacher'
 import { RootStack } from '@/routes'
@@ -40,6 +41,7 @@ export default function App() {
         <StoreProvider store={store}>
           <PersistQueryClientProvider>
             <AppContent />
+            <NotificationAttacher />
             <ToastAttacher />
           </PersistQueryClientProvider>
         </StoreProvider>

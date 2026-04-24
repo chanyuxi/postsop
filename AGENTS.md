@@ -49,6 +49,7 @@ Core tooling and libraries:
 - Keep shared TypeScript workspace configs in root-level `tsconfig.*.json` files. Package and app configs should extend those root files instead of adding another shared config directory.
 - When adding or changing Turborepo workflows, make package participation explicit. Do not assume a workspace is covered by a root `turbo run <task>` unless that package intentionally exposes the matching script.
 - Keep Turborepo focused on `build`, `dev`, `type-check`, and test orchestration. Prefer the root ESLint entrypoint for repository-wide linting instead of mirroring lint as a per-package Turbo task.
+- When both the mobile app and server are needed locally, prefer the root `pnpm dev` command so Turbo can start `@postsop/client-app`, `@postsop/server`, and shared workspace `dev` tasks in a single process without duplicating shared watchers.
 
 ## UI And Screen Implementation
 
@@ -226,6 +227,7 @@ When deprecating a permission:
 Useful commands:
 
 ```sh
+pnpm dev
 pnpm dev:server
 pnpm dev:mobile
 pnpm lint

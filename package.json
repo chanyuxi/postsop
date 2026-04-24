@@ -10,7 +10,7 @@
   },
   "scripts": {
     "build": "turbo run build",
-    "dev": "pnpm dev:server",
+    "dev": "turbo run dev --filter=@postsop/client-app --filter=@postsop/server",
     "dev:mobile": "turbo run dev --filter=@postsop/client-app",
     "dev:server": "turbo run dev --filter=@postsop/server",
     "lint": "eslint . --cache",
