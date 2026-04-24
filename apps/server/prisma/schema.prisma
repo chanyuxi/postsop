@@ -23,19 +23,18 @@ enum Gender {
 }
 
 model User {
-  id           Int         @id @default(autoincrement())
-  username     String?     @unique
-  email        String      @unique
-  phone        String?     @unique
+  id           Int          @id @default(autoincrement())
+  username     String       @unique
+  email        String       @unique
+  phone        String?      @unique
   password     String
-  status       UserStatus  @default(ACTIVE)
-  lastSignInIp String?     @map("last_sign_in_ip")
-  lastSignInAt DateTime?   @map("last_sign_in_at")
-  createdAt    DateTime    @default(now()) @map("created_at")
-  updatedAt    DateTime    @updatedAt @map("updated_at")
+  status       UserStatus   @default(ACTIVE)
+  lastSignInIp String?      @map("last_sign_in_ip")
+  lastSignInAt DateTime?    @map("last_sign_in_at")
+  createdAt    DateTime     @default(now()) @map("created_at")
+  updatedAt    DateTime     @updatedAt @map("updated_at")
   roles        Role[]
-  profile      UserProfile @relation(fields: [profileId], references: [id])
-  profileId    Int         @unique @map("profile_id")
+  profile      UserProfile?
 
   @@index([status])
   @@map("users")
@@ -53,7 +52,8 @@ model UserProfile {
   address   String?
   createdAt DateTime  @default(now()) @map("created_at")
   updatedAt DateTime  @updatedAt @map("updated_at")
-  user      User?
+  user      User      @relation(fields: [userId], references: [id])
+  userId    Int       @unique @map("user_id")
 
   @@map("user_profile")
 }

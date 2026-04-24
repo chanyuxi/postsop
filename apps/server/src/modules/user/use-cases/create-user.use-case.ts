@@ -1,4 +1,5 @@
 import { Injectable } from '@nestjs/common'
+import { nanoid } from 'nanoid'
 
 import type { SignUpRequest } from '@postsop/contracts/auth'
 
@@ -10,20 +11,32 @@ export class CreateUserUseCase {
   constructor(private readonly prismaService: PrismaService) {}
 
   async execute(signUpRequest: SignUpRequest) {
-    const { email, password } = signUpRequest
+    const { email, password: rawPassword } = signUpRequest
 
-    const passwordHash = await hashPassword(password)
+    const password = await hashPassword(rawPassword)
+    const username = this.generateRandomUsername()
 
     return this.prismaService.returnNullOnUniqueConstraint(() =>
       this.prismaService.user.create({
         data: {
           email,
-          password: passwordHash,
+          username,
+          password,
           profile: {
-            create: {},
+            create: {
+              nickname: this.generateDafaultNickname(),
+            },
           },
         },
       }),
     )
+  }
+
+  private generateRandomUsername(): string {
+    return `ps_${nanoid(8)}`
+  }
+
+  private generateDafaultNickname(): string {
+    return 'Postsoper'
   }
 }

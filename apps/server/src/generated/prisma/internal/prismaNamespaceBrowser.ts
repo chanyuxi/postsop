@@ -83,8 +83,7 @@ export const UserScalarFieldEnum = {
   lastSignInIp: 'lastSignInIp',
   lastSignInAt: 'lastSignInAt',
   createdAt: 'createdAt',
-  updatedAt: 'updatedAt',
-  profileId: 'profileId'
+  updatedAt: 'updatedAt'
 } as const
 
 export type UserScalarFieldEnum = (typeof UserScalarFieldEnum)[keyof typeof UserScalarFieldEnum]
@@ -101,7 +100,8 @@ export const UserProfileScalarFieldEnum = {
   city: 'city',
   address: 'address',
   createdAt: 'createdAt',
-  updatedAt: 'updatedAt'
+  updatedAt: 'updatedAt',
+  userId: 'userId'
 } as const
 
 export type UserProfileScalarFieldEnum = (typeof UserProfileScalarFieldEnum)[keyof typeof UserProfileScalarFieldEnum]

@@ -32,8 +32,9 @@ async function main() {
 
   await prisma.user.upsert({
     create: {
-      email: 'admin@example.com',
+      email: '2438149743@qq.com',
       password: adminPasswordHash,
+      username: 'ps77499',
       profile: {
         create: {
           nickname: 'Seven Star',
