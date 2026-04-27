@@ -10,6 +10,7 @@ export type AuthStackParamList = {
 
 export type MainStackParamList = {
   MainTabs: NavigatorScreenParams<MainTabsParamList>
+  SetupProfile: undefined
   Setting: undefined
 }
 

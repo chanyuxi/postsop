@@ -14,3 +14,9 @@ export const UserProfileViewSchema = z.strictObject({
 })
 
 export type UserProfileView = z.infer<typeof UserProfileViewSchema>
+
+export const UserProfileStatusViewSchema = z.strictObject({
+  initialized: z.boolean(),
+})
+
+export type UserProfileStatusView = z.infer<typeof UserProfileStatusViewSchema>
